@@ -1,0 +1,1 @@
+{"version":3,"file":"ortoo.esm.js","sources":["../src/index.ts","../src/a.ts"],"sourcesContent":["import a from './a';\n\nfunction A(): void {\n  console.log(a);\n}\n\nexport default A;\n","const a = 1;\nconst b = 2;\n\nexport default a;\n"],"names":["A","console","log"],"mappings":"AAEA,SAASA,IACPC,QAAQC,ICHA"}

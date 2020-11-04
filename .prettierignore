@@ -1,0 +1,9 @@
+node_modules
+.tea
+.DS_Store
+yarn.lock
+dist
+dist.zip
+.vscode
+.idea
+lib

@@ -1,0 +1,55 @@
+{
+  "name": "ortoo",
+  "version": "0.0.1",
+  "description": "Ortoo Javascript SDK",
+  "main": "lib/ortoo.cjs.js",
+  "module": "lib/ortoo.esm.js",
+  "browser": "lib/ortoo.umd.js",
+  "scripts": {
+    "dev": "rollup -c -w",
+    "test": "karma start",
+    "clean": "rm -rf ./lib ./types",
+    "build": "npm run clean && rollup -c",
+    "eslint:fix": "eslint --ext .tsx,.ts --fix ./src",
+    "prettier": "prettier  --config ./.prettierrc   --write ./src/**/*.{json,ts,tsx}"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/knowhunger/ortoo-js.git"
+  },
+  "author": "Ortoo Team",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/knowhunger/ortoo-js/issues"
+  },
+  "homepage": "https://github.com/knowhunger/ortoo-js#readme",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^16.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^10.0.0",
+    "@types/chai": "^4.2.14",
+    "@types/mocha": "^8.0.3",
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
+    "@typescript-eslint/parser": "^4.6.1",
+    "chai": "^4.2.0",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "karma": "^5.2.3",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-cli": "^2.0.0",
+    "karma-mocha": "^2.0.1",
+    "karma-typescript-preprocessor": "^0.4.0",
+    "lodash": "^4.17.20",
+    "mocha": "^8.2.1",
+    "prettier": "^2.1.2",
+    "rollup": "^2.33.1",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "typescript": "^4.0.5"
+  },
+  "dependencies": {
+    "karma-typescript": "^5.2.0"
+  }
+}
