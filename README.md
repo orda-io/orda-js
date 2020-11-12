@@ -4,16 +4,17 @@
 ## For Development
 
 ```
+$ npm install
 $ npm run dev
 ```
 
 ## For build
 ```
-$ npm test
+$ npm run build
 ```
 
 ## For Test 
 
 ```
-$ npm run test
+$ npm test
 ```
