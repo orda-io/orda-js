@@ -1,59 +1,37 @@
 module.exports = function (config) {
     config.set({
         basePath: '',
+        
         frameworks: ['mocha', 'karma-typescript'],
 
         files: [
-            // './test/index.js',
-            '**/*.spec.ts'
+            'src/**/*.ts',
+            'test/**/*.ts'
         ],
-
-        exclude: [
-        ],
-
-        karmaTypescriptConfig: {
-
-        }, 
-
-        preprocessors: {
-            "**/*.ts": ['karma-typescript']
-        },
-
-        typescriptPreprocessor: {
-            options: {
-                sourceMap: true
-            }
-        },
-
-        reporters: ['progress'],
-
-        port: 9876,
-
-        colors: true,
-
-        logLevel: config.LOG_INFO,
-
-        autoWatch: false,
 
         browsers: ['ChromeHeadless'],
 
         customLaunchers: {
-          ChromeX: {
-            base: "ChromeHeadless"
-          }
-        },    
+            ChromeX: {
+                base: "ChromeHeadless"
+            }
+        },
 
-        singleRun: true,
+        // reporters: ['progress', 'coverage'],
 
-        captureTimeout: 60000,
-
-        concurrency: Infinity,
-
+        preprocessors: {
+            "**/*.ts": ['karma-typescript'],
+        },
+        singleRun : true,
+        logLevel: config.LOG_DEBUG,
         plugins: [
             'karma-mocha',
-            'karma-chrome-launcher',
+            // 'karma-coverage',
             'karma-typescript',
-            'karma-typescript-preprocessor'
+            'karma-typescript-preprocessor',
+            'karma-chrome-launcher'
         ]
-    })
+    });
+
 }
+
