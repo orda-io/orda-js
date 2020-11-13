@@ -1,15 +1,17 @@
+
 module.exports = function (config) {
     config.set({
         basePath: '',
-        
+
         frameworks: ['mocha', 'karma-typescript'],
 
         files: [
+            'src/**/*.js',
             'src/**/*.ts',
             'test/**/*.ts'
         ],
 
-        browsers: ['ChromeHeadless'],
+        browsers: ['ChromeX'],
 
         customLaunchers: {
             ChromeX: {
@@ -17,19 +19,29 @@ module.exports = function (config) {
             }
         },
 
-        // reporters: ['progress', 'coverage'],
-
         preprocessors: {
-            "**/*.ts": ['karma-typescript'],
+            "**/*.ts": ['karma-typescript']
         },
-        singleRun : true,
-        logLevel: config.LOG_DEBUG,
+
+        karmaTypescriptConfig: {
+            compilerOptions: {
+                module: "commonjs",
+                moduleResolution: "node"
+            },
+            bundlerOptions: {
+                entrypoints: /\.test\.ts$/,
+            },
+            tsconfig: './tsconfig.json'
+        },
+        reporters: ['progress', 'coverage'],
+
+        singleRun: true,
+        logLevel: config.LOG_INFO,
         plugins: [
             'karma-mocha',
-            // 'karma-coverage',
             'karma-typescript',
-            'karma-typescript-preprocessor',
-            'karma-chrome-launcher'
+            'karma-coverage',
+            "karma-chrome-launcher"
         ]
     });
 

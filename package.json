@@ -11,7 +11,10 @@
     "clean": "rm -rf ./lib",
     "build": "npm run clean && rollup -c",
     "eslint:fix": "eslint --ext .tsx,.ts --fix ./src",
-    "prettier": "prettier  --config ./.prettierrc   --write ./src/**/*.{json,ts,tsx}"
+    "prettier": "prettier  --config ./.prettierrc   --write ./src/**/*.{json,ts,tsx}",
+    "gen-model:js": "pbjs -t static-module -o src/model/model.js ./ortoo/pkg/model/*.proto",
+    "gen-model:ts": "pbts -o src/model/model.d.ts -w commonjs src/model/model.js",
+    "gen-model": "npm run gen-model:js && npm run gen-model:ts"
   },
   "repository": {
     "type": "git",
@@ -28,7 +31,8 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
     "@types/chai": "^4.2.14",
-    "@types/mocha": "^8.0.3",
+    "@types/mocha": "^8.0.4",
+    "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.6.1",
     "@typescript-eslint/parser": "^4.6.1",
     "chai": "^4.2.0",
@@ -39,19 +43,18 @@
     "karma-chrome-launcher": "^3.1.0",
     "karma-cli": "^2.0.0",
     "karma-coverage": "^2.0.3",
-    "karma-mocha": "^2.0.1",    
+    "karma-mocha": "^2.0.1",
     "karma-typescript": "^5.2.0",
-    "karma-typescript-preprocessor": "^0.4.0",
     "lodash": "^4.17.20",
     "mocha": "^8.2.1",
     "prettier": "^2.1.2",
+    "protobufjs": "^6.10.1",
     "rollup": "^2.33.1",
-    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.29.0",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.0.5"
+    "typescript": "^4.0.5",
+    "uuid": "^8.3.1"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

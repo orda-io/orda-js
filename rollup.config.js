@@ -6,7 +6,8 @@ import json from '@rollup/plugin-json';
 import typescript from 'rollup-plugin-typescript2';
 import pkg from './package.json';
 
-
+let defaults = { compilerOptions: { declaration: true } };
+let override = { compilerOptions: { declaration: false } };
 
 export default {
     input: './src/index.ts',
@@ -21,7 +22,9 @@ export default {
     plugins: [
         json(),
         typescript({
-            exclude: 'node_modules/**',
+            tsconfigDefaults: defaults,
+            tsconfig: "tsconfig.json",
+            tsconfigOverride: override
         }), 
         nodeResolve(),
         commonjs(),        
