@@ -1,5 +1,5 @@
 import { SyncType } from './constants/constants';
-import { model } from './model/model';
+import * as model from './model/model';
 
 export class ClientConfig {
   ServerAddr: string;
@@ -11,7 +11,7 @@ export class ClientConfig {
     serverAddr: string,
     notificationAddr: string,
     collectionName: string,
-    syncType: SyncType
+    syncType?: SyncType
   ) {
     this.ServerAddr = serverAddr;
     this.NotificationAddr = notificationAddr;
@@ -29,4 +29,9 @@ export class ClientConfig {
         break;
     }
   }
+}
+
+export function CreateLocalClientConfig(collectionName: string): ClientConfig {
+  console.log('alias:', collectionName);
+  return new ClientConfig('', '', collectionName, SyncType.LOCAL_ONLY);
 }
