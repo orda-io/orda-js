@@ -1,6 +1,699 @@
 import * as Long from "long";
 
 import * as $protobuf from "protobufjs";
+/** Properties of a MessageHeader. */
+export interface IMessageHeader {
+
+    /** MessageHeader version */
+    version?: (string|null);
+
+    /** MessageHeader seq */
+    seq?: (number|null);
+
+    /** MessageHeader typeOf */
+    typeOf?: (TypeOfMessage|null);
+
+    /** MessageHeader collection */
+    collection?: (string|null);
+
+    /** MessageHeader clientAlias */
+    clientAlias?: (string|null);
+
+    /** MessageHeader cuid */
+    cuid?: (Uint8Array|null);
+}
+
+/** Represents a MessageHeader. */
+export class MessageHeader implements IMessageHeader {
+
+    /**
+     * Constructs a new MessageHeader.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IMessageHeader);
+
+    /** MessageHeader version. */
+    public version: string;
+
+    /** MessageHeader seq. */
+    public seq: number;
+
+    /** MessageHeader typeOf. */
+    public typeOf: TypeOfMessage;
+
+    /** MessageHeader collection. */
+    public collection: string;
+
+    /** MessageHeader clientAlias. */
+    public clientAlias: string;
+
+    /** MessageHeader cuid. */
+    public cuid: Uint8Array;
+
+    /**
+     * Creates a new MessageHeader instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns MessageHeader instance
+     */
+    public static create(properties?: IMessageHeader): MessageHeader;
+
+    /**
+     * Encodes the specified MessageHeader message. Does not implicitly {@link MessageHeader.verify|verify} messages.
+     * @param message MessageHeader message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IMessageHeader, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified MessageHeader message, length delimited. Does not implicitly {@link MessageHeader.verify|verify} messages.
+     * @param message MessageHeader message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IMessageHeader, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a MessageHeader message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns MessageHeader
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): MessageHeader;
+
+    /**
+     * Decodes a MessageHeader message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns MessageHeader
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): MessageHeader;
+
+    /**
+     * Verifies a MessageHeader message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a MessageHeader message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns MessageHeader
+     */
+    public static fromObject(object: { [k: string]: any }): MessageHeader;
+
+    /**
+     * Creates a plain object from a MessageHeader message. Also converts values to other types if specified.
+     * @param message MessageHeader
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: MessageHeader, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this MessageHeader to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** TypeOfMessage enum. */
+export enum TypeOfMessage {
+    REQUEST_CLIENT = 0,
+    REQUEST_PUSHPULL = 1,
+    RESPONSE_CLIENT = 10,
+    RESPONSE_PUSHPULL = 11
+}
+
+/** StateOfResponse enum. */
+export enum StateOfResponse {
+    OK = 0,
+    ERR_CLIENT_INVALID_COLLECTION = 101,
+    ERR_CLIENT_INVALID_SYNCTYPE = 102
+}
+
+/** Properties of a ResponseState. */
+export interface IResponseState {
+
+    /** ResponseState state */
+    state?: (StateOfResponse|null);
+
+    /** ResponseState msg */
+    msg?: (string|null);
+}
+
+/** Represents a ResponseState. */
+export class ResponseState implements IResponseState {
+
+    /**
+     * Constructs a new ResponseState.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IResponseState);
+
+    /** ResponseState state. */
+    public state: StateOfResponse;
+
+    /** ResponseState msg. */
+    public msg: string;
+
+    /**
+     * Creates a new ResponseState instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns ResponseState instance
+     */
+    public static create(properties?: IResponseState): ResponseState;
+
+    /**
+     * Encodes the specified ResponseState message. Does not implicitly {@link ResponseState.verify|verify} messages.
+     * @param message ResponseState message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IResponseState, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified ResponseState message, length delimited. Does not implicitly {@link ResponseState.verify|verify} messages.
+     * @param message ResponseState message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IResponseState, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a ResponseState message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns ResponseState
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): ResponseState;
+
+    /**
+     * Decodes a ResponseState message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns ResponseState
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): ResponseState;
+
+    /**
+     * Verifies a ResponseState message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a ResponseState message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns ResponseState
+     */
+    public static fromObject(object: { [k: string]: any }): ResponseState;
+
+    /**
+     * Creates a plain object from a ResponseState message. Also converts values to other types if specified.
+     * @param message ResponseState
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: ResponseState, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this ResponseState to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a ClientRequest. */
+export interface IClientRequest {
+
+    /** ClientRequest header */
+    header?: (IMessageHeader|null);
+
+    /** ClientRequest client */
+    client?: (IClient|null);
+}
+
+/** Represents a ClientRequest. */
+export class ClientRequest implements IClientRequest {
+
+    /**
+     * Constructs a new ClientRequest.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IClientRequest);
+
+    /** ClientRequest header. */
+    public header?: (IMessageHeader|null);
+
+    /** ClientRequest client. */
+    public client?: (IClient|null);
+
+    /**
+     * Creates a new ClientRequest instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns ClientRequest instance
+     */
+    public static create(properties?: IClientRequest): ClientRequest;
+
+    /**
+     * Encodes the specified ClientRequest message. Does not implicitly {@link ClientRequest.verify|verify} messages.
+     * @param message ClientRequest message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IClientRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified ClientRequest message, length delimited. Does not implicitly {@link ClientRequest.verify|verify} messages.
+     * @param message ClientRequest message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IClientRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a ClientRequest message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns ClientRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): ClientRequest;
+
+    /**
+     * Decodes a ClientRequest message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns ClientRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): ClientRequest;
+
+    /**
+     * Verifies a ClientRequest message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a ClientRequest message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns ClientRequest
+     */
+    public static fromObject(object: { [k: string]: any }): ClientRequest;
+
+    /**
+     * Creates a plain object from a ClientRequest message. Also converts values to other types if specified.
+     * @param message ClientRequest
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: ClientRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this ClientRequest to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a ClientResponse. */
+export interface IClientResponse {
+
+    /** ClientResponse header */
+    header?: (IMessageHeader|null);
+
+    /** ClientResponse state */
+    state?: (IResponseState|null);
+}
+
+/** Represents a ClientResponse. */
+export class ClientResponse implements IClientResponse {
+
+    /**
+     * Constructs a new ClientResponse.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IClientResponse);
+
+    /** ClientResponse header. */
+    public header?: (IMessageHeader|null);
+
+    /** ClientResponse state. */
+    public state?: (IResponseState|null);
+
+    /**
+     * Creates a new ClientResponse instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns ClientResponse instance
+     */
+    public static create(properties?: IClientResponse): ClientResponse;
+
+    /**
+     * Encodes the specified ClientResponse message. Does not implicitly {@link ClientResponse.verify|verify} messages.
+     * @param message ClientResponse message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IClientResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified ClientResponse message, length delimited. Does not implicitly {@link ClientResponse.verify|verify} messages.
+     * @param message ClientResponse message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IClientResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a ClientResponse message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns ClientResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): ClientResponse;
+
+    /**
+     * Decodes a ClientResponse message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns ClientResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): ClientResponse;
+
+    /**
+     * Verifies a ClientResponse message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a ClientResponse message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns ClientResponse
+     */
+    public static fromObject(object: { [k: string]: any }): ClientResponse;
+
+    /**
+     * Creates a plain object from a ClientResponse message. Also converts values to other types if specified.
+     * @param message ClientResponse
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: ClientResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this ClientResponse to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a PushPullRequest. */
+export interface IPushPullRequest {
+
+    /** PushPullRequest header */
+    header?: (IMessageHeader|null);
+
+    /** PushPullRequest ID */
+    ID?: (number|null);
+
+    /** PushPullRequest PushPullPacks */
+    PushPullPacks?: (IPushPullPack[]|null);
+}
+
+/** Represents a PushPullRequest. */
+export class PushPullRequest implements IPushPullRequest {
+
+    /**
+     * Constructs a new PushPullRequest.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IPushPullRequest);
+
+    /** PushPullRequest header. */
+    public header?: (IMessageHeader|null);
+
+    /** PushPullRequest ID. */
+    public ID: number;
+
+    /** PushPullRequest PushPullPacks. */
+    public PushPullPacks: IPushPullPack[];
+
+    /**
+     * Creates a new PushPullRequest instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns PushPullRequest instance
+     */
+    public static create(properties?: IPushPullRequest): PushPullRequest;
+
+    /**
+     * Encodes the specified PushPullRequest message. Does not implicitly {@link PushPullRequest.verify|verify} messages.
+     * @param message PushPullRequest message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IPushPullRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified PushPullRequest message, length delimited. Does not implicitly {@link PushPullRequest.verify|verify} messages.
+     * @param message PushPullRequest message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IPushPullRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a PushPullRequest message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns PushPullRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): PushPullRequest;
+
+    /**
+     * Decodes a PushPullRequest message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns PushPullRequest
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): PushPullRequest;
+
+    /**
+     * Verifies a PushPullRequest message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a PushPullRequest message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns PushPullRequest
+     */
+    public static fromObject(object: { [k: string]: any }): PushPullRequest;
+
+    /**
+     * Creates a plain object from a PushPullRequest message. Also converts values to other types if specified.
+     * @param message PushPullRequest
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: PushPullRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this PushPullRequest to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a PushPullResponse. */
+export interface IPushPullResponse {
+
+    /** PushPullResponse header */
+    header?: (IMessageHeader|null);
+
+    /** PushPullResponse ID */
+    ID?: (number|null);
+
+    /** PushPullResponse PushPullPacks */
+    PushPullPacks?: (IPushPullPack[]|null);
+}
+
+/** Represents a PushPullResponse. */
+export class PushPullResponse implements IPushPullResponse {
+
+    /**
+     * Constructs a new PushPullResponse.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IPushPullResponse);
+
+    /** PushPullResponse header. */
+    public header?: (IMessageHeader|null);
+
+    /** PushPullResponse ID. */
+    public ID: number;
+
+    /** PushPullResponse PushPullPacks. */
+    public PushPullPacks: IPushPullPack[];
+
+    /**
+     * Creates a new PushPullResponse instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns PushPullResponse instance
+     */
+    public static create(properties?: IPushPullResponse): PushPullResponse;
+
+    /**
+     * Encodes the specified PushPullResponse message. Does not implicitly {@link PushPullResponse.verify|verify} messages.
+     * @param message PushPullResponse message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IPushPullResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified PushPullResponse message, length delimited. Does not implicitly {@link PushPullResponse.verify|verify} messages.
+     * @param message PushPullResponse message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IPushPullResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a PushPullResponse message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns PushPullResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): PushPullResponse;
+
+    /**
+     * Decodes a PushPullResponse message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns PushPullResponse
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): PushPullResponse;
+
+    /**
+     * Verifies a PushPullResponse message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a PushPullResponse message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns PushPullResponse
+     */
+    public static fromObject(object: { [k: string]: any }): PushPullResponse;
+
+    /**
+     * Creates a plain object from a PushPullResponse message. Also converts values to other types if specified.
+     * @param message PushPullResponse
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: PushPullResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this PushPullResponse to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Represents an OrtooService */
+export class OrtooService extends $protobuf.rpc.Service {
+
+    /**
+     * Constructs a new OrtooService service.
+     * @param rpcImpl RPC implementation
+     * @param [requestDelimited=false] Whether requests are length-delimited
+     * @param [responseDelimited=false] Whether responses are length-delimited
+     */
+    constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+    /**
+     * Creates new OrtooService service using the specified rpc implementation.
+     * @param rpcImpl RPC implementation
+     * @param [requestDelimited=false] Whether requests are length-delimited
+     * @param [responseDelimited=false] Whether responses are length-delimited
+     * @returns RPC service. Useful where requests and/or responses are streamed.
+     */
+    public static create(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean): OrtooService;
+
+    /**
+     * Calls ProcessPushPull.
+     * @param request PushPullRequest message or plain object
+     * @param callback Node-style callback called with the error, if any, and PushPullResponse
+     */
+    public processPushPull(request: IPushPullRequest, callback: OrtooService.ProcessPushPullCallback): void;
+
+    /**
+     * Calls ProcessPushPull.
+     * @param request PushPullRequest message or plain object
+     * @returns Promise
+     */
+    public processPushPull(request: IPushPullRequest): Promise<PushPullResponse>;
+
+    /**
+     * Calls ProcessClient.
+     * @param request ClientRequest message or plain object
+     * @param callback Node-style callback called with the error, if any, and ClientResponse
+     */
+    public processClient(request: IClientRequest, callback: OrtooService.ProcessClientCallback): void;
+
+    /**
+     * Calls ProcessClient.
+     * @param request ClientRequest message or plain object
+     * @returns Promise
+     */
+    public processClient(request: IClientRequest): Promise<ClientResponse>;
+}
+
+export namespace OrtooService {
+
+    /**
+     * Callback as used by {@link OrtooService#processPushPull}.
+     * @param error Error, if any
+     * @param [response] PushPullResponse
+     */
+    type ProcessPushPullCallback = (error: (Error|null), response?: PushPullResponse) => void;
+
+    /**
+     * Callback as used by {@link OrtooService#processClient}.
+     * @param error Error, if any
+     * @param [response] ClientResponse
+     */
+    type ProcessClientCallback = (error: (Error|null), response?: ClientResponse) => void;
+}
+
 /** Properties of a Client. */
 export interface IClient {
 

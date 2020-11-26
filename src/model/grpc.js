@@ -16,6 +16,1657 @@
     // Exported root namespace
     var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
     
+    $root.MessageHeader = (function() {
+    
+        /**
+         * Properties of a MessageHeader.
+         * @exports IMessageHeader
+         * @interface IMessageHeader
+         * @property {string|null} [version] MessageHeader version
+         * @property {number|null} [seq] MessageHeader seq
+         * @property {TypeOfMessage|null} [typeOf] MessageHeader typeOf
+         * @property {string|null} [collection] MessageHeader collection
+         * @property {string|null} [clientAlias] MessageHeader clientAlias
+         * @property {Uint8Array|null} [cuid] MessageHeader cuid
+         */
+    
+        /**
+         * Constructs a new MessageHeader.
+         * @exports MessageHeader
+         * @classdesc Represents a MessageHeader.
+         * @implements IMessageHeader
+         * @constructor
+         * @param {IMessageHeader=} [properties] Properties to set
+         */
+        function MessageHeader(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * MessageHeader version.
+         * @member {string} version
+         * @memberof MessageHeader
+         * @instance
+         */
+        MessageHeader.prototype.version = "";
+    
+        /**
+         * MessageHeader seq.
+         * @member {number} seq
+         * @memberof MessageHeader
+         * @instance
+         */
+        MessageHeader.prototype.seq = 0;
+    
+        /**
+         * MessageHeader typeOf.
+         * @member {TypeOfMessage} typeOf
+         * @memberof MessageHeader
+         * @instance
+         */
+        MessageHeader.prototype.typeOf = 0;
+    
+        /**
+         * MessageHeader collection.
+         * @member {string} collection
+         * @memberof MessageHeader
+         * @instance
+         */
+        MessageHeader.prototype.collection = "";
+    
+        /**
+         * MessageHeader clientAlias.
+         * @member {string} clientAlias
+         * @memberof MessageHeader
+         * @instance
+         */
+        MessageHeader.prototype.clientAlias = "";
+    
+        /**
+         * MessageHeader cuid.
+         * @member {Uint8Array} cuid
+         * @memberof MessageHeader
+         * @instance
+         */
+        MessageHeader.prototype.cuid = $util.newBuffer([]);
+    
+        /**
+         * Creates a new MessageHeader instance using the specified properties.
+         * @function create
+         * @memberof MessageHeader
+         * @static
+         * @param {IMessageHeader=} [properties] Properties to set
+         * @returns {MessageHeader} MessageHeader instance
+         */
+        MessageHeader.create = function create(properties) {
+            return new MessageHeader(properties);
+        };
+    
+        /**
+         * Encodes the specified MessageHeader message. Does not implicitly {@link MessageHeader.verify|verify} messages.
+         * @function encode
+         * @memberof MessageHeader
+         * @static
+         * @param {IMessageHeader} message MessageHeader message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        MessageHeader.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.version != null && message.hasOwnProperty("version"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.version);
+            if (message.seq != null && message.hasOwnProperty("seq"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.seq);
+            if (message.typeOf != null && message.hasOwnProperty("typeOf"))
+                writer.uint32(/* id 3, wireType 0 =*/24).int32(message.typeOf);
+            if (message.collection != null && message.hasOwnProperty("collection"))
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.collection);
+            if (message.clientAlias != null && message.hasOwnProperty("clientAlias"))
+                writer.uint32(/* id 5, wireType 2 =*/42).string(message.clientAlias);
+            if (message.cuid != null && message.hasOwnProperty("cuid"))
+                writer.uint32(/* id 6, wireType 2 =*/50).bytes(message.cuid);
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified MessageHeader message, length delimited. Does not implicitly {@link MessageHeader.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof MessageHeader
+         * @static
+         * @param {IMessageHeader} message MessageHeader message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        MessageHeader.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes a MessageHeader message from the specified reader or buffer.
+         * @function decode
+         * @memberof MessageHeader
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {MessageHeader} MessageHeader
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        MessageHeader.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.MessageHeader();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.version = reader.string();
+                    break;
+                case 2:
+                    message.seq = reader.uint32();
+                    break;
+                case 3:
+                    message.typeOf = reader.int32();
+                    break;
+                case 4:
+                    message.collection = reader.string();
+                    break;
+                case 5:
+                    message.clientAlias = reader.string();
+                    break;
+                case 6:
+                    message.cuid = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes a MessageHeader message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof MessageHeader
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {MessageHeader} MessageHeader
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        MessageHeader.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies a MessageHeader message.
+         * @function verify
+         * @memberof MessageHeader
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        MessageHeader.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.version != null && message.hasOwnProperty("version"))
+                if (!$util.isString(message.version))
+                    return "version: string expected";
+            if (message.seq != null && message.hasOwnProperty("seq"))
+                if (!$util.isInteger(message.seq))
+                    return "seq: integer expected";
+            if (message.typeOf != null && message.hasOwnProperty("typeOf"))
+                switch (message.typeOf) {
+                default:
+                    return "typeOf: enum value expected";
+                case 0:
+                case 1:
+                case 10:
+                case 11:
+                    break;
+                }
+            if (message.collection != null && message.hasOwnProperty("collection"))
+                if (!$util.isString(message.collection))
+                    return "collection: string expected";
+            if (message.clientAlias != null && message.hasOwnProperty("clientAlias"))
+                if (!$util.isString(message.clientAlias))
+                    return "clientAlias: string expected";
+            if (message.cuid != null && message.hasOwnProperty("cuid"))
+                if (!(message.cuid && typeof message.cuid.length === "number" || $util.isString(message.cuid)))
+                    return "cuid: buffer expected";
+            return null;
+        };
+    
+        /**
+         * Creates a MessageHeader message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof MessageHeader
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {MessageHeader} MessageHeader
+         */
+        MessageHeader.fromObject = function fromObject(object) {
+            if (object instanceof $root.MessageHeader)
+                return object;
+            var message = new $root.MessageHeader();
+            if (object.version != null)
+                message.version = String(object.version);
+            if (object.seq != null)
+                message.seq = object.seq >>> 0;
+            switch (object.typeOf) {
+            case "REQUEST_CLIENT":
+            case 0:
+                message.typeOf = 0;
+                break;
+            case "REQUEST_PUSHPULL":
+            case 1:
+                message.typeOf = 1;
+                break;
+            case "RESPONSE_CLIENT":
+            case 10:
+                message.typeOf = 10;
+                break;
+            case "RESPONSE_PUSHPULL":
+            case 11:
+                message.typeOf = 11;
+                break;
+            }
+            if (object.collection != null)
+                message.collection = String(object.collection);
+            if (object.clientAlias != null)
+                message.clientAlias = String(object.clientAlias);
+            if (object.cuid != null)
+                if (typeof object.cuid === "string")
+                    $util.base64.decode(object.cuid, message.cuid = $util.newBuffer($util.base64.length(object.cuid)), 0);
+                else if (object.cuid.length)
+                    message.cuid = object.cuid;
+            return message;
+        };
+    
+        /**
+         * Creates a plain object from a MessageHeader message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof MessageHeader
+         * @static
+         * @param {MessageHeader} message MessageHeader
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        MessageHeader.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.version = "";
+                object.seq = 0;
+                object.typeOf = options.enums === String ? "REQUEST_CLIENT" : 0;
+                object.collection = "";
+                object.clientAlias = "";
+                if (options.bytes === String)
+                    object.cuid = "";
+                else {
+                    object.cuid = [];
+                    if (options.bytes !== Array)
+                        object.cuid = $util.newBuffer(object.cuid);
+                }
+            }
+            if (message.version != null && message.hasOwnProperty("version"))
+                object.version = message.version;
+            if (message.seq != null && message.hasOwnProperty("seq"))
+                object.seq = message.seq;
+            if (message.typeOf != null && message.hasOwnProperty("typeOf"))
+                object.typeOf = options.enums === String ? $root.TypeOfMessage[message.typeOf] : message.typeOf;
+            if (message.collection != null && message.hasOwnProperty("collection"))
+                object.collection = message.collection;
+            if (message.clientAlias != null && message.hasOwnProperty("clientAlias"))
+                object.clientAlias = message.clientAlias;
+            if (message.cuid != null && message.hasOwnProperty("cuid"))
+                object.cuid = options.bytes === String ? $util.base64.encode(message.cuid, 0, message.cuid.length) : options.bytes === Array ? Array.prototype.slice.call(message.cuid) : message.cuid;
+            return object;
+        };
+    
+        /**
+         * Converts this MessageHeader to JSON.
+         * @function toJSON
+         * @memberof MessageHeader
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        MessageHeader.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return MessageHeader;
+    })();
+    
+    /**
+     * TypeOfMessage enum.
+     * @exports TypeOfMessage
+     * @enum {string}
+     * @property {number} REQUEST_CLIENT=0 REQUEST_CLIENT value
+     * @property {number} REQUEST_PUSHPULL=1 REQUEST_PUSHPULL value
+     * @property {number} RESPONSE_CLIENT=10 RESPONSE_CLIENT value
+     * @property {number} RESPONSE_PUSHPULL=11 RESPONSE_PUSHPULL value
+     */
+    $root.TypeOfMessage = (function() {
+        var valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "REQUEST_CLIENT"] = 0;
+        values[valuesById[1] = "REQUEST_PUSHPULL"] = 1;
+        values[valuesById[10] = "RESPONSE_CLIENT"] = 10;
+        values[valuesById[11] = "RESPONSE_PUSHPULL"] = 11;
+        return values;
+    })();
+    
+    /**
+     * StateOfResponse enum.
+     * @exports StateOfResponse
+     * @enum {string}
+     * @property {number} OK=0 OK value
+     * @property {number} ERR_CLIENT_INVALID_COLLECTION=101 ERR_CLIENT_INVALID_COLLECTION value
+     * @property {number} ERR_CLIENT_INVALID_SYNCTYPE=102 ERR_CLIENT_INVALID_SYNCTYPE value
+     */
+    $root.StateOfResponse = (function() {
+        var valuesById = {}, values = Object.create(valuesById);
+        values[valuesById[0] = "OK"] = 0;
+        values[valuesById[101] = "ERR_CLIENT_INVALID_COLLECTION"] = 101;
+        values[valuesById[102] = "ERR_CLIENT_INVALID_SYNCTYPE"] = 102;
+        return values;
+    })();
+    
+    $root.ResponseState = (function() {
+    
+        /**
+         * Properties of a ResponseState.
+         * @exports IResponseState
+         * @interface IResponseState
+         * @property {StateOfResponse|null} [state] ResponseState state
+         * @property {string|null} [msg] ResponseState msg
+         */
+    
+        /**
+         * Constructs a new ResponseState.
+         * @exports ResponseState
+         * @classdesc Represents a ResponseState.
+         * @implements IResponseState
+         * @constructor
+         * @param {IResponseState=} [properties] Properties to set
+         */
+        function ResponseState(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * ResponseState state.
+         * @member {StateOfResponse} state
+         * @memberof ResponseState
+         * @instance
+         */
+        ResponseState.prototype.state = 0;
+    
+        /**
+         * ResponseState msg.
+         * @member {string} msg
+         * @memberof ResponseState
+         * @instance
+         */
+        ResponseState.prototype.msg = "";
+    
+        /**
+         * Creates a new ResponseState instance using the specified properties.
+         * @function create
+         * @memberof ResponseState
+         * @static
+         * @param {IResponseState=} [properties] Properties to set
+         * @returns {ResponseState} ResponseState instance
+         */
+        ResponseState.create = function create(properties) {
+            return new ResponseState(properties);
+        };
+    
+        /**
+         * Encodes the specified ResponseState message. Does not implicitly {@link ResponseState.verify|verify} messages.
+         * @function encode
+         * @memberof ResponseState
+         * @static
+         * @param {IResponseState} message ResponseState message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ResponseState.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.state != null && message.hasOwnProperty("state"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.state);
+            if (message.msg != null && message.hasOwnProperty("msg"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.msg);
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified ResponseState message, length delimited. Does not implicitly {@link ResponseState.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ResponseState
+         * @static
+         * @param {IResponseState} message ResponseState message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ResponseState.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes a ResponseState message from the specified reader or buffer.
+         * @function decode
+         * @memberof ResponseState
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ResponseState} ResponseState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ResponseState.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponseState();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.state = reader.int32();
+                    break;
+                case 2:
+                    message.msg = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes a ResponseState message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ResponseState
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ResponseState} ResponseState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ResponseState.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies a ResponseState message.
+         * @function verify
+         * @memberof ResponseState
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ResponseState.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.state != null && message.hasOwnProperty("state"))
+                switch (message.state) {
+                default:
+                    return "state: enum value expected";
+                case 0:
+                case 101:
+                case 102:
+                    break;
+                }
+            if (message.msg != null && message.hasOwnProperty("msg"))
+                if (!$util.isString(message.msg))
+                    return "msg: string expected";
+            return null;
+        };
+    
+        /**
+         * Creates a ResponseState message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof ResponseState
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {ResponseState} ResponseState
+         */
+        ResponseState.fromObject = function fromObject(object) {
+            if (object instanceof $root.ResponseState)
+                return object;
+            var message = new $root.ResponseState();
+            switch (object.state) {
+            case "OK":
+            case 0:
+                message.state = 0;
+                break;
+            case "ERR_CLIENT_INVALID_COLLECTION":
+            case 101:
+                message.state = 101;
+                break;
+            case "ERR_CLIENT_INVALID_SYNCTYPE":
+            case 102:
+                message.state = 102;
+                break;
+            }
+            if (object.msg != null)
+                message.msg = String(object.msg);
+            return message;
+        };
+    
+        /**
+         * Creates a plain object from a ResponseState message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof ResponseState
+         * @static
+         * @param {ResponseState} message ResponseState
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ResponseState.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.state = options.enums === String ? "OK" : 0;
+                object.msg = "";
+            }
+            if (message.state != null && message.hasOwnProperty("state"))
+                object.state = options.enums === String ? $root.StateOfResponse[message.state] : message.state;
+            if (message.msg != null && message.hasOwnProperty("msg"))
+                object.msg = message.msg;
+            return object;
+        };
+    
+        /**
+         * Converts this ResponseState to JSON.
+         * @function toJSON
+         * @memberof ResponseState
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ResponseState.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return ResponseState;
+    })();
+    
+    $root.ClientRequest = (function() {
+    
+        /**
+         * Properties of a ClientRequest.
+         * @exports IClientRequest
+         * @interface IClientRequest
+         * @property {IMessageHeader|null} [header] ClientRequest header
+         * @property {IClient|null} [client] ClientRequest client
+         */
+    
+        /**
+         * Constructs a new ClientRequest.
+         * @exports ClientRequest
+         * @classdesc Represents a ClientRequest.
+         * @implements IClientRequest
+         * @constructor
+         * @param {IClientRequest=} [properties] Properties to set
+         */
+        function ClientRequest(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * ClientRequest header.
+         * @member {IMessageHeader|null|undefined} header
+         * @memberof ClientRequest
+         * @instance
+         */
+        ClientRequest.prototype.header = null;
+    
+        /**
+         * ClientRequest client.
+         * @member {IClient|null|undefined} client
+         * @memberof ClientRequest
+         * @instance
+         */
+        ClientRequest.prototype.client = null;
+    
+        /**
+         * Creates a new ClientRequest instance using the specified properties.
+         * @function create
+         * @memberof ClientRequest
+         * @static
+         * @param {IClientRequest=} [properties] Properties to set
+         * @returns {ClientRequest} ClientRequest instance
+         */
+        ClientRequest.create = function create(properties) {
+            return new ClientRequest(properties);
+        };
+    
+        /**
+         * Encodes the specified ClientRequest message. Does not implicitly {@link ClientRequest.verify|verify} messages.
+         * @function encode
+         * @memberof ClientRequest
+         * @static
+         * @param {IClientRequest} message ClientRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ClientRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.header != null && message.hasOwnProperty("header"))
+                $root.MessageHeader.encode(message.header, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.client != null && message.hasOwnProperty("client"))
+                $root.Client.encode(message.client, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified ClientRequest message, length delimited. Does not implicitly {@link ClientRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ClientRequest
+         * @static
+         * @param {IClientRequest} message ClientRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ClientRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes a ClientRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof ClientRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ClientRequest} ClientRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ClientRequest.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ClientRequest();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.header = $root.MessageHeader.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.client = $root.Client.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes a ClientRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ClientRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ClientRequest} ClientRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ClientRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies a ClientRequest message.
+         * @function verify
+         * @memberof ClientRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ClientRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.header != null && message.hasOwnProperty("header")) {
+                var error = $root.MessageHeader.verify(message.header);
+                if (error)
+                    return "header." + error;
+            }
+            if (message.client != null && message.hasOwnProperty("client")) {
+                var error = $root.Client.verify(message.client);
+                if (error)
+                    return "client." + error;
+            }
+            return null;
+        };
+    
+        /**
+         * Creates a ClientRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof ClientRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {ClientRequest} ClientRequest
+         */
+        ClientRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.ClientRequest)
+                return object;
+            var message = new $root.ClientRequest();
+            if (object.header != null) {
+                if (typeof object.header !== "object")
+                    throw TypeError(".ClientRequest.header: object expected");
+                message.header = $root.MessageHeader.fromObject(object.header);
+            }
+            if (object.client != null) {
+                if (typeof object.client !== "object")
+                    throw TypeError(".ClientRequest.client: object expected");
+                message.client = $root.Client.fromObject(object.client);
+            }
+            return message;
+        };
+    
+        /**
+         * Creates a plain object from a ClientRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof ClientRequest
+         * @static
+         * @param {ClientRequest} message ClientRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ClientRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.header = null;
+                object.client = null;
+            }
+            if (message.header != null && message.hasOwnProperty("header"))
+                object.header = $root.MessageHeader.toObject(message.header, options);
+            if (message.client != null && message.hasOwnProperty("client"))
+                object.client = $root.Client.toObject(message.client, options);
+            return object;
+        };
+    
+        /**
+         * Converts this ClientRequest to JSON.
+         * @function toJSON
+         * @memberof ClientRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ClientRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return ClientRequest;
+    })();
+    
+    $root.ClientResponse = (function() {
+    
+        /**
+         * Properties of a ClientResponse.
+         * @exports IClientResponse
+         * @interface IClientResponse
+         * @property {IMessageHeader|null} [header] ClientResponse header
+         * @property {IResponseState|null} [state] ClientResponse state
+         */
+    
+        /**
+         * Constructs a new ClientResponse.
+         * @exports ClientResponse
+         * @classdesc Represents a ClientResponse.
+         * @implements IClientResponse
+         * @constructor
+         * @param {IClientResponse=} [properties] Properties to set
+         */
+        function ClientResponse(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * ClientResponse header.
+         * @member {IMessageHeader|null|undefined} header
+         * @memberof ClientResponse
+         * @instance
+         */
+        ClientResponse.prototype.header = null;
+    
+        /**
+         * ClientResponse state.
+         * @member {IResponseState|null|undefined} state
+         * @memberof ClientResponse
+         * @instance
+         */
+        ClientResponse.prototype.state = null;
+    
+        /**
+         * Creates a new ClientResponse instance using the specified properties.
+         * @function create
+         * @memberof ClientResponse
+         * @static
+         * @param {IClientResponse=} [properties] Properties to set
+         * @returns {ClientResponse} ClientResponse instance
+         */
+        ClientResponse.create = function create(properties) {
+            return new ClientResponse(properties);
+        };
+    
+        /**
+         * Encodes the specified ClientResponse message. Does not implicitly {@link ClientResponse.verify|verify} messages.
+         * @function encode
+         * @memberof ClientResponse
+         * @static
+         * @param {IClientResponse} message ClientResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ClientResponse.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.header != null && message.hasOwnProperty("header"))
+                $root.MessageHeader.encode(message.header, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.state != null && message.hasOwnProperty("state"))
+                $root.ResponseState.encode(message.state, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified ClientResponse message, length delimited. Does not implicitly {@link ClientResponse.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ClientResponse
+         * @static
+         * @param {IClientResponse} message ClientResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ClientResponse.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes a ClientResponse message from the specified reader or buffer.
+         * @function decode
+         * @memberof ClientResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ClientResponse} ClientResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ClientResponse.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ClientResponse();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.header = $root.MessageHeader.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.state = $root.ResponseState.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes a ClientResponse message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ClientResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ClientResponse} ClientResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ClientResponse.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies a ClientResponse message.
+         * @function verify
+         * @memberof ClientResponse
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ClientResponse.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.header != null && message.hasOwnProperty("header")) {
+                var error = $root.MessageHeader.verify(message.header);
+                if (error)
+                    return "header." + error;
+            }
+            if (message.state != null && message.hasOwnProperty("state")) {
+                var error = $root.ResponseState.verify(message.state);
+                if (error)
+                    return "state." + error;
+            }
+            return null;
+        };
+    
+        /**
+         * Creates a ClientResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof ClientResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {ClientResponse} ClientResponse
+         */
+        ClientResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.ClientResponse)
+                return object;
+            var message = new $root.ClientResponse();
+            if (object.header != null) {
+                if (typeof object.header !== "object")
+                    throw TypeError(".ClientResponse.header: object expected");
+                message.header = $root.MessageHeader.fromObject(object.header);
+            }
+            if (object.state != null) {
+                if (typeof object.state !== "object")
+                    throw TypeError(".ClientResponse.state: object expected");
+                message.state = $root.ResponseState.fromObject(object.state);
+            }
+            return message;
+        };
+    
+        /**
+         * Creates a plain object from a ClientResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof ClientResponse
+         * @static
+         * @param {ClientResponse} message ClientResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ClientResponse.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.header = null;
+                object.state = null;
+            }
+            if (message.header != null && message.hasOwnProperty("header"))
+                object.header = $root.MessageHeader.toObject(message.header, options);
+            if (message.state != null && message.hasOwnProperty("state"))
+                object.state = $root.ResponseState.toObject(message.state, options);
+            return object;
+        };
+    
+        /**
+         * Converts this ClientResponse to JSON.
+         * @function toJSON
+         * @memberof ClientResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ClientResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return ClientResponse;
+    })();
+    
+    $root.PushPullRequest = (function() {
+    
+        /**
+         * Properties of a PushPullRequest.
+         * @exports IPushPullRequest
+         * @interface IPushPullRequest
+         * @property {IMessageHeader|null} [header] PushPullRequest header
+         * @property {number|null} [ID] PushPullRequest ID
+         * @property {Array.<IPushPullPack>|null} [PushPullPacks] PushPullRequest PushPullPacks
+         */
+    
+        /**
+         * Constructs a new PushPullRequest.
+         * @exports PushPullRequest
+         * @classdesc Represents a PushPullRequest.
+         * @implements IPushPullRequest
+         * @constructor
+         * @param {IPushPullRequest=} [properties] Properties to set
+         */
+        function PushPullRequest(properties) {
+            this.PushPullPacks = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * PushPullRequest header.
+         * @member {IMessageHeader|null|undefined} header
+         * @memberof PushPullRequest
+         * @instance
+         */
+        PushPullRequest.prototype.header = null;
+    
+        /**
+         * PushPullRequest ID.
+         * @member {number} ID
+         * @memberof PushPullRequest
+         * @instance
+         */
+        PushPullRequest.prototype.ID = 0;
+    
+        /**
+         * PushPullRequest PushPullPacks.
+         * @member {Array.<IPushPullPack>} PushPullPacks
+         * @memberof PushPullRequest
+         * @instance
+         */
+        PushPullRequest.prototype.PushPullPacks = $util.emptyArray;
+    
+        /**
+         * Creates a new PushPullRequest instance using the specified properties.
+         * @function create
+         * @memberof PushPullRequest
+         * @static
+         * @param {IPushPullRequest=} [properties] Properties to set
+         * @returns {PushPullRequest} PushPullRequest instance
+         */
+        PushPullRequest.create = function create(properties) {
+            return new PushPullRequest(properties);
+        };
+    
+        /**
+         * Encodes the specified PushPullRequest message. Does not implicitly {@link PushPullRequest.verify|verify} messages.
+         * @function encode
+         * @memberof PushPullRequest
+         * @static
+         * @param {IPushPullRequest} message PushPullRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushPullRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.header != null && message.hasOwnProperty("header"))
+                $root.MessageHeader.encode(message.header, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.ID != null && message.hasOwnProperty("ID"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.ID);
+            if (message.PushPullPacks != null && message.PushPullPacks.length)
+                for (var i = 0; i < message.PushPullPacks.length; ++i)
+                    $root.PushPullPack.encode(message.PushPullPacks[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified PushPullRequest message, length delimited. Does not implicitly {@link PushPullRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof PushPullRequest
+         * @static
+         * @param {IPushPullRequest} message PushPullRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushPullRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes a PushPullRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof PushPullRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {PushPullRequest} PushPullRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushPullRequest.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.PushPullRequest();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.header = $root.MessageHeader.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.ID = reader.int32();
+                    break;
+                case 3:
+                    if (!(message.PushPullPacks && message.PushPullPacks.length))
+                        message.PushPullPacks = [];
+                    message.PushPullPacks.push($root.PushPullPack.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes a PushPullRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof PushPullRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {PushPullRequest} PushPullRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushPullRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies a PushPullRequest message.
+         * @function verify
+         * @memberof PushPullRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PushPullRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.header != null && message.hasOwnProperty("header")) {
+                var error = $root.MessageHeader.verify(message.header);
+                if (error)
+                    return "header." + error;
+            }
+            if (message.ID != null && message.hasOwnProperty("ID"))
+                if (!$util.isInteger(message.ID))
+                    return "ID: integer expected";
+            if (message.PushPullPacks != null && message.hasOwnProperty("PushPullPacks")) {
+                if (!Array.isArray(message.PushPullPacks))
+                    return "PushPullPacks: array expected";
+                for (var i = 0; i < message.PushPullPacks.length; ++i) {
+                    var error = $root.PushPullPack.verify(message.PushPullPacks[i]);
+                    if (error)
+                        return "PushPullPacks." + error;
+                }
+            }
+            return null;
+        };
+    
+        /**
+         * Creates a PushPullRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof PushPullRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {PushPullRequest} PushPullRequest
+         */
+        PushPullRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.PushPullRequest)
+                return object;
+            var message = new $root.PushPullRequest();
+            if (object.header != null) {
+                if (typeof object.header !== "object")
+                    throw TypeError(".PushPullRequest.header: object expected");
+                message.header = $root.MessageHeader.fromObject(object.header);
+            }
+            if (object.ID != null)
+                message.ID = object.ID | 0;
+            if (object.PushPullPacks) {
+                if (!Array.isArray(object.PushPullPacks))
+                    throw TypeError(".PushPullRequest.PushPullPacks: array expected");
+                message.PushPullPacks = [];
+                for (var i = 0; i < object.PushPullPacks.length; ++i) {
+                    if (typeof object.PushPullPacks[i] !== "object")
+                        throw TypeError(".PushPullRequest.PushPullPacks: object expected");
+                    message.PushPullPacks[i] = $root.PushPullPack.fromObject(object.PushPullPacks[i]);
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Creates a plain object from a PushPullRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof PushPullRequest
+         * @static
+         * @param {PushPullRequest} message PushPullRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PushPullRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.PushPullPacks = [];
+            if (options.defaults) {
+                object.header = null;
+                object.ID = 0;
+            }
+            if (message.header != null && message.hasOwnProperty("header"))
+                object.header = $root.MessageHeader.toObject(message.header, options);
+            if (message.ID != null && message.hasOwnProperty("ID"))
+                object.ID = message.ID;
+            if (message.PushPullPacks && message.PushPullPacks.length) {
+                object.PushPullPacks = [];
+                for (var j = 0; j < message.PushPullPacks.length; ++j)
+                    object.PushPullPacks[j] = $root.PushPullPack.toObject(message.PushPullPacks[j], options);
+            }
+            return object;
+        };
+    
+        /**
+         * Converts this PushPullRequest to JSON.
+         * @function toJSON
+         * @memberof PushPullRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PushPullRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return PushPullRequest;
+    })();
+    
+    $root.PushPullResponse = (function() {
+    
+        /**
+         * Properties of a PushPullResponse.
+         * @exports IPushPullResponse
+         * @interface IPushPullResponse
+         * @property {IMessageHeader|null} [header] PushPullResponse header
+         * @property {number|null} [ID] PushPullResponse ID
+         * @property {Array.<IPushPullPack>|null} [PushPullPacks] PushPullResponse PushPullPacks
+         */
+    
+        /**
+         * Constructs a new PushPullResponse.
+         * @exports PushPullResponse
+         * @classdesc Represents a PushPullResponse.
+         * @implements IPushPullResponse
+         * @constructor
+         * @param {IPushPullResponse=} [properties] Properties to set
+         */
+        function PushPullResponse(properties) {
+            this.PushPullPacks = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * PushPullResponse header.
+         * @member {IMessageHeader|null|undefined} header
+         * @memberof PushPullResponse
+         * @instance
+         */
+        PushPullResponse.prototype.header = null;
+    
+        /**
+         * PushPullResponse ID.
+         * @member {number} ID
+         * @memberof PushPullResponse
+         * @instance
+         */
+        PushPullResponse.prototype.ID = 0;
+    
+        /**
+         * PushPullResponse PushPullPacks.
+         * @member {Array.<IPushPullPack>} PushPullPacks
+         * @memberof PushPullResponse
+         * @instance
+         */
+        PushPullResponse.prototype.PushPullPacks = $util.emptyArray;
+    
+        /**
+         * Creates a new PushPullResponse instance using the specified properties.
+         * @function create
+         * @memberof PushPullResponse
+         * @static
+         * @param {IPushPullResponse=} [properties] Properties to set
+         * @returns {PushPullResponse} PushPullResponse instance
+         */
+        PushPullResponse.create = function create(properties) {
+            return new PushPullResponse(properties);
+        };
+    
+        /**
+         * Encodes the specified PushPullResponse message. Does not implicitly {@link PushPullResponse.verify|verify} messages.
+         * @function encode
+         * @memberof PushPullResponse
+         * @static
+         * @param {IPushPullResponse} message PushPullResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushPullResponse.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.header != null && message.hasOwnProperty("header"))
+                $root.MessageHeader.encode(message.header, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.ID != null && message.hasOwnProperty("ID"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.ID);
+            if (message.PushPullPacks != null && message.PushPullPacks.length)
+                for (var i = 0; i < message.PushPullPacks.length; ++i)
+                    $root.PushPullPack.encode(message.PushPullPacks[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified PushPullResponse message, length delimited. Does not implicitly {@link PushPullResponse.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof PushPullResponse
+         * @static
+         * @param {IPushPullResponse} message PushPullResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushPullResponse.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes a PushPullResponse message from the specified reader or buffer.
+         * @function decode
+         * @memberof PushPullResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {PushPullResponse} PushPullResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushPullResponse.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.PushPullResponse();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.header = $root.MessageHeader.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.ID = reader.int32();
+                    break;
+                case 3:
+                    if (!(message.PushPullPacks && message.PushPullPacks.length))
+                        message.PushPullPacks = [];
+                    message.PushPullPacks.push($root.PushPullPack.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes a PushPullResponse message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof PushPullResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {PushPullResponse} PushPullResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushPullResponse.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies a PushPullResponse message.
+         * @function verify
+         * @memberof PushPullResponse
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PushPullResponse.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.header != null && message.hasOwnProperty("header")) {
+                var error = $root.MessageHeader.verify(message.header);
+                if (error)
+                    return "header." + error;
+            }
+            if (message.ID != null && message.hasOwnProperty("ID"))
+                if (!$util.isInteger(message.ID))
+                    return "ID: integer expected";
+            if (message.PushPullPacks != null && message.hasOwnProperty("PushPullPacks")) {
+                if (!Array.isArray(message.PushPullPacks))
+                    return "PushPullPacks: array expected";
+                for (var i = 0; i < message.PushPullPacks.length; ++i) {
+                    var error = $root.PushPullPack.verify(message.PushPullPacks[i]);
+                    if (error)
+                        return "PushPullPacks." + error;
+                }
+            }
+            return null;
+        };
+    
+        /**
+         * Creates a PushPullResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof PushPullResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {PushPullResponse} PushPullResponse
+         */
+        PushPullResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.PushPullResponse)
+                return object;
+            var message = new $root.PushPullResponse();
+            if (object.header != null) {
+                if (typeof object.header !== "object")
+                    throw TypeError(".PushPullResponse.header: object expected");
+                message.header = $root.MessageHeader.fromObject(object.header);
+            }
+            if (object.ID != null)
+                message.ID = object.ID | 0;
+            if (object.PushPullPacks) {
+                if (!Array.isArray(object.PushPullPacks))
+                    throw TypeError(".PushPullResponse.PushPullPacks: array expected");
+                message.PushPullPacks = [];
+                for (var i = 0; i < object.PushPullPacks.length; ++i) {
+                    if (typeof object.PushPullPacks[i] !== "object")
+                        throw TypeError(".PushPullResponse.PushPullPacks: object expected");
+                    message.PushPullPacks[i] = $root.PushPullPack.fromObject(object.PushPullPacks[i]);
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Creates a plain object from a PushPullResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof PushPullResponse
+         * @static
+         * @param {PushPullResponse} message PushPullResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PushPullResponse.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.PushPullPacks = [];
+            if (options.defaults) {
+                object.header = null;
+                object.ID = 0;
+            }
+            if (message.header != null && message.hasOwnProperty("header"))
+                object.header = $root.MessageHeader.toObject(message.header, options);
+            if (message.ID != null && message.hasOwnProperty("ID"))
+                object.ID = message.ID;
+            if (message.PushPullPacks && message.PushPullPacks.length) {
+                object.PushPullPacks = [];
+                for (var j = 0; j < message.PushPullPacks.length; ++j)
+                    object.PushPullPacks[j] = $root.PushPullPack.toObject(message.PushPullPacks[j], options);
+            }
+            return object;
+        };
+    
+        /**
+         * Converts this PushPullResponse to JSON.
+         * @function toJSON
+         * @memberof PushPullResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PushPullResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return PushPullResponse;
+    })();
+    
+    $root.OrtooService = (function() {
+    
+        /**
+         * Constructs a new OrtooService service.
+         * @exports OrtooService
+         * @classdesc Represents an OrtooService
+         * @extends $protobuf.rpc.Service
+         * @constructor
+         * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+         * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+         * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+         */
+        function OrtooService(rpcImpl, requestDelimited, responseDelimited) {
+            $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+        }
+    
+        (OrtooService.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = OrtooService;
+    
+        /**
+         * Creates new OrtooService service using the specified rpc implementation.
+         * @function create
+         * @memberof OrtooService
+         * @static
+         * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+         * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+         * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+         * @returns {OrtooService} RPC service. Useful where requests and/or responses are streamed.
+         */
+        OrtooService.create = function create(rpcImpl, requestDelimited, responseDelimited) {
+            return new this(rpcImpl, requestDelimited, responseDelimited);
+        };
+    
+        /**
+         * Callback as used by {@link OrtooService#processPushPull}.
+         * @memberof OrtooService
+         * @typedef ProcessPushPullCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {PushPullResponse} [response] PushPullResponse
+         */
+    
+        /**
+         * Calls ProcessPushPull.
+         * @function processPushPull
+         * @memberof OrtooService
+         * @instance
+         * @param {IPushPullRequest} request PushPullRequest message or plain object
+         * @param {OrtooService.ProcessPushPullCallback} callback Node-style callback called with the error, if any, and PushPullResponse
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(OrtooService.prototype.processPushPull = function processPushPull(request, callback) {
+            return this.rpcCall(processPushPull, $root.PushPullRequest, $root.PushPullResponse, request, callback);
+        }, "name", { value: "ProcessPushPull" });
+    
+        /**
+         * Calls ProcessPushPull.
+         * @function processPushPull
+         * @memberof OrtooService
+         * @instance
+         * @param {IPushPullRequest} request PushPullRequest message or plain object
+         * @returns {Promise<PushPullResponse>} Promise
+         * @variation 2
+         */
+    
+        /**
+         * Callback as used by {@link OrtooService#processClient}.
+         * @memberof OrtooService
+         * @typedef ProcessClientCallback
+         * @type {function}
+         * @param {Error|null} error Error, if any
+         * @param {ClientResponse} [response] ClientResponse
+         */
+    
+        /**
+         * Calls ProcessClient.
+         * @function processClient
+         * @memberof OrtooService
+         * @instance
+         * @param {IClientRequest} request ClientRequest message or plain object
+         * @param {OrtooService.ProcessClientCallback} callback Node-style callback called with the error, if any, and ClientResponse
+         * @returns {undefined}
+         * @variation 1
+         */
+        Object.defineProperty(OrtooService.prototype.processClient = function processClient(request, callback) {
+            return this.rpcCall(processClient, $root.ClientRequest, $root.ClientResponse, request, callback);
+        }, "name", { value: "ProcessClient" });
+    
+        /**
+         * Calls ProcessClient.
+         * @function processClient
+         * @memberof OrtooService
+         * @instance
+         * @param {IClientRequest} request ClientRequest message or plain object
+         * @returns {Promise<ClientResponse>} Promise
+         * @variation 2
+         */
+    
+        return OrtooService;
+    })();
+    
     $root.Client = (function() {
     
         /**

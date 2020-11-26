@@ -9,8 +9,8 @@
     "build": "npm run clean && webpack --config=webpack.dev.conf.js",
     "eslint:fix": "eslint --ext .tsx,.ts --fix ./src",
     "prettier": "prettier --config ./.prettierrc --write ./src/**/*.{json,ts,tsx}",
-    "gen-model:js": "pbjs -t static-module -o src/model/model.js ./ortoo/pkg/model/*.proto",
-    "gen-model:ts": "pbts -o src/model/model.d.ts -w es6 src/model/model.js",
+    "gen-model:js": "pbjs -t static-module -o src/model/model.js ./ortoo/pkg/model/model.proto && pbjs -t static-module -o src/model/grpc.js ./ortoo/pkg/model/grpc.proto",
+    "gen-model:ts": "pbts -o src/model/model.d.ts -w es6 src/model/model.js && pbts -o src/model/grpc.d.ts -w es6 src/model/grpc.js",
     "gen-model": "npm run gen-model:js && npm run gen-model:ts"
   },
   "repository": {
@@ -36,6 +36,7 @@
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "jsdoc": "^3.6.6",
     "karma": "^5.2.3",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.1.0",
@@ -55,7 +56,7 @@
     "webpack-cli": "^4.2.0"
   },
   "dependencies": {
-    "protobufjs": "^6.9.0",
+    "protobufjs": "github:iFwu/protobuf.js",
     "tslog": "^3.0.1",
     "uuid": "^8.3.1"
   },
