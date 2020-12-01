@@ -1,5 +1,1 @@
-export enum SyncType {
-  LOCAL_ONLY,
-  MANUALLY,
-  NOTIFIABLE,
-}
+export const ProtocolVersion = '0.1';

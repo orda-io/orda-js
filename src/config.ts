@@ -1,11 +1,10 @@
-import { SyncType } from './constants/constants';
-import * as model from './model/model';
+import { SyncType } from './protocols/protobuf/ortoo_pb';
 
 export class ClientConfig {
   ServerAddr: string;
   NotificationAddr: string;
   CollectionName: string;
-  SyncType: model.SyncType;
+  SyncType: SyncType;
 
   constructor(
     serverAddr: string,
@@ -16,22 +15,16 @@ export class ClientConfig {
     this.ServerAddr = serverAddr;
     this.NotificationAddr = notificationAddr;
     this.CollectionName = collectionName;
-
-    switch (syncType) {
-      case SyncType.LOCAL_ONLY:
-        this.SyncType = model.SyncType.LOCAL_ONLY;
-        break;
-      case SyncType.MANUALLY:
-        this.SyncType = model.SyncType.MANUALLY;
-        break;
-      case SyncType.NOTIFIABLE:
-        this.SyncType = model.SyncType.NOTIFIABLE;
-        break;
-    }
+    this.SyncType = syncType;
   }
 }
 
 export function CreateLocalClientConfig(collectionName: string): ClientConfig {
   console.log('alias:', collectionName);
-  return new ClientConfig('', '', collectionName, SyncType.LOCAL_ONLY);
+  return new ClientConfig(
+    'http://127.0.0.1:16091',
+    '127.0.0.1:11883',
+    collectionName,
+    SyncType.LOCAL_ONLY
+  );
 }

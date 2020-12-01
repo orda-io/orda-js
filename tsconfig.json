@@ -1,5 +1,5 @@
 {
-  "compilerOptions": {    
+  "compilerOptions": {
     "target": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
@@ -8,13 +8,15 @@
     "allowJs": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/**/*.ts",
-    "test/**/*.ts"
+    "test/**/*.ts",
+    "src/protocols/protobuf/*.js"
   ],
-  "exclude": [    
+  "exclude": [
     "node_modules"
   ]
 }

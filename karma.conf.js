@@ -2,7 +2,6 @@
 // Generated on Wed Nov 25 2020 05:45:57 GMT+0900 (Korean Standard Time)
 
 const webpackConfig = require('./webpack.dev.conf.js');
-const istanbul = require('./coverage-istanbul.conf');
 
 module.exports = function (config) {
   config.set({
@@ -17,7 +16,10 @@ module.exports = function (config) {
     // list of files / patterns to load in the browser
     files: [
       // { pattern: 'src/**/*.ts', included: false },
-      { pattern: 'test/**/*.ts', included: true /* should be true to run tests */}
+      {
+        pattern: 'test/**/*.ts',
+        included: true, /* should be true to run tests */
+      }
     ],
 
     // list of files / patterns to exclude
@@ -43,9 +45,16 @@ module.exports = function (config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha', 'coverage-istanbul'],
+    reporters: ['mocha', 'coverage'],
 
-    coverageIstanbulReporter: istanbul.coverageIstanbulReporter,
+    // coverageIstanbulReporter: istanbul.coverageIstanbulReporter,
+    coverageReporter: {
+      dir: 'coverage',
+      reporters: [
+        { type: 'text' },
+        { type: 'html', subdir: 'reprt-html' }
+      ],
+    },
 
     // web server port
     port: 9876,
