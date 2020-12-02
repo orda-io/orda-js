@@ -1,7 +1,7 @@
 import { Client } from './client';
 import { ClientConfig } from './config';
 
-// export { Client };
+export { Client };
 
 export default {
   createClient(): Client {

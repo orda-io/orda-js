@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { UID } from '../../src/types/uid';
+import { UID } from '../../src/protocols/uid';
 
 describe('UID test', () => {
   it('Can generate and compare UIDs', () => {

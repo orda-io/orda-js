@@ -4,5 +4,4 @@ package.json
 package-lock.json
 lib
 examples
-src/model/model.d.ts
-ortoo/*
+src/protocols/protobuf/*
