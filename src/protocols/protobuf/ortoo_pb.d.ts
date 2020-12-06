@@ -2,27 +2,38 @@ import * as jspb from 'google-protobuf';
 
 export class Client extends jspb.Message {
   getCuid(): Uint8Array | string;
+
   getCuid_asU8(): Uint8Array;
+
   getCuid_asB64(): string;
+
   setCuid(value: Uint8Array | string): Client;
 
   getAlias(): string;
+
   setAlias(value: string): Client;
 
   getCollection(): string;
+
   setCollection(value: string): Client;
 
-  getSynctype(): yncType;
-  setSynctype(value: yncType): Client;
+  getSynctype(): SyncType;
+
+  setSynctype(value: SyncType): Client;
 
   serializeBinary(): Uint8Array;
+
   toObject(includeInstance?: boolean): Client.AsObject;
+
   static toObject(includeInstance: boolean, msg: Client): Client.AsObject;
+
   static serializeBinaryToWriter(
     message: Client,
-    writer: jspb.BinaryWriter
+    writer: jspb.BinaryWriter,
   ): void;
+
   static deserializeBinary(bytes: Uint8Array): Client;
+
   static deserializeBinaryFromReader(
     message: Client,
     reader: jspb.BinaryReader
@@ -34,7 +45,7 @@ export namespace Client {
     cuid: Uint8Array | string;
     alias: string;
     collection: string;
-    synctype: yncType;
+    synctype: SyncType;
   };
 }
 
@@ -119,21 +130,31 @@ export namespace OperationID {
 
 export class Operation extends jspb.Message {
   getId(): OperationID | undefined;
+
   setId(value?: OperationID): Operation;
+
   hasId(): boolean;
+
   clearId(): Operation;
 
-  getOptype(): ypeOfOperation;
-  setOptype(value: ypeOfOperation): Operation;
+  getOptype(): TypeOfOperation;
+
+  setOptype(value: TypeOfOperation): Operation;
 
   getBody(): Uint8Array | string;
+
   getBody_asU8(): Uint8Array;
+
   getBody_asB64(): string;
+
   setBody(value: Uint8Array | string): Operation;
 
   serializeBinary(): Uint8Array;
+
   toObject(includeInstance?: boolean): Operation.AsObject;
+
   static toObject(includeInstance: boolean, msg: Operation): Operation.AsObject;
+
   static serializeBinaryToWriter(
     message: Operation,
     writer: jspb.BinaryWriter
@@ -148,7 +169,7 @@ export class Operation extends jspb.Message {
 export namespace Operation {
   export type AsObject = {
     id?: OperationID.AsObject;
-    optype: ypeOfOperation;
+    optype: TypeOfOperation;
     body: Uint8Array | string;
   };
 }
@@ -281,30 +302,41 @@ export class DatatypeMeta extends jspb.Message {
   setKey(value: string): DatatypeMeta;
 
   getDuid(): Uint8Array | string;
+
   getDuid_asU8(): Uint8Array;
+
   getDuid_asB64(): string;
+
   setDuid(value: Uint8Array | string): DatatypeMeta;
 
   getOpid(): OperationID | undefined;
+
   setOpid(value?: OperationID): DatatypeMeta;
+
   hasOpid(): boolean;
+
   clearOpid(): DatatypeMeta;
 
-  getTypeof(): ypeOfDatatype;
-  setTypeof(value: ypeOfDatatype): DatatypeMeta;
+  getTypeof(): TypeOfDatatype;
 
-  getState(): tateOfDatatype;
-  setState(value: tateOfDatatype): DatatypeMeta;
+  setTypeof(value: TypeOfDatatype): DatatypeMeta;
+
+  getState(): StateOfDatatype;
+
+  setState(value: StateOfDatatype): DatatypeMeta;
 
   serializeBinary(): Uint8Array;
+
   toObject(includeInstance?: boolean): DatatypeMeta.AsObject;
+
   static toObject(
     includeInstance: boolean,
-    msg: DatatypeMeta
+    msg: DatatypeMeta,
   ): DatatypeMeta.AsObject;
+
   static serializeBinaryToWriter(
     message: DatatypeMeta,
-    writer: jspb.BinaryWriter
+    writer: jspb.BinaryWriter,
   ): void;
   static deserializeBinary(bytes: Uint8Array): DatatypeMeta;
   static deserializeBinaryFromReader(
@@ -318,29 +350,36 @@ export namespace DatatypeMeta {
     key: string;
     duid: Uint8Array | string;
     opid?: OperationID.AsObject;
-    pb_typeof: ypeOfDatatype;
-    state: tateOfDatatype;
+    pb_typeof: TypeOfDatatype;
+    state: StateOfDatatype;
   };
 }
 
 export class MessageHeader extends jspb.Message {
   getVersion(): string;
+
   setVersion(value: string): MessageHeader;
 
   getSeq(): number;
+
   setSeq(value: number): MessageHeader;
 
-  getTypeof(): ypeOfMessage;
-  setTypeof(value: ypeOfMessage): MessageHeader;
+  getTypeof(): TypeOfMessage;
+
+  setTypeof(value: TypeOfMessage): MessageHeader;
 
   getCollection(): string;
+
   setCollection(value: string): MessageHeader;
 
   getClientalias(): string;
+
   setClientalias(value: string): MessageHeader;
 
   getCuid(): Uint8Array | string;
+
   getCuid_asU8(): Uint8Array;
+
   getCuid_asB64(): string;
   setCuid(value: Uint8Array | string): MessageHeader;
 
@@ -365,7 +404,7 @@ export namespace MessageHeader {
   export type AsObject = {
     version: string;
     seq: number;
-    pb_typeof: ypeOfMessage;
+    pb_typeof: TypeOfMessage;
     collection: string;
     clientalias: string;
     cuid: Uint8Array | string;
@@ -373,17 +412,21 @@ export namespace MessageHeader {
 }
 
 export class ResponseState extends jspb.Message {
-  getState(): tateOfResponse;
-  setState(value: tateOfResponse): ResponseState;
+  getState(): StateOfResponse;
+
+  setState(value: StateOfResponse): ResponseState;
 
   getMsg(): string;
+
   setMsg(value: string): ResponseState;
 
   serializeBinary(): Uint8Array;
+
   toObject(includeInstance?: boolean): ResponseState.AsObject;
+
   static toObject(
     includeInstance: boolean,
-    msg: ResponseState
+    msg: ResponseState,
   ): ResponseState.AsObject;
   static serializeBinaryToWriter(
     message: ResponseState,
@@ -398,7 +441,7 @@ export class ResponseState extends jspb.Message {
 
 export namespace ResponseState {
   export type AsObject = {
-    state: tateOfResponse;
+    state: StateOfResponse;
     msg: string;
   };
 }

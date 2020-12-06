@@ -1,13 +1,12 @@
-import { assert } from 'chai';
 import { CreateLocalClientConfig } from '../src/config';
 import { Client } from '../src/client';
-// import Client from './client';
+import { Logger } from './helper';
 
-describe('Can create clients', () => {
-  it('Should create a client', async () => {
+describe('Test clients', () => {
+  it('Can create a client', async () => {
     const conf = CreateLocalClientConfig('hello_world');
     const client = new Client(conf, 'hello');
     await client.sendClientRequest();
-    console.log(client);
+    Logger.log(client);
   });
 });

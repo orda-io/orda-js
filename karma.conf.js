@@ -11,7 +11,7 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai', 'sinon'],
+    frameworks: ['mocha', 'chai', 'sinon', 'source-map-support'],
 
     // list of files / patterns to load in the browser
     files: [
@@ -19,7 +19,7 @@ module.exports = function (config) {
       {
         pattern: 'test/**/*.ts',
         included: true, /* should be true to run tests */
-      }
+      },
     ],
 
     // list of files / patterns to exclude
@@ -79,6 +79,6 @@ module.exports = function (config) {
 
     // Concurrency level
     // how many browser should be started simultaneous
-    concurrency: Infinity
-  })
-}
+    concurrency: Infinity,
+  });
+};
