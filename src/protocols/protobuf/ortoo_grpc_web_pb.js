@@ -1,5 +1,5 @@
 /**
- * @fileoverview gRPC-Web generated client stub for 
+ * @fileoverview gRPC-Web generated client stub for ortoo
  * @enhanceable
  * @public
  */
@@ -11,11 +11,11 @@
 // @ts-nocheck
 
 
-
 const grpc = {};
 grpc.web = require('grpc-web');
 
-const proto = require('./ortoo_pb.js');
+const proto = {};
+proto.ortoo = require('./ortoo_pb.js');
 
 /**
  * @param {string} hostname
@@ -25,17 +25,17 @@ const proto = require('./ortoo_pb.js');
  * @struct
  * @final
  */
-proto.OrtooServiceClient =
-    function(hostname, credentials, options) {
-  if (!options) options = {};
-  options['format'] = 'binary';
+proto.ortoo.OrtooServiceClient =
+  function(hostname, credentials, options) {
+    if (!options) options = {};
+    options['format'] = 'binary';
 
-  /**
-   * @private @const {!grpc.web.GrpcWebClientBase} The client
-   */
-  this.client_ = new grpc.web.GrpcWebClientBase(options);
+    /**
+     * @private @const {!grpc.web.GrpcWebClientBase} The client
+     */
+    this.client_ = new grpc.web.GrpcWebClientBase(options);
 
-  /**
+    /**
    * @private @const {string} The hostname
    */
   this.hostname_ = hostname;
@@ -51,17 +51,17 @@ proto.OrtooServiceClient =
  * @struct
  * @final
  */
-proto.OrtooServicePromiseClient =
-    function(hostname, credentials, options) {
-  if (!options) options = {};
-  options['format'] = 'binary';
+proto.ortoo.OrtooServicePromiseClient =
+  function(hostname, credentials, options) {
+    if (!options) options = {};
+    options['format'] = 'binary';
 
-  /**
-   * @private @const {!grpc.web.GrpcWebClientBase} The client
-   */
-  this.client_ = new grpc.web.GrpcWebClientBase(options);
+    /**
+     * @private @const {!grpc.web.GrpcWebClientBase} The client
+     */
+    this.client_ = new grpc.web.GrpcWebClientBase(options);
 
-  /**
+    /**
    * @private @const {string} The hostname
    */
   this.hostname_ = hostname;
@@ -72,162 +72,162 @@ proto.OrtooServicePromiseClient =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.PushPullRequest,
- *   !proto.PushPullResponse>}
+ *   !proto.ortoo.PushPullRequest,
+ *   !proto.ortoo.PushPullResponse>}
  */
 const methodDescriptor_OrtooService_ProcessPushPull = new grpc.web.MethodDescriptor(
-  '/OrtooService/ProcessPushPull',
+  '/ortoo.OrtooService/ProcessPushPull',
   grpc.web.MethodType.UNARY,
-  proto.PushPullRequest,
-  proto.PushPullResponse,
+  proto.ortoo.PushPullRequest,
+  proto.ortoo.PushPullResponse,
   /**
-   * @param {!proto.PushPullRequest} request
+   * @param {!proto.ortoo.PushPullRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.PushPullResponse.deserializeBinary
+  proto.ortoo.PushPullResponse.deserializeBinary,
 );
 
 
 /**
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.PushPullRequest,
- *   !proto.PushPullResponse>}
+ *   !proto.ortoo.PushPullRequest,
+ *   !proto.ortoo.PushPullResponse>}
  */
 const methodInfo_OrtooService_ProcessPushPull = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.PushPullResponse,
+  proto.ortoo.PushPullResponse,
   /**
-   * @param {!proto.PushPullRequest} request
+   * @param {!proto.ortoo.PushPullRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.PushPullResponse.deserializeBinary
+  proto.ortoo.PushPullResponse.deserializeBinary,
 );
 
 
 /**
- * @param {!proto.PushPullRequest} request The
+ * @param {!proto.ortoo.PushPullRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.PushPullResponse)}
+ * @param {function(?grpc.web.Error, ?proto.ortoo.PushPullResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.PushPullResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.ortoo.PushPullResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.OrtooServiceClient.prototype.processPushPull =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/OrtooService/ProcessPushPull',
+proto.ortoo.OrtooServiceClient.prototype.processPushPull =
+  function(request, metadata, callback) {
+    return this.client_.rpcCall(this.hostname_ +
+      '/ortoo.OrtooService/ProcessPushPull',
       request,
       metadata || {},
       methodDescriptor_OrtooService_ProcessPushPull,
       callback);
-};
+  };
 
 
 /**
- * @param {!proto.PushPullRequest} request The
+ * @param {!proto.ortoo.PushPullRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.PushPullResponse>}
+ * @return {!Promise<!proto.ortoo.PushPullResponse>}
  *     Promise that resolves to the response
  */
-proto.OrtooServicePromiseClient.prototype.processPushPull =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/OrtooService/ProcessPushPull',
+proto.ortoo.OrtooServicePromiseClient.prototype.processPushPull =
+  function(request, metadata) {
+    return this.client_.unaryCall(this.hostname_ +
+      '/ortoo.OrtooService/ProcessPushPull',
       request,
       metadata || {},
       methodDescriptor_OrtooService_ProcessPushPull);
-};
+  };
 
 
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.ClientRequest,
- *   !proto.ClientResponse>}
+ *   !proto.ortoo.ClientRequest,
+ *   !proto.ortoo.ClientResponse>}
  */
 const methodDescriptor_OrtooService_ProcessClient = new grpc.web.MethodDescriptor(
-  '/OrtooService/ProcessClient',
+  '/ortoo.OrtooService/ProcessClient',
   grpc.web.MethodType.UNARY,
-  proto.ClientRequest,
-  proto.ClientResponse,
+  proto.ortoo.ClientRequest,
+  proto.ortoo.ClientResponse,
   /**
-   * @param {!proto.ClientRequest} request
+   * @param {!proto.ortoo.ClientRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.ClientResponse.deserializeBinary
+  proto.ortoo.ClientResponse.deserializeBinary,
 );
 
 
 /**
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.ClientRequest,
- *   !proto.ClientResponse>}
+ *   !proto.ortoo.ClientRequest,
+ *   !proto.ortoo.ClientResponse>}
  */
 const methodInfo_OrtooService_ProcessClient = new grpc.web.AbstractClientBase.MethodInfo(
-  proto.ClientResponse,
+  proto.ortoo.ClientResponse,
   /**
-   * @param {!proto.ClientRequest} request
+   * @param {!proto.ortoo.ClientRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.ClientResponse.deserializeBinary
+  proto.ortoo.ClientResponse.deserializeBinary,
 );
 
 
 /**
- * @param {!proto.ClientRequest} request The
+ * @param {!proto.ortoo.ClientRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.ClientResponse)}
+ * @param {function(?grpc.web.Error, ?proto.ortoo.ClientResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.ClientResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.ortoo.ClientResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.OrtooServiceClient.prototype.processClient =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/OrtooService/ProcessClient',
+proto.ortoo.OrtooServiceClient.prototype.processClient =
+  function(request, metadata, callback) {
+    return this.client_.rpcCall(this.hostname_ +
+      '/ortoo.OrtooService/ProcessClient',
       request,
       metadata || {},
       methodDescriptor_OrtooService_ProcessClient,
       callback);
-};
+  };
 
 
 /**
- * @param {!proto.ClientRequest} request The
+ * @param {!proto.ortoo.ClientRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.ClientResponse>}
+ * @return {!Promise<!proto.ortoo.ClientResponse>}
  *     Promise that resolves to the response
  */
-proto.OrtooServicePromiseClient.prototype.processClient =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/OrtooService/ProcessClient',
+proto.ortoo.OrtooServicePromiseClient.prototype.processClient =
+  function(request, metadata) {
+    return this.client_.unaryCall(this.hostname_ +
+      '/ortoo.OrtooService/ProcessClient',
       request,
       metadata || {},
       methodDescriptor_OrtooService_ProcessClient);
-};
+  };
 
 
-module.exports = proto;
+module.exports = proto.ortoo;
 

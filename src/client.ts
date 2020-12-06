@@ -1,19 +1,12 @@
 import * as grpcWeb from 'grpc-web';
-import { CreateClientModel } from './protocols/client';
+import { CreateClientModel } from './protocols/client_model';
 import { CreateClientRequest } from './protocols/requests';
 import { CUID } from './protocols/cuid';
 import { OrtooServiceClient } from './protocols/protobuf/ortoo_grpc_web_pb';
-import {
-  ClientResponse,
-  SyncType,
-  Client as ClientModel,
-} from './protocols/protobuf/ortoo_pb';
+import { Client as ClientModel, ClientResponse } from './protocols/protobuf/ortoo_pb';
 import { ClientConfig } from './config';
-
-// const clientModel = CreateClientModel(new CUID(), "hello1", "hello_world", SyncType.MANUALLY);
-// const clientRequest = CreateClientRequest(1, clientModel);
-
-// const ortooService = new OrtooServiceClient('http://localhost:16091');
+import { OrtooLogger } from './utils/logging';
+import { ShortUID } from './constants/constants';
 
 enum clientState {
   NOT_CONNECTED,
@@ -21,7 +14,8 @@ enum clientState {
 }
 
 export class Client {
-  private model: ClientModel;
+  private Logger: OrtooLogger;
+  private readonly model: ClientModel;
   private state: clientState;
   private serviceClient: OrtooServiceClient;
 
@@ -30,28 +24,42 @@ export class Client {
       new CUID(),
       alias,
       conf.CollectionName,
-      conf.SyncType
+      conf.SyncType,
     );
     this.state = clientState.NOT_CONNECTED;
     this.serviceClient = new OrtooServiceClient(conf.ServerAddr);
+    this.Logger = new OrtooLogger(
+      this.getName(),
+    );
   }
 
   async sendClientRequest(): Promise<void> {
     const clientRequest = CreateClientRequest(1, this.model);
-    // console.log('sendClientRequest3', clientRequest);
-    console.log('sendClientRequest3', clientRequest);
+
+    this.Logger.log('sendClientRequest3', clientRequest);
     const call = this.serviceClient.processClient(
       clientRequest,
       null,
       (err: grpcWeb.Error, response: ClientResponse) => {
-        console.error('error', err);
-        console.info('response', response);
-      }
+        if (err !== null) {
+          this.Logger.error(err);
+          return;
+        }
+        this.Logger.info(`Response:${response}`);
+      },
     );
-    console.log('end processClient');
+    this.Logger.info('end processClient');
 
     await call.on('status', (status: grpcWeb.Status) => {
-      console.info('status', status);
+      this.Logger.info(`Status:${status.code}`);
+      this.Logger.info(`Status:${status.details}`);
+      this.Logger.info(`Status:${status.metadata}`);
     });
+  }
+
+  getName(): string {
+    const cuidString = Buffer.from(this.model.getCuid()).toString('hex');
+    cuidString.substr(10);
+    return `${this.model.getAlias()}:${cuidString.substr(ShortUID)}`;
   }
 }

@@ -7,7 +7,6 @@ export function CreateClientModel(
   collection: string,
   syncType: SyncType
 ): Client {
-  console.log('CUID', cuid.String());
   const client = new Client();
   client.setCuid(cuid.AsUint8Array);
   client.setAlias(alias);

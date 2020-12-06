@@ -20,7 +20,6 @@ export class ClientConfig {
 }
 
 export function CreateLocalClientConfig(collectionName: string): ClientConfig {
-  console.log('alias:', collectionName);
   return new ClientConfig(
     'http://127.0.0.1:16091',
     '127.0.0.1:11883',
