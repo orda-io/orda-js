@@ -3,7 +3,6 @@
     "target": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
-    "inlineSourceMap": true,
     "declaration": true,
     "declarationMap": true,
     "removeComments": false,

@@ -7,6 +7,7 @@ import { Client as ClientModel, ClientResponse } from './protocols/protobuf/orto
 import { ClientConfig } from './config';
 import { OrtooLogger } from './utils/logging';
 import { ShortUID } from './constants/constants';
+import { NotificationManager } from './managers/notification_manager';
 
 enum clientState {
   NOT_CONNECTED,
@@ -14,30 +15,34 @@ enum clientState {
 }
 
 export class Client {
-  private Logger: OrtooLogger;
+  private readonly Logger: OrtooLogger;
   private readonly model: ClientModel;
   private state: clientState;
-  private serviceClient: OrtooServiceClient;
+  private grpcClient: OrtooServiceClient;
+  private notificationManager: NotificationManager;
 
   constructor(conf: ClientConfig, alias: string) {
+
     this.model = CreateClientModel(
       new CUID(),
       alias,
       conf.CollectionName,
       conf.SyncType,
     );
+    this.Logger = new OrtooLogger(this.getName());
+    this.Logger.info(conf.NotificationHost, conf.NotificationPort);
+
     this.state = clientState.NOT_CONNECTED;
-    this.serviceClient = new OrtooServiceClient(conf.ServerAddr);
-    this.Logger = new OrtooLogger(
-      this.getName(),
-    );
+    this.grpcClient = new OrtooServiceClient(conf.ServerAddr);
+    this.notificationManager = new NotificationManager(conf, alias, this.Logger);
   }
+
 
   async sendClientRequest(): Promise<void> {
     const clientRequest = CreateClientRequest(1, this.model);
 
     this.Logger.log('sendClientRequest3', clientRequest);
-    const call = this.serviceClient.processClient(
+    const call = this.grpcClient.processClient(
       clientRequest,
       null,
       (err: grpcWeb.Error, response: ClientResponse) => {
@@ -56,6 +61,7 @@ export class Client {
       this.Logger.info(`Status:${status.metadata}`);
     });
   }
+
 
   getName(): string {
     const cuidString = Buffer.from(this.model.getCuid()).toString('hex');

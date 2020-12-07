@@ -2,7 +2,8 @@ import { SyncType } from './protocols/protobuf/ortoo_pb';
 
 export class ClientConfig {
   ServerAddr: string;
-  NotificationAddr: string;
+  NotificationHost: string;
+  NotificationPort: number;
   CollectionName: string;
   SyncType: SyncType;
 
@@ -10,10 +11,12 @@ export class ClientConfig {
     serverAddr: string,
     notificationAddr: string,
     collectionName: string,
-    syncType?: SyncType
+    syncType?: SyncType,
   ) {
     this.ServerAddr = serverAddr;
-    this.NotificationAddr = notificationAddr;
+    const url = new URL(notificationAddr);
+    this.NotificationHost = url.host;
+    this.NotificationPort = +url.port;
     this.CollectionName = collectionName;
     this.SyncType = syncType;
   }

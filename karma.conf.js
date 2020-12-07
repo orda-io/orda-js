@@ -24,14 +24,20 @@ module.exports = function (config) {
 
     // list of files / patterns to exclude
     exclude: [
-      '**/*.swp'
+      '**/*.swp',
     ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       './src/**/*.ts': ['webpack'],
-      './test/**/*.ts': ['webpack']
+      './test/**/*.ts': ['webpack'],
+    },
+
+    client: {
+      mocha: {
+        timeout: 6000, // 6 seconds - upped from 2 seconds
+      },
     },
 
     // use the dev webpack configuration
@@ -39,7 +45,7 @@ module.exports = function (config) {
       module: webpackConfig.module,
       resolve: webpackConfig.resolve,
       mode: webpackConfig.mode,
-      devtool: 'inline-source-map'
+      devtool: 'inline-source-map',
     },
 
     // test results reporter to use
