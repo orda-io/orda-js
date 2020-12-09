@@ -2,7 +2,8 @@
   "compilerOptions": {
     "target": "esnext",
     "moduleResolution": "node",
-    "sourceMap": true,
+    "sourceMap": false,
+    "inlineSourceMap": true,
     "declaration": true,
     "declarationMap": true,
     "removeComments": false,

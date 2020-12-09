@@ -25,8 +25,8 @@ export class ClientConfig {
 export function CreateLocalClientConfig(collectionName: string): ClientConfig {
   return new ClientConfig(
     'http://127.0.0.1:16091',
-    '127.0.0.1:11883',
+    'ws://127.0.0.1:9001',
     collectionName,
-    SyncType.LOCAL_ONLY
+    SyncType.LOCAL_ONLY,
   );
 }
