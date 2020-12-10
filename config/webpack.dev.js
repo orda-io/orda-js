@@ -3,11 +3,20 @@ const base = require('./webpack.base');
 
 module.exports = function() {
   const merged = webpackMerge.merge(base.config, {
+
     mode: 'development',
     output: {
-      filename: '[name]-test-bundle.js',
+      filename: '[name]-dev-bundle.js',
       path: base.root('./dist'),
       publicPath: '/',
+    },
+    devServer: {
+      contentBase: base.root('./dist'),
+      hot: true,
+      overlay: {
+        warnings: true,
+        errors: true,
+      },
     },
     module: {
       rules: [

@@ -8,7 +8,6 @@ exports.config = {
   entry: {
     ortoo: ['./src/ortoo.ts'],
   },
-  // mode: 'development',
   resolve: {
     extensions: ['.ts', '.js'],
     modules: [root('src'), 'node_modules'],
@@ -17,11 +16,6 @@ exports.config = {
   devtool: 'source-map',
   module: {
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.(js)$/,
-        loader: 'source-map-loader',
-      },
       {
         test: /\.js$/,
         use: ['babel-loader'],
