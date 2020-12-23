@@ -30,7 +30,7 @@ export class Client {
       conf.SyncType,
     );
     this.Logger = new OrtooLogger(this.getName());
-    this.Logger.info(conf.NotificationHost, conf.NotificationPort);
+    this.Logger.info(conf.NotificationUri);
 
     this.state = clientState.NOT_CONNECTED;
     this.grpcClient = new OrtooServiceClient(conf.ServerAddr);
@@ -44,7 +44,7 @@ export class Client {
     this.Logger.log('sendClientRequest3', clientRequest);
     const call = this.grpcClient.processClient(
       clientRequest,
-      null,
+      undefined,
       (err: grpcWeb.Error, response: ClientResponse) => {
         if (err !== null) {
           this.Logger.error(err);

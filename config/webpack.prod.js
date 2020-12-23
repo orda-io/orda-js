@@ -5,16 +5,23 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = function() {
   const merged = webpackMerge.merge(base.config, {
+    entry: {
+      ortoo: './src/ortoo.ts',
+    },
     mode: 'production',
     output: {
-      path: base.root('./dist'),
-      publicPath: '/',
-      sourceMapFilename: '[file].map',
+      path: base.root('./example'),
+      // publicPath: '/',
+      // sourceMapFilename: '[file].map',
       filename: '[name].bundle.js',
-      chunkFilename: '[name].chunk.js',
+      // chunkFilename: '[name].chunk.js',
+      library: 'ortoo',
+      libraryTarget: 'umd',
+      umdNamedDefine: true,
+      globalObject: `this`,
     },
     plugins: [],
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     module: {
       rules: [
         {
@@ -27,7 +34,7 @@ module.exports = function() {
       ],
     },
     optimization: {
-      minimize: true,
+      minimize: false,
       minimizer: [
         new TerserPlugin({
           sourceMap: true,
@@ -42,6 +49,6 @@ module.exports = function() {
       ],
     },
   });
-  console.log(merged['module'].rules);
+  console.log(merged);
   return merged;
 };

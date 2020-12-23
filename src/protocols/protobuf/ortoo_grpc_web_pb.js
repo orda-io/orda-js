@@ -11,6 +11,7 @@
 // @ts-nocheck
 
 
+
 const grpc = {};
 grpc.web = require('grpc-web');
 
@@ -36,11 +37,11 @@ proto.ortoo.OrtooServiceClient =
     this.client_ = new grpc.web.GrpcWebClientBase(options);
 
     /**
-   * @private @const {string} The hostname
-   */
-  this.hostname_ = hostname;
+     * @private @const {string} The hostname
+     */
+    this.hostname_ = hostname;
 
-};
+  };
 
 
 /**
@@ -62,11 +63,11 @@ proto.ortoo.OrtooServicePromiseClient =
     this.client_ = new grpc.web.GrpcWebClientBase(options);
 
     /**
-   * @private @const {string} The hostname
-   */
-  this.hostname_ = hostname;
+     * @private @const {string} The hostname
+     */
+    this.hostname_ = hostname;
 
-};
+  };
 
 
 /**

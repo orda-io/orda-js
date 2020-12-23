@@ -2,22 +2,16 @@
   "compilerOptions": {
     "target": "esnext",
     "moduleResolution": "node",
-    "sourceMap": false,
-    "inlineSourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    "removeComments": false,
-    "noEmit": false,
     "allowJs": true,
+    "strict": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "outDir": "./dist",
     "allowSyntheticDefaultImports": true
   },
   "include": [
-    "src/**/*.ts",
-    "test/**/*.ts",
-    "src/protocols/protobuf/*.js"
+    "src"
   ],
   "exclude": [
     "node_modules"

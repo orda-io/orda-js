@@ -344,26 +344,26 @@ proto.ortoo.Client.prototype.toObject = function(opt_includeInstance) {
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.Client} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.Client.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      cuid: msg.getCuid_asB64(),
-      alias: jspb.Message.getFieldWithDefault(msg, 2, ''),
-      collection: jspb.Message.getFieldWithDefault(msg, 3, ''),
-      synctype: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    };
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.Client} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.Client.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    cuid: msg.getCuid_asB64(),
+    alias: jspb.Message.getFieldWithDefault(msg, 2, ''),
+    collection: jspb.Message.getFieldWithDefault(msg, 3, ''),
+    synctype: jspb.Message.getFieldWithDefault(msg, 4, 0),
+  };
 
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
   return obj;
 };
 }
@@ -399,16 +399,16 @@ proto.ortoo.Client.deserializeBinaryFromReader = function(msg, reader) {
         var value = /** @type {!Uint8Array} */ (reader.readBytes());
         msg.setCuid(value);
         break;
-    case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setAlias(value);
-      break;
-    case 3:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setCollection(value);
-      break;
-    case 4:
-      var value = /** @type {!proto.ortoo.SyncType} */ (reader.readEnum());
+      case 2:
+        var value = /** @type {string} */ (reader.readString());
+        msg.setAlias(value);
+        break;
+      case 3:
+        var value = /** @type {string} */ (reader.readString());
+        msg.setCollection(value);
+        break;
+      case 4:
+        var value = /** @type {!proto.ortoo.SyncType} */ (reader.readEnum());
       msg.setSynctype(value);
       break;
     default:
@@ -594,8 +594,8 @@ proto.ortoo.Timestamp.prototype.toObject = function(opt_includeInstance) {
     if (includeInstance) {
       obj.$jspbMessageInstance = msg;
     }
-  return obj;
-};
+    return obj;
+  };
 }
 
 
@@ -629,16 +629,16 @@ proto.ortoo.Timestamp.deserializeBinaryFromReader = function(msg, reader) {
         var value = /** @type {number} */ (reader.readUint32());
         msg.setEra(value);
         break;
-    case 2:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setLamport(value);
-      break;
-    case 3:
-      var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setCuid(value);
-      break;
-    case 4:
-      var value = /** @type {number} */ (reader.readUint32());
+      case 2:
+        var value = /** @type {number} */ (reader.readUint64());
+        msg.setLamport(value);
+        break;
+      case 3:
+        var value = /** @type {!Uint8Array} */ (reader.readBytes());
+        msg.setCuid(value);
+        break;
+      case 4:
+        var value = /** @type {number} */ (reader.readUint32());
       msg.setDelimiter(value);
       break;
     default:
@@ -824,8 +824,8 @@ proto.ortoo.OperationID.prototype.toObject = function(opt_includeInstance) {
     if (includeInstance) {
       obj.$jspbMessageInstance = msg;
     }
-  return obj;
-};
+    return obj;
+  };
 }
 
 
@@ -859,16 +859,16 @@ proto.ortoo.OperationID.deserializeBinaryFromReader = function(msg, reader) {
         var value = /** @type {number} */ (reader.readUint32());
         msg.setEra(value);
         break;
-    case 2:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setLamport(value);
-      break;
-    case 3:
-      var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setCuid(value);
-      break;
-    case 4:
-      var value = /** @type {number} */ (reader.readUint64());
+      case 2:
+        var value = /** @type {number} */ (reader.readUint64());
+        msg.setLamport(value);
+        break;
+      case 3:
+        var value = /** @type {!Uint8Array} */ (reader.readBytes());
+        msg.setCuid(value);
+        break;
+      case 4:
+        var value = /** @type {number} */ (reader.readUint64());
       msg.setSeq(value);
       break;
     default:
@@ -1054,7 +1054,7 @@ proto.ortoo.Operation.prototype.toObject = function(opt_includeInstance) {
       obj.$jspbMessageInstance = msg;
     }
     return obj;
-};
+  };
 }
 
 
@@ -1093,13 +1093,13 @@ proto.ortoo.Operation.deserializeBinaryFromReader = function(msg, reader) {
         var value = /** @type {!proto.ortoo.TypeOfOperation} */ (reader.readEnum());
         msg.setOptype(value);
         break;
-    case 3:
-      var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setBody(value);
-      break;
-    default:
-      reader.skipField();
-      break;
+      case 3:
+        var value = /** @type {!Uint8Array} */ (reader.readBytes());
+        msg.setBody(value);
+        break;
+      default:
+        reader.skipField();
+        break;
     }
   }
   return msg;
@@ -1238,6 +1238,7 @@ proto.ortoo.Operation.prototype.setBody = function(value) {
 };
 
 
+
 /**
  * List of repeated fields within this message type.
  * @private {!Array<number>}
@@ -1284,11 +1285,11 @@ proto.ortoo.PushPullPack.prototype.toObject = function(opt_includeInstance) {
         proto.ortoo.Operation.toObject, includeInstance),
     };
 
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
+    if (includeInstance) {
+      obj.$jspbMessageInstance = msg;
+    }
+    return obj;
+  };
 }
 
 
@@ -1322,10 +1323,10 @@ proto.ortoo.PushPullPack.deserializeBinaryFromReader = function(msg, reader) {
         var value = /** @type {!Uint8Array} */ (reader.readBytes());
         msg.setDuid(value);
         break;
-    case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setKey(value);
-      break;
+      case 2:
+        var value = /** @type {string} */ (reader.readString());
+        msg.setKey(value);
+        break;
       case 3:
         var value = /** @type {number} */ (reader.readFixed32());
         msg.setOption(value);
@@ -1669,13 +1670,13 @@ proto.ortoo.CheckPoint.deserializeBinaryFromReader = function(msg, reader) {
         var value = /** @type {number} */ (reader.readUint64());
         msg.setSseq(value);
         break;
-    case 2:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setCseq(value);
-      break;
-    default:
-      reader.skipField();
-      break;
+      case 2:
+        var value = /** @type {number} */ (reader.readUint64());
+        msg.setCseq(value);
+        break;
+      default:
+        reader.skipField();
+        break;
     }
   }
   return msg;
@@ -1788,7 +1789,7 @@ proto.ortoo.NotificationPushPull.prototype.toObject = function(opt_includeInstan
       obj.$jspbMessageInstance = msg;
     }
     return obj;
-};
+  };
 }
 
 
@@ -1822,16 +1823,16 @@ proto.ortoo.NotificationPushPull.deserializeBinaryFromReader = function(msg, rea
         var value = /** @type {string} */ (reader.readString());
         msg.setCuid(value);
         break;
-    case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setDuid(value);
-      break;
-    case 3:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setSseq(value);
-      break;
-    default:
-      reader.skipField();
+      case 2:
+        var value = /** @type {string} */ (reader.readString());
+        msg.setDuid(value);
+        break;
+      case 3:
+        var value = /** @type {number} */ (reader.readUint64());
+        msg.setSseq(value);
+        break;
+      default:
+        reader.skipField();
       break;
     }
   }
@@ -1967,9 +1968,9 @@ proto.ortoo.DatatypeMeta.prototype.toObject = function(opt_includeInstance) {
 
     if (includeInstance) {
       obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
+    }
+    return obj;
+  };
 }
 
 
@@ -2016,13 +2017,13 @@ proto.ortoo.DatatypeMeta.deserializeBinaryFromReader = function(msg, reader) {
         var value = /** @type {!proto.ortoo.TypeOfDatatype} */ (reader.readEnum());
         msg.setTypeof(value);
         break;
-    case 5:
-      var value = /** @type {!proto.ortoo.StateOfDatatype} */ (reader.readEnum());
-      msg.setState(value);
-      break;
-    default:
-      reader.skipField();
-      break;
+      case 5:
+        var value = /** @type {!proto.ortoo.StateOfDatatype} */ (reader.readEnum());
+        msg.setState(value);
+        break;
+      default:
+        reader.skipField();
+        break;
     }
   }
   return msg;
@@ -2244,10 +2245,10 @@ proto.ortoo.MessageHeader.prototype.toObject = function(opt_includeInstance) {
     };
 
     if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
+      obj.$jspbMessageInstance = msg;
+    }
+    return obj;
+  };
 }
 
 
@@ -2281,16 +2282,16 @@ proto.ortoo.MessageHeader.deserializeBinaryFromReader = function(msg, reader) {
         var value = /** @type {string} */ (reader.readString());
         msg.setVersion(value);
         break;
-    case 2:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setSeq(value);
-      break;
-    case 3:
-      var value = /** @type {!proto.ortoo.TypeOfMessage} */ (reader.readEnum());
-      msg.setTypeof(value);
-      break;
-    case 4:
-      var value = /** @type {string} */ (reader.readString());
+      case 2:
+        var value = /** @type {number} */ (reader.readUint32());
+        msg.setSeq(value);
+        break;
+      case 3:
+        var value = /** @type {!proto.ortoo.TypeOfMessage} */ (reader.readEnum());
+        msg.setTypeof(value);
+        break;
+      case 4:
+        var value = /** @type {string} */ (reader.readString());
       msg.setCollection(value);
       break;
     case 5:
@@ -2561,13 +2562,13 @@ proto.ortoo.ResponseState.deserializeBinaryFromReader = function(msg, reader) {
         var value = /** @type {!proto.ortoo.StateOfResponse} */ (reader.readEnum());
         msg.setState(value);
         break;
-    case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setMsg(value);
-      break;
-    default:
-      reader.skipField();
-      break;
+      case 2:
+        var value = /** @type {string} */ (reader.readString());
+        msg.setMsg(value);
+        break;
+      default:
+        reader.skipField();
+        break;
     }
   }
   return msg;
@@ -3025,6 +3026,7 @@ proto.ortoo.ClientResponse.prototype.hasState = function() {
 };
 
 
+
 /**
  * List of repeated fields within this message type.
  * @private {!Array<number>}
@@ -3070,8 +3072,8 @@ proto.ortoo.PushPullRequest.prototype.toObject = function(opt_includeInstance) {
     if (includeInstance) {
       obj.$jspbMessageInstance = msg;
     }
-  return obj;
-};
+    return obj;
+  };
 }
 
 
@@ -3252,6 +3254,7 @@ proto.ortoo.PushPullRequest.prototype.clearPushpullpacksList = function() {
 };
 
 
+
 /**
  * List of repeated fields within this message type.
  * @private {!Array<number>}
@@ -3297,8 +3300,8 @@ proto.ortoo.PushPullResponse.prototype.toObject = function(opt_includeInstance) 
     if (includeInstance) {
       obj.$jspbMessageInstance = msg;
     }
-  return obj;
-};
+    return obj;
+  };
 }
 
 

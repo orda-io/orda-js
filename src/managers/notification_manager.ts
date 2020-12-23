@@ -6,12 +6,11 @@ export class NotificationManager {
   private mqttClient: Paho.Client;
   private Logger: OrtooLogger;
 
-
   constructor(conf: ClientConfig, alias: string, logger: OrtooLogger) {
     this.Logger = logger;
 
-    this.mqttClient = new Paho.Client('127.0.0.1', 9001, alias);
-    this.mqttClient.startTrace();
+    this.mqttClient = new Paho.Client('127.0.0.1', 9001, '/ws', alias);
+    // this.mqttClient.startTrace();
     this.mqttClient.onConnectionLost = this.onConnectionLostHandler;
     this.mqttClient.onMessageArrived = this.onMessageArrived;
   }
@@ -40,6 +39,7 @@ export class NotificationManager {
   }
 
   disconnect() {
-    this.mqttClient.disconnect();
+    this.Logger.info('is connected:', this.mqttClient.isConnected());
+    // this.mqttClient.disconnect();
   }
 }
