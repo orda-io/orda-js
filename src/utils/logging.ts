@@ -12,8 +12,8 @@ colors.setTheme({
   error: colors.bgRed,
 });
 
-const colorMap = {
-  TRACE: 'magenta',
+const colorMap: { [key: string]: string } = {
+  'TRACE': 'magenta',
   DEBUG: 'bgBlue',
   INFO: 'bgBlack',
   WARN: 'yellow',
@@ -27,7 +27,8 @@ const ortooLogPrefix: prefix.LoglevelPluginPrefixOptions = {
     timestamp: Date,
   ): string | undefined {
     const tsFormat: string = `[${timestamp}]`['green'];
-    const levelFormat: string = `[${level}]`[colorMap[level.toUpperCase()]];
+    const levelColor: string | number = colorMap[level.toUpperCase()];
+    const levelFormat: string = `[${level}]`[levelColor as never];
     const nameFormat: string = `[${name}]`['cyan'];
     return `${tsFormat} ${levelFormat} ${nameFormat}`;
   },
