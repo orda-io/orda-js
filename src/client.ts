@@ -1,13 +1,12 @@
 import * as grpcWeb from 'grpc-web';
-import { CreateClientModel } from './protocols/client_model';
-import { CreateClientRequest } from './protocols/requests';
+import { ClientModel, CreateClientModel } from './protocols/client_model';
+import { ClientResponse, CreateClientRequest } from './protocols/requests';
 import { CUID } from './protocols/cuid';
 import { OrtooServiceClient } from './protocols/protobuf/ortoo_grpc_web_pb';
-import { Client as ClientModel, ClientResponse } from './protocols/protobuf/ortoo_pb';
 import { ClientConfig } from './config';
 import { OrtooLogger } from './utils/logging';
 import { ShortUID } from './constants/constants';
-import { NotificationManager } from './managers/notification_manager';
+import { NotificationManager } from './managers/notification';
 
 enum clientState {
   NOT_CONNECTED,
@@ -34,7 +33,7 @@ export class Client {
 
     this.state = clientState.NOT_CONNECTED;
     this.grpcClient = new OrtooServiceClient(conf.ServerAddr);
-    this.notificationManager = new NotificationManager(conf, alias, this.Logger);
+    this.notificationManager = new NotificationManager(conf, this.model, this.Logger);
   }
 
 

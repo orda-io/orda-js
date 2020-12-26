@@ -44,7 +44,6 @@
     "@types/google-protobuf": "^3.7.4",
     "@types/mocha": "^8.2.0",
     "@types/node": "^14.14.10",
-    "@types/paho-mqtt": "^1.0.4",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
@@ -92,7 +91,7 @@
     "grpc-web": "^1.2.1",
     "loglevel": "^1.7.1",
     "loglevel-plugin-prefix": "^0.8.4",
-    "paho-mqtt": "^1.1.0",
+    "mqtt": "^4.2.6",
     "uuid": "^8.3.1"
   }
 }

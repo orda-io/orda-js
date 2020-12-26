@@ -25,8 +25,8 @@ export class ClientConfig {
 
 export function CreateLocalClientConfig(collectionName: string): ClientConfig {
   return new ClientConfig(
-    'http://127.0.0.1:16091',
-    'ws://127.0.0.1:9001',
+    'http://127.0.0.1:29065',
+    'ws://127.0.0.1:18881/mqtt',
     collectionName,
     SyncType.LOCAL_ONLY,
   );
