@@ -21,21 +21,23 @@ export class Client {
   private notificationManager: NotificationManager;
 
   constructor(conf: ClientConfig, alias: string) {
-
     this.model = CreateClientModel(
       new CUID(),
       alias,
       conf.CollectionName,
-      conf.SyncType,
+      conf.SyncType
     );
     this.Logger = new OrtooLogger(this.getName());
     this.Logger.info(conf.NotificationUri);
 
     this.state = clientState.NOT_CONNECTED;
     this.grpcClient = new OrtooServiceClient(conf.ServerAddr);
-    this.notificationManager = new NotificationManager(conf, this.model, this.Logger);
+    this.notificationManager = new NotificationManager(
+      conf,
+      this.model,
+      this.Logger
+    );
   }
-
 
   async sendClientRequest(): Promise<void> {
     const clientRequest = CreateClientRequest(1, this.model);
@@ -50,7 +52,7 @@ export class Client {
           return;
         }
         this.Logger.info(`Response:${response}`);
-      },
+      }
     );
     this.Logger.info('end processClient');
 
@@ -60,7 +62,6 @@ export class Client {
       this.Logger.info(`Status:${status.metadata}`);
     });
   }
-
 
   getName(): string {
     const cuidString = Buffer.from(this.model.getCuid()).toString('hex');

@@ -13,7 +13,7 @@ export function CreateClientModel(
   cuid: CUID,
   alias: string,
   collection: string,
-  syncType: SyncType,
+  syncType: SyncType
 ): ClientModel {
   const client = new ClientModel();
   client.setCuid(cuid.AsUint8Array);

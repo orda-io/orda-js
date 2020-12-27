@@ -33,7 +33,6 @@ export class NotificationManager {
 
   private onConnect = (): void => {
     this.Logger.info('connect MQTT');
-
   };
 
   private onError = (error: Error): void => {
@@ -44,7 +43,6 @@ export class NotificationManager {
     this.Logger.info('Message:', message.toString());
   };
 
-
   subscribe(): void {
     this.mqttClient.subscribe('presence');
   }
@@ -53,7 +51,7 @@ export class NotificationManager {
     this.mqttClient.publish('presence', 'bin hier');
   }
 
-  disconnect() {
+  disconnect(): void {
     // this.Logger.info('is connected:', this.mqttPaho.isConnected());
     this.mqttClient.end();
   }

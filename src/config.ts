@@ -10,7 +10,7 @@ export class ClientConfig {
     serverAddr: string,
     notificationUri: string,
     collectionName: string,
-    syncType?: SyncType | undefined,
+    syncType?: SyncType | undefined
   ) {
     this.ServerAddr = serverAddr;
     this.NotificationUri = notificationUri;
@@ -28,6 +28,6 @@ export function CreateLocalClientConfig(collectionName: string): ClientConfig {
     'http://127.0.0.1:29065',
     'ws://127.0.0.1:18881/mqtt',
     collectionName,
-    SyncType.LOCAL_ONLY,
+    SyncType.LOCAL_ONLY
   );
 }

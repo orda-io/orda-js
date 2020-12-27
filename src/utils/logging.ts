@@ -13,7 +13,7 @@ colors.setTheme({
 });
 
 const colorMap: { [key: string]: string } = {
-  'TRACE': 'magenta',
+  TRACE: 'magenta',
   DEBUG: 'bgBlue',
   INFO: 'bgBlack',
   WARN: 'yellow',
@@ -24,7 +24,7 @@ const ortooLogPrefix: prefix.LoglevelPluginPrefixOptions = {
   format(
     level: string,
     name: string | undefined,
-    timestamp: Date,
+    timestamp: Date
   ): string | undefined {
     const tsFormat: string = `[${timestamp}]`['green'];
     const levelColor: string | number = colorMap[level.toUpperCase()];
@@ -49,27 +49,27 @@ export class OrtooLogger {
     this.logLevel.enableAll();
   }
 
-  public trace(...msg: any[]): void {
+  public trace(...msg: unknown[]): void {
     this.logLevel.trace(...msg);
   }
 
-  public debug(...msg: any[]): void {
+  public debug(...msg: unknown[]): void {
     this.logLevel.debug(...msg);
   }
 
-  public log(...msg: any[]): void {
+  public log(...msg: unknown[]): void {
     this.logLevel.log(...msg);
   }
 
-  public info(...msg: any[]): void {
+  public info(...msg: unknown[]): void {
     this.logLevel.info(...msg);
   }
 
-  public warn(...msg: any[]): void {
+  public warn(...msg: unknown[]): void {
     this.logLevel.warn(...msg);
   }
 
-  public error(...msg: any[]): void {
+  public error(...msg: unknown[]): void {
     this.logLevel.error(...msg);
   }
 }
