@@ -356,9 +356,9 @@ proto.ortoo.Client.prototype.toObject = function(opt_includeInstance) {
 proto.ortoo.Client.toObject = function(includeInstance, msg) {
   var f, obj = {
     cuid: msg.getCuid_asB64(),
-    alias: jspb.Message.getFieldWithDefault(msg, 2, ''),
-    collection: jspb.Message.getFieldWithDefault(msg, 3, ''),
-    synctype: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    alias: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    collection: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    synctype: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
 
   if (includeInstance) {
@@ -395,20 +395,20 @@ proto.ortoo.Client.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = /** @type {!Uint8Array} */ (reader.readBytes());
-        msg.setCuid(value);
-        break;
-      case 2:
-        var value = /** @type {string} */ (reader.readString());
-        msg.setAlias(value);
-        break;
-      case 3:
-        var value = /** @type {string} */ (reader.readString());
-        msg.setCollection(value);
-        break;
-      case 4:
-        var value = /** @type {!proto.ortoo.SyncType} */ (reader.readEnum());
+    case 1:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setCuid(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setAlias(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCollection(value);
+      break;
+    case 4:
+      var value = /** @type {!proto.ortoo.SyncType} */ (reader.readEnum());
       msg.setSynctype(value);
       break;
     default:
@@ -444,7 +444,7 @@ proto.ortoo.Client.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeBytes(
       1,
-      f,
+      f
     );
   }
   f = message.getAlias();
@@ -476,7 +476,7 @@ proto.ortoo.Client.serializeBinaryToWriter = function(message, writer) {
  * @return {!(string|Uint8Array)}
  */
 proto.ortoo.Client.prototype.getCuid = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ''));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
@@ -487,7 +487,7 @@ proto.ortoo.Client.prototype.getCuid = function() {
  */
 proto.ortoo.Client.prototype.getCuid_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
-    this.getCuid()));
+      this.getCuid()));
 };
 
 
@@ -500,7 +500,7 @@ proto.ortoo.Client.prototype.getCuid_asB64 = function() {
  */
 proto.ortoo.Client.prototype.getCuid_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-    this.getCuid()));
+      this.getCuid()));
 };
 
 
@@ -515,7 +515,7 @@ proto.ortoo.Client.prototype.setCuid = function(value) {
  * @return {string}
  */
 proto.ortoo.Client.prototype.getAlias = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ''));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
@@ -530,7 +530,7 @@ proto.ortoo.Client.prototype.setAlias = function(value) {
  * @return {string}
  */
 proto.ortoo.Client.prototype.getCollection = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ''));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
@@ -574,28 +574,28 @@ proto.ortoo.Timestamp.prototype.toObject = function(opt_includeInstance) {
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.Timestamp} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.Timestamp.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      era: jspb.Message.getFieldWithDefault(msg, 1, 0),
-      lamport: jspb.Message.getFieldWithDefault(msg, 2, 0),
-      cuid: msg.getCuid_asB64(),
-      delimiter: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    };
-
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
-    return obj;
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.Timestamp} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.Timestamp.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    era: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    lamport: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    cuid: msg.getCuid_asB64(),
+    delimiter: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -625,20 +625,20 @@ proto.ortoo.Timestamp.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = /** @type {number} */ (reader.readUint32());
-        msg.setEra(value);
-        break;
-      case 2:
-        var value = /** @type {number} */ (reader.readUint64());
-        msg.setLamport(value);
-        break;
-      case 3:
-        var value = /** @type {!Uint8Array} */ (reader.readBytes());
-        msg.setCuid(value);
-        break;
-      case 4:
-        var value = /** @type {number} */ (reader.readUint32());
+    case 1:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setEra(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setLamport(value);
+      break;
+    case 3:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setCuid(value);
+      break;
+    case 4:
+      var value = /** @type {number} */ (reader.readUint32());
       msg.setDelimiter(value);
       break;
     default:
@@ -674,7 +674,7 @@ proto.ortoo.Timestamp.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0) {
     writer.writeUint32(
       1,
-      f,
+      f
     );
   }
   f = message.getLamport();
@@ -736,7 +736,7 @@ proto.ortoo.Timestamp.prototype.setLamport = function(value) {
  * @return {!(string|Uint8Array)}
  */
 proto.ortoo.Timestamp.prototype.getCuid = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ''));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
@@ -747,7 +747,7 @@ proto.ortoo.Timestamp.prototype.getCuid = function() {
  */
 proto.ortoo.Timestamp.prototype.getCuid_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
-    this.getCuid()));
+      this.getCuid()));
 };
 
 
@@ -760,7 +760,7 @@ proto.ortoo.Timestamp.prototype.getCuid_asB64 = function() {
  */
 proto.ortoo.Timestamp.prototype.getCuid_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-    this.getCuid()));
+      this.getCuid()));
 };
 
 
@@ -804,28 +804,28 @@ proto.ortoo.OperationID.prototype.toObject = function(opt_includeInstance) {
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.OperationID} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.OperationID.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      era: jspb.Message.getFieldWithDefault(msg, 1, 0),
-      lamport: jspb.Message.getFieldWithDefault(msg, 2, 0),
-      cuid: msg.getCuid_asB64(),
-      seq: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    };
-
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
-    return obj;
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.OperationID} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.OperationID.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    era: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    lamport: jspb.Message.getFieldWithDefault(msg, 2, "0"),
+    cuid: msg.getCuid_asB64(),
+    seq: jspb.Message.getFieldWithDefault(msg, 4, "0")
   };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -855,20 +855,20 @@ proto.ortoo.OperationID.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = /** @type {number} */ (reader.readUint32());
-        msg.setEra(value);
-        break;
-      case 2:
-        var value = /** @type {number} */ (reader.readUint64());
-        msg.setLamport(value);
-        break;
-      case 3:
-        var value = /** @type {!Uint8Array} */ (reader.readBytes());
-        msg.setCuid(value);
-        break;
-      case 4:
-        var value = /** @type {number} */ (reader.readUint64());
+    case 1:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setEra(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setLamport(value);
+      break;
+    case 3:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setCuid(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readUint64String());
       msg.setSeq(value);
       break;
     default:
@@ -904,12 +904,12 @@ proto.ortoo.OperationID.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0) {
     writer.writeUint32(
       1,
-      f,
+      f
     );
   }
   f = message.getLamport();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       2,
       f
     );
@@ -922,8 +922,8 @@ proto.ortoo.OperationID.serializeBinaryToWriter = function(message, writer) {
     );
   }
   f = message.getSeq();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       4,
       f
     );
@@ -948,16 +948,16 @@ proto.ortoo.OperationID.prototype.setEra = function(value) {
 
 /**
  * optional uint64 lamport = 2;
- * @return {number}
+ * @return {string}
  */
 proto.ortoo.OperationID.prototype.getLamport = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
-/** @param {number} value */
+/** @param {string} value */
 proto.ortoo.OperationID.prototype.setLamport = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
+  jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
@@ -966,7 +966,7 @@ proto.ortoo.OperationID.prototype.setLamport = function(value) {
  * @return {!(string|Uint8Array)}
  */
 proto.ortoo.OperationID.prototype.getCuid = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ''));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
@@ -977,7 +977,7 @@ proto.ortoo.OperationID.prototype.getCuid = function() {
  */
 proto.ortoo.OperationID.prototype.getCuid_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
-    this.getCuid()));
+      this.getCuid()));
 };
 
 
@@ -990,7 +990,7 @@ proto.ortoo.OperationID.prototype.getCuid_asB64 = function() {
  */
 proto.ortoo.OperationID.prototype.getCuid_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-    this.getCuid()));
+      this.getCuid()));
 };
 
 
@@ -1002,16 +1002,16 @@ proto.ortoo.OperationID.prototype.setCuid = function(value) {
 
 /**
  * optional uint64 seq = 4;
- * @return {number}
+ * @return {string}
  */
 proto.ortoo.OperationID.prototype.getSeq = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, "0"));
 };
 
 
-/** @param {number} value */
+/** @param {string} value */
 proto.ortoo.OperationID.prototype.setSeq = function(value) {
-  jspb.Message.setProto3IntField(this, 4, value);
+  jspb.Message.setProto3StringIntField(this, 4, value);
 };
 
 
@@ -1034,27 +1034,27 @@ proto.ortoo.Operation.prototype.toObject = function(opt_includeInstance) {
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.Operation} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.Operation.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      id: (f = msg.getId()) && proto.ortoo.OperationID.toObject(includeInstance, f),
-      optype: jspb.Message.getFieldWithDefault(msg, 2, 0),
-      body: msg.getBody_asB64(),
-    };
-
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
-    return obj;
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.Operation} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.Operation.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    id: (f = msg.getId()) && proto.ortoo.OperationID.toObject(includeInstance, f),
+    optype: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    body: msg.getBody_asB64()
   };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -1084,22 +1084,22 @@ proto.ortoo.Operation.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = new proto.ortoo.OperationID;
-        reader.readMessage(value, proto.ortoo.OperationID.deserializeBinaryFromReader);
-        msg.setId(value);
-        break;
-      case 2:
-        var value = /** @type {!proto.ortoo.TypeOfOperation} */ (reader.readEnum());
-        msg.setOptype(value);
-        break;
-      case 3:
-        var value = /** @type {!Uint8Array} */ (reader.readBytes());
-        msg.setBody(value);
-        break;
-      default:
-        reader.skipField();
-        break;
+    case 1:
+      var value = new proto.ortoo.OperationID;
+      reader.readMessage(value,proto.ortoo.OperationID.deserializeBinaryFromReader);
+      msg.setId(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.ortoo.TypeOfOperation} */ (reader.readEnum());
+      msg.setOptype(value);
+      break;
+    case 3:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setBody(value);
+      break;
+    default:
+      reader.skipField();
+      break;
     }
   }
   return msg;
@@ -1131,7 +1131,7 @@ proto.ortoo.Operation.serializeBinaryToWriter = function(message, writer) {
     writer.writeMessage(
       1,
       f,
-      proto.ortoo.OperationID.serializeBinaryToWriter,
+      proto.ortoo.OperationID.serializeBinaryToWriter
     );
   }
   f = message.getOptype();
@@ -1204,7 +1204,7 @@ proto.ortoo.Operation.prototype.setOptype = function(value) {
  * @return {!(string|Uint8Array)}
  */
 proto.ortoo.Operation.prototype.getBody = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ''));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
@@ -1215,7 +1215,7 @@ proto.ortoo.Operation.prototype.getBody = function() {
  */
 proto.ortoo.Operation.prototype.getBody_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
-    this.getBody()));
+      this.getBody()));
 };
 
 
@@ -1228,7 +1228,7 @@ proto.ortoo.Operation.prototype.getBody_asB64 = function() {
  */
 proto.ortoo.Operation.prototype.getBody_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-    this.getBody()));
+      this.getBody()));
 };
 
 
@@ -1264,32 +1264,32 @@ proto.ortoo.PushPullPack.prototype.toObject = function(opt_includeInstance) {
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.PushPullPack} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.PushPullPack.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      duid: msg.getDuid_asB64(),
-      key: jspb.Message.getFieldWithDefault(msg, 2, ''),
-      option: jspb.Message.getFieldWithDefault(msg, 3, 0),
-      checkpoint: (f = msg.getCheckpoint()) && proto.ortoo.CheckPoint.toObject(includeInstance, f),
-      era: jspb.Message.getFieldWithDefault(msg, 5, 0),
-      type: jspb.Message.getFieldWithDefault(msg, 6, 0),
-      operationsList: jspb.Message.toObjectList(msg.getOperationsList(),
-        proto.ortoo.Operation.toObject, includeInstance),
-    };
-
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
-    return obj;
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.PushPullPack} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.PushPullPack.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    duid: msg.getDuid_asB64(),
+    key: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    option: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    checkpoint: (f = msg.getCheckpoint()) && proto.ortoo.CheckPoint.toObject(includeInstance, f),
+    era: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    type: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    operationsList: jspb.Message.toObjectList(msg.getOperationsList(),
+    proto.ortoo.Operation.toObject, includeInstance)
   };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -1319,39 +1319,39 @@ proto.ortoo.PushPullPack.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = /** @type {!Uint8Array} */ (reader.readBytes());
-        msg.setDuid(value);
-        break;
-      case 2:
-        var value = /** @type {string} */ (reader.readString());
-        msg.setKey(value);
-        break;
-      case 3:
-        var value = /** @type {number} */ (reader.readFixed32());
-        msg.setOption(value);
-        break;
-      case 4:
-        var value = new proto.ortoo.CheckPoint;
-        reader.readMessage(value, proto.ortoo.CheckPoint.deserializeBinaryFromReader);
-        msg.setCheckpoint(value);
-        break;
-      case 5:
-        var value = /** @type {number} */ (reader.readUint32());
-        msg.setEra(value);
-        break;
-      case 6:
-        var value = /** @type {number} */ (reader.readInt32());
-        msg.setType(value);
-        break;
-      case 7:
-        var value = new proto.ortoo.Operation;
-        reader.readMessage(value, proto.ortoo.Operation.deserializeBinaryFromReader);
-        msg.addOperations(value);
-        break;
-      default:
-        reader.skipField();
-        break;
+    case 1:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setDuid(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setKey(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readFixed32());
+      msg.setOption(value);
+      break;
+    case 4:
+      var value = new proto.ortoo.CheckPoint;
+      reader.readMessage(value,proto.ortoo.CheckPoint.deserializeBinaryFromReader);
+      msg.setCheckpoint(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setEra(value);
+      break;
+    case 6:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setType(value);
+      break;
+    case 7:
+      var value = new proto.ortoo.Operation;
+      reader.readMessage(value,proto.ortoo.Operation.deserializeBinaryFromReader);
+      msg.addOperations(value);
+      break;
+    default:
+      reader.skipField();
+      break;
     }
   }
   return msg;
@@ -1382,7 +1382,7 @@ proto.ortoo.PushPullPack.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeBytes(
       1,
-      f,
+      f
     );
   }
   f = message.getKey();
@@ -1404,7 +1404,7 @@ proto.ortoo.PushPullPack.serializeBinaryToWriter = function(message, writer) {
     writer.writeMessage(
       4,
       f,
-      proto.ortoo.CheckPoint.serializeBinaryToWriter,
+      proto.ortoo.CheckPoint.serializeBinaryToWriter
     );
   }
   f = message.getEra();
@@ -1426,7 +1426,7 @@ proto.ortoo.PushPullPack.serializeBinaryToWriter = function(message, writer) {
     writer.writeRepeatedMessage(
       7,
       f,
-      proto.ortoo.Operation.serializeBinaryToWriter,
+      proto.ortoo.Operation.serializeBinaryToWriter
     );
   }
 };
@@ -1437,7 +1437,7 @@ proto.ortoo.PushPullPack.serializeBinaryToWriter = function(message, writer) {
  * @return {!(string|Uint8Array)}
  */
 proto.ortoo.PushPullPack.prototype.getDuid = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ''));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
@@ -1448,7 +1448,7 @@ proto.ortoo.PushPullPack.prototype.getDuid = function() {
  */
 proto.ortoo.PushPullPack.prototype.getDuid_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
-    this.getDuid()));
+      this.getDuid()));
 };
 
 
@@ -1461,7 +1461,7 @@ proto.ortoo.PushPullPack.prototype.getDuid_asB64 = function() {
  */
 proto.ortoo.PushPullPack.prototype.getDuid_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-    this.getDuid()));
+      this.getDuid()));
 };
 
 
@@ -1476,7 +1476,7 @@ proto.ortoo.PushPullPack.prototype.setDuid = function(value) {
  * @return {string}
  */
 proto.ortoo.PushPullPack.prototype.getKey = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ''));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
@@ -1617,26 +1617,26 @@ proto.ortoo.CheckPoint.prototype.toObject = function(opt_includeInstance) {
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.CheckPoint} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.CheckPoint.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      sseq: jspb.Message.getFieldWithDefault(msg, 1, 0),
-      cseq: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    };
-
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
-    return obj;
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.CheckPoint} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.CheckPoint.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    sseq: jspb.Message.getFieldWithDefault(msg, 1, "0"),
+    cseq: jspb.Message.getFieldWithDefault(msg, 2, "0")
   };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -1666,17 +1666,17 @@ proto.ortoo.CheckPoint.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = /** @type {number} */ (reader.readUint64());
-        msg.setSseq(value);
-        break;
-      case 2:
-        var value = /** @type {number} */ (reader.readUint64());
-        msg.setCseq(value);
-        break;
-      default:
-        reader.skipField();
-        break;
+    case 1:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setSseq(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setCseq(value);
+      break;
+    default:
+      reader.skipField();
+      break;
     }
   }
   return msg;
@@ -1704,15 +1704,15 @@ proto.ortoo.CheckPoint.prototype.serializeBinary = function() {
 proto.ortoo.CheckPoint.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getSseq();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       1,
-      f,
+      f
     );
   }
   f = message.getCseq();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       2,
       f
     );
@@ -1722,31 +1722,31 @@ proto.ortoo.CheckPoint.serializeBinaryToWriter = function(message, writer) {
 
 /**
  * optional uint64 sseq = 1;
- * @return {number}
+ * @return {string}
  */
 proto.ortoo.CheckPoint.prototype.getSseq = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
 };
 
 
-/** @param {number} value */
+/** @param {string} value */
 proto.ortoo.CheckPoint.prototype.setSseq = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
+  jspb.Message.setProto3StringIntField(this, 1, value);
 };
 
 
 /**
  * optional uint64 cseq = 2;
- * @return {number}
+ * @return {string}
  */
 proto.ortoo.CheckPoint.prototype.getCseq = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
-/** @param {number} value */
+/** @param {string} value */
 proto.ortoo.CheckPoint.prototype.setCseq = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
+  jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
@@ -1769,27 +1769,27 @@ proto.ortoo.NotificationPushPull.prototype.toObject = function(opt_includeInstan
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.NotificationPushPull} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.NotificationPushPull.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      cuid: jspb.Message.getFieldWithDefault(msg, 1, ''),
-      duid: jspb.Message.getFieldWithDefault(msg, 2, ''),
-      sseq: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    };
-
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
-    return obj;
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.NotificationPushPull} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.NotificationPushPull.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    cuid: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    duid: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    sseq: jspb.Message.getFieldWithDefault(msg, 3, "0")
   };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -1819,20 +1819,20 @@ proto.ortoo.NotificationPushPull.deserializeBinaryFromReader = function(msg, rea
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = /** @type {string} */ (reader.readString());
-        msg.setCuid(value);
-        break;
-      case 2:
-        var value = /** @type {string} */ (reader.readString());
-        msg.setDuid(value);
-        break;
-      case 3:
-        var value = /** @type {number} */ (reader.readUint64());
-        msg.setSseq(value);
-        break;
-      default:
-        reader.skipField();
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCuid(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setDuid(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setSseq(value);
+      break;
+    default:
+      reader.skipField();
       break;
     }
   }
@@ -1864,7 +1864,7 @@ proto.ortoo.NotificationPushPull.serializeBinaryToWriter = function(message, wri
   if (f.length > 0) {
     writer.writeString(
       1,
-      f,
+      f
     );
   }
   f = message.getDuid();
@@ -1875,8 +1875,8 @@ proto.ortoo.NotificationPushPull.serializeBinaryToWriter = function(message, wri
     );
   }
   f = message.getSseq();
-  if (f !== 0) {
-    writer.writeUint64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
       3,
       f
     );
@@ -1889,7 +1889,7 @@ proto.ortoo.NotificationPushPull.serializeBinaryToWriter = function(message, wri
  * @return {string}
  */
 proto.ortoo.NotificationPushPull.prototype.getCuid = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ''));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
@@ -1904,7 +1904,7 @@ proto.ortoo.NotificationPushPull.prototype.setCuid = function(value) {
  * @return {string}
  */
 proto.ortoo.NotificationPushPull.prototype.getDuid = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ''));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
@@ -1916,16 +1916,16 @@ proto.ortoo.NotificationPushPull.prototype.setDuid = function(value) {
 
 /**
  * optional uint64 sseq = 3;
- * @return {number}
+ * @return {string}
  */
 proto.ortoo.NotificationPushPull.prototype.getSseq = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, "0"));
 };
 
 
-/** @param {number} value */
+/** @param {string} value */
 proto.ortoo.NotificationPushPull.prototype.setSseq = function(value) {
-  jspb.Message.setProto3IntField(this, 3, value);
+  jspb.Message.setProto3StringIntField(this, 3, value);
 };
 
 
@@ -1948,29 +1948,29 @@ proto.ortoo.DatatypeMeta.prototype.toObject = function(opt_includeInstance) {
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.DatatypeMeta} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.DatatypeMeta.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      key: jspb.Message.getFieldWithDefault(msg, 1, ''),
-      duid: msg.getDuid_asB64(),
-      opid: (f = msg.getOpid()) && proto.ortoo.OperationID.toObject(includeInstance, f),
-      pb_typeof: jspb.Message.getFieldWithDefault(msg, 4, 0),
-      state: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    };
-
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
-    return obj;
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.DatatypeMeta} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.DatatypeMeta.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    key: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    duid: msg.getDuid_asB64(),
+    opid: (f = msg.getOpid()) && proto.ortoo.OperationID.toObject(includeInstance, f),
+    pb_typeof: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    state: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -2000,30 +2000,30 @@ proto.ortoo.DatatypeMeta.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = /** @type {string} */ (reader.readString());
-        msg.setKey(value);
-        break;
-      case 2:
-        var value = /** @type {!Uint8Array} */ (reader.readBytes());
-        msg.setDuid(value);
-        break;
-      case 3:
-        var value = new proto.ortoo.OperationID;
-        reader.readMessage(value, proto.ortoo.OperationID.deserializeBinaryFromReader);
-        msg.setOpid(value);
-        break;
-      case 4:
-        var value = /** @type {!proto.ortoo.TypeOfDatatype} */ (reader.readEnum());
-        msg.setTypeof(value);
-        break;
-      case 5:
-        var value = /** @type {!proto.ortoo.StateOfDatatype} */ (reader.readEnum());
-        msg.setState(value);
-        break;
-      default:
-        reader.skipField();
-        break;
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setKey(value);
+      break;
+    case 2:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setDuid(value);
+      break;
+    case 3:
+      var value = new proto.ortoo.OperationID;
+      reader.readMessage(value,proto.ortoo.OperationID.deserializeBinaryFromReader);
+      msg.setOpid(value);
+      break;
+    case 4:
+      var value = /** @type {!proto.ortoo.TypeOfDatatype} */ (reader.readEnum());
+      msg.setTypeof(value);
+      break;
+    case 5:
+      var value = /** @type {!proto.ortoo.StateOfDatatype} */ (reader.readEnum());
+      msg.setState(value);
+      break;
+    default:
+      reader.skipField();
+      break;
     }
   }
   return msg;
@@ -2054,7 +2054,7 @@ proto.ortoo.DatatypeMeta.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeString(
       1,
-      f,
+      f
     );
   }
   f = message.getDuid_asU8();
@@ -2069,7 +2069,7 @@ proto.ortoo.DatatypeMeta.serializeBinaryToWriter = function(message, writer) {
     writer.writeMessage(
       3,
       f,
-      proto.ortoo.OperationID.serializeBinaryToWriter,
+      proto.ortoo.OperationID.serializeBinaryToWriter
     );
   }
   f = message.getTypeof();
@@ -2094,7 +2094,7 @@ proto.ortoo.DatatypeMeta.serializeBinaryToWriter = function(message, writer) {
  * @return {string}
  */
 proto.ortoo.DatatypeMeta.prototype.getKey = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ''));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
@@ -2109,7 +2109,7 @@ proto.ortoo.DatatypeMeta.prototype.setKey = function(value) {
  * @return {!(string|Uint8Array)}
  */
 proto.ortoo.DatatypeMeta.prototype.getDuid = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 2, ''));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
@@ -2120,7 +2120,7 @@ proto.ortoo.DatatypeMeta.prototype.getDuid = function() {
  */
 proto.ortoo.DatatypeMeta.prototype.getDuid_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
-    this.getDuid()));
+      this.getDuid()));
 };
 
 
@@ -2133,7 +2133,7 @@ proto.ortoo.DatatypeMeta.prototype.getDuid_asB64 = function() {
  */
 proto.ortoo.DatatypeMeta.prototype.getDuid_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-    this.getDuid()));
+      this.getDuid()));
 };
 
 
@@ -2225,30 +2225,30 @@ proto.ortoo.MessageHeader.prototype.toObject = function(opt_includeInstance) {
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.MessageHeader} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.MessageHeader.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      version: jspb.Message.getFieldWithDefault(msg, 1, ''),
-      seq: jspb.Message.getFieldWithDefault(msg, 2, 0),
-      pb_typeof: jspb.Message.getFieldWithDefault(msg, 3, 0),
-      collection: jspb.Message.getFieldWithDefault(msg, 4, ''),
-      clientalias: jspb.Message.getFieldWithDefault(msg, 5, ''),
-      cuid: msg.getCuid_asB64(),
-    };
-
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
-    return obj;
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.MessageHeader} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.MessageHeader.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    version: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    seq: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    pb_typeof: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    collection: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    clientalias: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    cuid: msg.getCuid_asB64()
   };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -2278,20 +2278,20 @@ proto.ortoo.MessageHeader.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = /** @type {string} */ (reader.readString());
-        msg.setVersion(value);
-        break;
-      case 2:
-        var value = /** @type {number} */ (reader.readUint32());
-        msg.setSeq(value);
-        break;
-      case 3:
-        var value = /** @type {!proto.ortoo.TypeOfMessage} */ (reader.readEnum());
-        msg.setTypeof(value);
-        break;
-      case 4:
-        var value = /** @type {string} */ (reader.readString());
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setVersion(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setSeq(value);
+      break;
+    case 3:
+      var value = /** @type {!proto.ortoo.TypeOfMessage} */ (reader.readEnum());
+      msg.setTypeof(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
       msg.setCollection(value);
       break;
     case 5:
@@ -2335,7 +2335,7 @@ proto.ortoo.MessageHeader.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeString(
       1,
-      f,
+      f
     );
   }
   f = message.getSeq();
@@ -2381,7 +2381,7 @@ proto.ortoo.MessageHeader.serializeBinaryToWriter = function(message, writer) {
  * @return {string}
  */
 proto.ortoo.MessageHeader.prototype.getVersion = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ''));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
@@ -2426,7 +2426,7 @@ proto.ortoo.MessageHeader.prototype.setTypeof = function(value) {
  * @return {string}
  */
 proto.ortoo.MessageHeader.prototype.getCollection = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ''));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
@@ -2441,7 +2441,7 @@ proto.ortoo.MessageHeader.prototype.setCollection = function(value) {
  * @return {string}
  */
 proto.ortoo.MessageHeader.prototype.getClientalias = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ''));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
@@ -2456,7 +2456,7 @@ proto.ortoo.MessageHeader.prototype.setClientalias = function(value) {
  * @return {!(string|Uint8Array)}
  */
 proto.ortoo.MessageHeader.prototype.getCuid = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 6, ''));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
 };
 
 
@@ -2467,7 +2467,7 @@ proto.ortoo.MessageHeader.prototype.getCuid = function() {
  */
 proto.ortoo.MessageHeader.prototype.getCuid_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
-    this.getCuid()));
+      this.getCuid()));
 };
 
 
@@ -2480,7 +2480,7 @@ proto.ortoo.MessageHeader.prototype.getCuid_asB64 = function() {
  */
 proto.ortoo.MessageHeader.prototype.getCuid_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-    this.getCuid()));
+      this.getCuid()));
 };
 
 
@@ -2509,26 +2509,26 @@ proto.ortoo.ResponseState.prototype.toObject = function(opt_includeInstance) {
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.ResponseState} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.ResponseState.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      state: jspb.Message.getFieldWithDefault(msg, 1, 0),
-      msg: jspb.Message.getFieldWithDefault(msg, 2, ''),
-    };
-
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
-    return obj;
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.ResponseState} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.ResponseState.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    state: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    msg: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -2558,17 +2558,17 @@ proto.ortoo.ResponseState.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = /** @type {!proto.ortoo.StateOfResponse} */ (reader.readEnum());
-        msg.setState(value);
-        break;
-      case 2:
-        var value = /** @type {string} */ (reader.readString());
-        msg.setMsg(value);
-        break;
-      default:
-        reader.skipField();
-        break;
+    case 1:
+      var value = /** @type {!proto.ortoo.StateOfResponse} */ (reader.readEnum());
+      msg.setState(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setMsg(value);
+      break;
+    default:
+      reader.skipField();
+      break;
     }
   }
   return msg;
@@ -2599,7 +2599,7 @@ proto.ortoo.ResponseState.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0.0) {
     writer.writeEnum(
       1,
-      f,
+      f
     );
   }
   f = message.getMsg();
@@ -2632,7 +2632,7 @@ proto.ortoo.ResponseState.prototype.setState = function(value) {
  * @return {string}
  */
 proto.ortoo.ResponseState.prototype.getMsg = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ''));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
@@ -2661,26 +2661,26 @@ proto.ortoo.ClientRequest.prototype.toObject = function(opt_includeInstance) {
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.ClientRequest} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.ClientRequest.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      header: (f = msg.getHeader()) && proto.ortoo.MessageHeader.toObject(includeInstance, f),
-      client: (f = msg.getClient()) && proto.ortoo.Client.toObject(includeInstance, f),
-    };
-
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
-    return obj;
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.ClientRequest} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.ClientRequest.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    header: (f = msg.getHeader()) && proto.ortoo.MessageHeader.toObject(includeInstance, f),
+    client: (f = msg.getClient()) && proto.ortoo.Client.toObject(includeInstance, f)
   };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -2710,19 +2710,19 @@ proto.ortoo.ClientRequest.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = new proto.ortoo.MessageHeader;
-        reader.readMessage(value, proto.ortoo.MessageHeader.deserializeBinaryFromReader);
-        msg.setHeader(value);
-        break;
-      case 2:
-        var value = new proto.ortoo.Client;
-        reader.readMessage(value, proto.ortoo.Client.deserializeBinaryFromReader);
-        msg.setClient(value);
-        break;
-      default:
-        reader.skipField();
-        break;
+    case 1:
+      var value = new proto.ortoo.MessageHeader;
+      reader.readMessage(value,proto.ortoo.MessageHeader.deserializeBinaryFromReader);
+      msg.setHeader(value);
+      break;
+    case 2:
+      var value = new proto.ortoo.Client;
+      reader.readMessage(value,proto.ortoo.Client.deserializeBinaryFromReader);
+      msg.setClient(value);
+      break;
+    default:
+      reader.skipField();
+      break;
     }
   }
   return msg;
@@ -2754,7 +2754,7 @@ proto.ortoo.ClientRequest.serializeBinaryToWriter = function(message, writer) {
     writer.writeMessage(
       1,
       f,
-      proto.ortoo.MessageHeader.serializeBinaryToWriter,
+      proto.ortoo.MessageHeader.serializeBinaryToWriter
     );
   }
   f = message.getClient();
@@ -2762,7 +2762,7 @@ proto.ortoo.ClientRequest.serializeBinaryToWriter = function(message, writer) {
     writer.writeMessage(
       2,
       f,
-      proto.ortoo.Client.serializeBinaryToWriter,
+      proto.ortoo.Client.serializeBinaryToWriter
     );
   }
 };
@@ -2853,26 +2853,26 @@ proto.ortoo.ClientResponse.prototype.toObject = function(opt_includeInstance) {
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.ClientResponse} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.ClientResponse.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      header: (f = msg.getHeader()) && proto.ortoo.MessageHeader.toObject(includeInstance, f),
-      state: (f = msg.getState()) && proto.ortoo.ResponseState.toObject(includeInstance, f),
-    };
-
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
-    return obj;
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.ClientResponse} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.ClientResponse.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    header: (f = msg.getHeader()) && proto.ortoo.MessageHeader.toObject(includeInstance, f),
+    state: (f = msg.getState()) && proto.ortoo.ResponseState.toObject(includeInstance, f)
   };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -2902,19 +2902,19 @@ proto.ortoo.ClientResponse.deserializeBinaryFromReader = function(msg, reader) {
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = new proto.ortoo.MessageHeader;
-        reader.readMessage(value, proto.ortoo.MessageHeader.deserializeBinaryFromReader);
-        msg.setHeader(value);
-        break;
-      case 2:
-        var value = new proto.ortoo.ResponseState;
-        reader.readMessage(value, proto.ortoo.ResponseState.deserializeBinaryFromReader);
-        msg.setState(value);
-        break;
-      default:
-        reader.skipField();
-        break;
+    case 1:
+      var value = new proto.ortoo.MessageHeader;
+      reader.readMessage(value,proto.ortoo.MessageHeader.deserializeBinaryFromReader);
+      msg.setHeader(value);
+      break;
+    case 2:
+      var value = new proto.ortoo.ResponseState;
+      reader.readMessage(value,proto.ortoo.ResponseState.deserializeBinaryFromReader);
+      msg.setState(value);
+      break;
+    default:
+      reader.skipField();
+      break;
     }
   }
   return msg;
@@ -2946,7 +2946,7 @@ proto.ortoo.ClientResponse.serializeBinaryToWriter = function(message, writer) {
     writer.writeMessage(
       1,
       f,
-      proto.ortoo.MessageHeader.serializeBinaryToWriter,
+      proto.ortoo.MessageHeader.serializeBinaryToWriter
     );
   }
   f = message.getState();
@@ -2954,7 +2954,7 @@ proto.ortoo.ClientResponse.serializeBinaryToWriter = function(message, writer) {
     writer.writeMessage(
       2,
       f,
-      proto.ortoo.ResponseState.serializeBinaryToWriter,
+      proto.ortoo.ResponseState.serializeBinaryToWriter
     );
   }
 };
@@ -3052,28 +3052,28 @@ proto.ortoo.PushPullRequest.prototype.toObject = function(opt_includeInstance) {
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.PushPullRequest} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.PushPullRequest.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      header: (f = msg.getHeader()) && proto.ortoo.MessageHeader.toObject(includeInstance, f),
-      id: jspb.Message.getFieldWithDefault(msg, 2, 0),
-      pushpullpacksList: jspb.Message.toObjectList(msg.getPushpullpacksList(),
-        proto.ortoo.PushPullPack.toObject, includeInstance),
-    };
-
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
-    return obj;
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.PushPullRequest} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.PushPullRequest.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    header: (f = msg.getHeader()) && proto.ortoo.MessageHeader.toObject(includeInstance, f),
+    id: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    pushpullpacksList: jspb.Message.toObjectList(msg.getPushpullpacksList(),
+    proto.ortoo.PushPullPack.toObject, includeInstance)
   };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -3103,23 +3103,23 @@ proto.ortoo.PushPullRequest.deserializeBinaryFromReader = function(msg, reader) 
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = new proto.ortoo.MessageHeader;
-        reader.readMessage(value, proto.ortoo.MessageHeader.deserializeBinaryFromReader);
-        msg.setHeader(value);
-        break;
-      case 2:
-        var value = /** @type {number} */ (reader.readInt32());
-        msg.setId(value);
-        break;
-      case 3:
-        var value = new proto.ortoo.PushPullPack;
-        reader.readMessage(value, proto.ortoo.PushPullPack.deserializeBinaryFromReader);
-        msg.addPushpullpacks(value);
-        break;
-      default:
-        reader.skipField();
-        break;
+    case 1:
+      var value = new proto.ortoo.MessageHeader;
+      reader.readMessage(value,proto.ortoo.MessageHeader.deserializeBinaryFromReader);
+      msg.setHeader(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setId(value);
+      break;
+    case 3:
+      var value = new proto.ortoo.PushPullPack;
+      reader.readMessage(value,proto.ortoo.PushPullPack.deserializeBinaryFromReader);
+      msg.addPushpullpacks(value);
+      break;
+    default:
+      reader.skipField();
+      break;
     }
   }
   return msg;
@@ -3151,7 +3151,7 @@ proto.ortoo.PushPullRequest.serializeBinaryToWriter = function(message, writer) 
     writer.writeMessage(
       1,
       f,
-      proto.ortoo.MessageHeader.serializeBinaryToWriter,
+      proto.ortoo.MessageHeader.serializeBinaryToWriter
     );
   }
   f = message.getId();
@@ -3166,7 +3166,7 @@ proto.ortoo.PushPullRequest.serializeBinaryToWriter = function(message, writer) 
     writer.writeRepeatedMessage(
       3,
       f,
-      proto.ortoo.PushPullPack.serializeBinaryToWriter,
+      proto.ortoo.PushPullPack.serializeBinaryToWriter
     );
   }
 };
@@ -3280,28 +3280,28 @@ proto.ortoo.PushPullResponse.prototype.toObject = function(opt_includeInstance) 
 };
 
 
-  /**
-   * Static version of the {@see toObject} method.
-   * @param {boolean|undefined} includeInstance Whether to include the JSPB
-   *     instance for transitional soy proto support:
-   *     http://goto/soy-param-migration
-   * @param {!proto.ortoo.PushPullResponse} msg The msg instance to transform.
-   * @return {!Object}
-   * @suppress {unusedLocalVariables} f is only used for nested messages
-   */
-  proto.ortoo.PushPullResponse.toObject = function(includeInstance, msg) {
-    var f, obj = {
-      header: (f = msg.getHeader()) && proto.ortoo.MessageHeader.toObject(includeInstance, f),
-      id: jspb.Message.getFieldWithDefault(msg, 2, 0),
-      pushpullpacksList: jspb.Message.toObjectList(msg.getPushpullpacksList(),
-        proto.ortoo.PushPullPack.toObject, includeInstance),
-    };
-
-    if (includeInstance) {
-      obj.$jspbMessageInstance = msg;
-    }
-    return obj;
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Whether to include the JSPB
+ *     instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.ortoo.PushPullResponse} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.ortoo.PushPullResponse.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    header: (f = msg.getHeader()) && proto.ortoo.MessageHeader.toObject(includeInstance, f),
+    id: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    pushpullpacksList: jspb.Message.toObjectList(msg.getPushpullpacksList(),
+    proto.ortoo.PushPullPack.toObject, includeInstance)
   };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
 }
 
 
@@ -3331,23 +3331,23 @@ proto.ortoo.PushPullResponse.deserializeBinaryFromReader = function(msg, reader)
     }
     var field = reader.getFieldNumber();
     switch (field) {
-      case 1:
-        var value = new proto.ortoo.MessageHeader;
-        reader.readMessage(value, proto.ortoo.MessageHeader.deserializeBinaryFromReader);
-        msg.setHeader(value);
-        break;
-      case 2:
-        var value = /** @type {number} */ (reader.readInt32());
-        msg.setId(value);
-        break;
-      case 3:
-        var value = new proto.ortoo.PushPullPack;
-        reader.readMessage(value, proto.ortoo.PushPullPack.deserializeBinaryFromReader);
-        msg.addPushpullpacks(value);
-        break;
-      default:
-        reader.skipField();
-        break;
+    case 1:
+      var value = new proto.ortoo.MessageHeader;
+      reader.readMessage(value,proto.ortoo.MessageHeader.deserializeBinaryFromReader);
+      msg.setHeader(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setId(value);
+      break;
+    case 3:
+      var value = new proto.ortoo.PushPullPack;
+      reader.readMessage(value,proto.ortoo.PushPullPack.deserializeBinaryFromReader);
+      msg.addPushpullpacks(value);
+      break;
+    default:
+      reader.skipField();
+      break;
     }
   }
   return msg;
@@ -3379,7 +3379,7 @@ proto.ortoo.PushPullResponse.serializeBinaryToWriter = function(message, writer)
     writer.writeMessage(
       1,
       f,
-      proto.ortoo.MessageHeader.serializeBinaryToWriter,
+      proto.ortoo.MessageHeader.serializeBinaryToWriter
     );
   }
   f = message.getId();
@@ -3394,7 +3394,7 @@ proto.ortoo.PushPullResponse.serializeBinaryToWriter = function(message, writer)
     writer.writeRepeatedMessage(
       3,
       f,
-      proto.ortoo.PushPullPack.serializeBinaryToWriter,
+      proto.ortoo.PushPullPack.serializeBinaryToWriter
     );
   }
 };
@@ -3488,7 +3488,7 @@ proto.ortoo.PushPullResponse.prototype.clearPushpullpacksList = function() {
 proto.ortoo.SyncType = {
   LOCAL_ONLY: 0,
   MANUALLY: 1,
-  NOTIFIABLE: 2,
+  NOTIFIABLE: 2
 };
 
 /**
@@ -3519,7 +3519,7 @@ proto.ortoo.TypeOfDatatype = {
   COUNTER: 0,
   HASH_MAP: 1,
   LIST: 2,
-  DOCUMENT: 3,
+  DOCUMENT: 3
 };
 
 /**
@@ -3532,7 +3532,7 @@ proto.ortoo.StateOfDatatype = {
   SUBSCRIBED: 4,
   DUE_TO_UNSUBSCRIBE: 5,
   UNSUBSCRIBED: 6,
-  DELETED: 7,
+  DELETED: 7
 };
 
 /**
@@ -3542,7 +3542,7 @@ proto.ortoo.TypeOfMessage = {
   REQUEST_CLIENT: 0,
   REQUEST_PUSHPULL: 1,
   RESPONSE_CLIENT: 10,
-  RESPONSE_PUSHPULL: 11,
+  RESPONSE_PUSHPULL: 11
 };
 
 /**
@@ -3551,7 +3551,7 @@ proto.ortoo.TypeOfMessage = {
 proto.ortoo.StateOfResponse = {
   OK: 0,
   ERR_CLIENT_INVALID_COLLECTION: 101,
-  ERR_CLIENT_INVALID_SYNCTYPE: 102,
+  ERR_CLIENT_INVALID_SYNCTYPE: 102
 };
 
 goog.object.extend(exports, proto.ortoo);

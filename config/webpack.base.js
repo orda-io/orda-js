@@ -2,6 +2,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const root = path.join.bind(path, ROOT);
+const babelrc = require('./babelrc.config.json');
 
 exports.root = root;
 exports.config = {
@@ -17,8 +18,18 @@ exports.config = {
   module: {
     rules: [
       {
+        test: /\.json$/,
+        loader: 'json-loader',
+      },
+      {
         test: /\.js$/,
-        use: ['babel-loader'],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: babelrc.presets,
+            plugins: babelrc.plugins,
+          },
+        },
         exclude: /node_modules/,
       },
     ],

@@ -1,58 +1,61 @@
-import { OrtooLogger } from '../utils/logging';
 import { ClientConfig } from '../config';
-import { ClientModel } from '../protocols/client_model';
 import mqtt from 'mqtt';
 import { Packet } from 'mqtt-packet';
+import { OrtooContext } from '../context';
 
 export class NotificationManager {
-  private mqttClient: mqtt.Client;
-  private Logger: OrtooLogger;
+  private readonly ctx: OrtooContext;
+  private readonly notificationUri: string;
+  private mqttClient: mqtt.Client | null = null;
 
-  constructor(conf: ClientConfig, cm: ClientModel, logger: OrtooLogger) {
-    this.Logger = logger;
-    this.mqttClient = mqtt.connect(conf.NotificationUri, {
+  constructor(conf: ClientConfig, ctx: OrtooContext) {
+    this.ctx = ctx;
+    this.notificationUri = conf.NotificationUri;
+  }
+
+  public connect(): void {
+    this.mqttClient = mqtt.connect(this.notificationUri, {
       clean: true,
-      clientId: cm.cuid,
-      username: cm.getAlias(),
+      clientId: this.ctx.client.cuid,
+      username: this.ctx.client.getAlias(),
     });
 
     this.mqttClient.on('connect', this.onConnect);
     this.mqttClient.on('message', this.onMessage);
     this.mqttClient.on('error', this.onError);
-    this.mqttClient.on('packetsend', this.onPacketSend);
-    this.mqttClient.on('packetreceive', this.onPacketReceive);
+    // this.mqttClient.on('packetsend', this.onPacketSend);
+    // this.mqttClient.on('packetreceive', this.onPacketReceive);
   }
 
-  private onPacketSend = (packet: Packet): void => {
-    this.Logger.info('onPacketSend', packet);
+  private onConnect: mqtt.OnConnectCallback = (packet: Packet): void => {
+    this.ctx.L.info('connect MQTT:', packet);
   };
 
-  private onPacketReceive = (packet: Packet): void => {
-    this.Logger.info('onPacketReceive', packet);
+  private onMessage: mqtt.OnMessageCallback = (
+    topic: string,
+    payload: Buffer,
+    packet: Packet
+  ): void => {
+    this.ctx.L.info('Message:', topic.toString());
   };
 
-  private onConnect = (): void => {
-    this.Logger.info('connect MQTT');
+  private onError: mqtt.OnErrorCallback = (error: Error): void => {
+    this.ctx.L.info('error MQTT', error);
   };
 
-  private onError = (error: Error): void => {
-    this.Logger.info('error MQTT', error);
-  };
+  // private onPacketSend: mqtt.OnConnectCallback = (packet: Packet): void => {
+  //   this.Logger.info('onPacketSend', packet);
+  // };
+  //
+  // private onPacketReceive = (packet: Packet): void => {
+  //   this.Logger.info('onPacketReceive', packet);
+  // };
 
-  private onMessage = (topic: string, message: string): void => {
-    this.Logger.info('Message:', message.toString());
-  };
-
-  subscribe(): void {
-    this.mqttClient.subscribe('presence');
-  }
-
-  publish(): void {
-    this.mqttClient.publish('presence', 'bin hier');
+  subscribe(topic: string): void {
+    // this.mqttClient?.subscribe(topic);
   }
 
   disconnect(): void {
-    // this.Logger.info('is connected:', this.mqttPaho.isConnected());
-    this.mqttClient.end();
+    // this.mqttClient?.end();
   }
 }
