@@ -11,13 +11,13 @@
     "clean": "rimraf dist coverage",
     "eslint:fix": "eslint --ext .tsx,.ts --fix ./src",
     "prettier": "prettier --config ./.prettierrc --write ./src/**/*.{json,ts,tsx}",
-    "gen-protocols:protoc": "protoc -I=./src/protocols/protobuf ortoo.proto --js_out=import_style=commonjs,binary:./src/protocols/protobuf --grpc-web_out=import_style=commonjs+dts,mode=grpcweb:./src/protocols/protobuf",
+    "gen-protocols:protoc": "protoc -I=./src/protocols/protobuf ortoo.proto --js_out=import_style=commonjs,binary:./src/protocols/protobuf --grpc-web_out=import_style=typescript,mode=grpcweb:./src/protocols/protobuf",
     "gen-protocols:add-declare": "sed -i 's/export namespace/export declare namespace/g' src/protocols/protobuf/ortoo_pb.d.ts",
     "gen-protocols": "npm run gen-protocols:protoc && npm run gen-protocols:add-declare",
     "build": "npm run clean && webpack --config=./config/webpack.dev.js",
     "build:prod": "npm run clean:dist && webpack --config=./config/webpack.prod.js  --progress --profile --bail",
     "build:types": "tsc --emitDeclarationOnly --declaration --outDir dist && cp ./src/protocols/protobuf/*.js ./dist/protocols/protobuf",
-    "build:js": "npx babel src --out-dir dist --extensions \".ts\" --source-maps inline",
+    "build:js": "npx babel src --config-file=config/babelrc.config.json --out-dir dist --extensions \".ts\" --source-maps inline",
     "build:example": "npm run build:types && npm run build:js && rollup -c ./config/rollup.prod.js"
   },
   "repository": {
@@ -34,10 +34,14 @@
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.1",
     "@babel/plugin-proposal-object-rest-spread": "^7.12.1",
+    "@babel/plugin-proposal-optional-chaining": "^7.12.7",
+    "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
     "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-inject": "^4.0.2",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@rollup/plugin-typescript": "^8.1.0",
     "@types/chai": "^4.2.14",
@@ -56,6 +60,7 @@
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
     "jsdoc": "^3.6.6",
+    "json-loader": "^0.5.7",
     "karma": "^5.2.3",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.1.0",
@@ -84,11 +89,8 @@
     "webpack-merge": "^5.4.1"
   },
   "dependencies": {
-    "colors": "^1.4.0",
     "google-protobuf": "^3.14.0",
     "grpc-web": "^1.2.1",
-    "loglevel": "^1.7.1",
-    "loglevel-plugin-prefix": "^0.8.4",
     "mqtt": "^4.2.6",
     "uuid": "^8.3.1"
   }

@@ -1,12 +1,17 @@
 import * as grpcWeb from 'grpc-web';
-import { ClientModel, CreateClientModel } from './protocols/client_model';
+import {
+  ClientModel,
+  CreateClientModel,
+  SyncType,
+} from './protocols/client_model';
 import { ClientResponse, CreateClientRequest } from './protocols/requests';
 import { CUID } from './protocols/cuid';
-import { OrtooServiceClient } from './protocols/protobuf/ortoo_grpc_web_pb';
+import { OrtooServiceClient } from './protocols/protobuf/OrtooServiceClientPb';
 import { ClientConfig } from './config';
-import { OrtooLogger } from './utils/logging';
 import { ShortUID } from './constants/constants';
-import { NotificationManager } from './managers/notification';
+import DatatypeManager from './managers/datatype';
+import { OrtooContext } from './context';
+import SyncManager from './managers/sync';
 
 enum clientState {
   NOT_CONNECTED,
@@ -14,11 +19,12 @@ enum clientState {
 }
 
 export class Client {
-  private readonly Logger: OrtooLogger;
-  private readonly model: ClientModel;
   private state: clientState;
+  private readonly model: ClientModel;
+  private readonly ctx: OrtooContext;
   private grpcClient: OrtooServiceClient;
-  private notificationManager: NotificationManager;
+  private syncManager: SyncManager | null;
+  private datatypeManager: DatatypeManager | null;
 
   constructor(conf: ClientConfig, alias: string) {
     this.model = CreateClientModel(
@@ -27,39 +33,40 @@ export class Client {
       conf.CollectionName,
       conf.SyncType
     );
-    this.Logger = new OrtooLogger(this.getName());
-    this.Logger.info(conf.NotificationUri);
+    this.ctx = new OrtooContext(this.model, conf);
 
     this.state = clientState.NOT_CONNECTED;
     this.grpcClient = new OrtooServiceClient(conf.ServerAddr);
-    this.notificationManager = new NotificationManager(
-      conf,
-      this.model,
-      this.Logger
-    );
+
+    this.syncManager = null;
+    this.datatypeManager = null;
+    if (conf.SyncType !== SyncType.LOCAL_ONLY) {
+      this.syncManager = new SyncManager(conf, this.ctx);
+      this.datatypeManager = new DatatypeManager();
+    }
   }
 
   async sendClientRequest(): Promise<void> {
     const clientRequest = CreateClientRequest(1, this.model);
 
-    this.Logger.log('sendClientRequest3', clientRequest);
+    this.ctx.L.info('sendClientRequest3', clientRequest);
     const call = this.grpcClient.processClient(
       clientRequest,
-      undefined,
+      null,
       (err: grpcWeb.Error, response: ClientResponse) => {
         if (err !== null) {
-          this.Logger.error(err);
+          this.ctx.L.error(err.message);
           return;
         }
-        this.Logger.info(`Response:${response}`);
+        this.ctx.L.info(`Response:${response}`);
       }
     );
-    this.Logger.info('end processClient');
+    this.ctx.L.info('end processClient');
 
     await call.on('status', (status: grpcWeb.Status) => {
-      this.Logger.info(`Status:${status.code}`);
-      this.Logger.info(`Status:${status.details}`);
-      this.Logger.info(`Status:${status.metadata}`);
+      this.ctx.L.info(`Status:${status.code}`);
+      this.ctx.L.info(`Status:${status.details}`);
+      this.ctx.L.info(`Status:${status.metadata}`);
     });
   }
 

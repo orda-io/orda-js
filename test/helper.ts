@@ -1,5 +1,5 @@
-import { OrtooLogger } from '../src/utils/logging';
+import { OrtooLoggerFactory } from '../src/utils/ortoo_logger';
 
-export const Logger = new OrtooLogger('Test');
+const logFactory = new OrtooLoggerFactory('trace');
 
-
+export const TestLogger = logFactory.getLogger('test');
