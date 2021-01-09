@@ -5,7 +5,11 @@
       {
         "targets": {
           "esmodules": true
-        }
+        },
+        "useBuiltIns": "usage",
+        "corejs": 3,
+        "shippedProposals": true,
+        "debug": true
       }
     ],
     "@babel/typescript"

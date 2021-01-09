@@ -14,7 +14,6 @@ exports.config = {
     modules: [root('src'), 'node_modules'],
   },
 
-  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -22,7 +21,7 @@ exports.config = {
         loader: 'json-loader',
       },
       {
-        test: /\.js$/,
+        test: /\.(js|ts)$/,
         use: {
           loader: 'babel-loader',
           options: {
