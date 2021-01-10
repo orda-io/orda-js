@@ -90,3 +90,5 @@ export class OrtooLoggerFactory {
     };
   }
 }
+
+export const logger = new OrtooLoggerFactory('trace').getLogger('Ortoo');

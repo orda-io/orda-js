@@ -5,7 +5,7 @@ import { ClientConfig } from '../config';
 import { OrtooContext } from '../context';
 
 export default class SyncManager {
-  private cseq: number;
+  private seq: number;
   private readonly serverAddr: string;
   private grpc?: OrtooServiceClient;
   private notification: NotificationManager | null;
@@ -13,7 +13,7 @@ export default class SyncManager {
 
   constructor(conf: ClientConfig, ctx: OrtooContext) {
     this.ctx = ctx;
-    this.cseq = 0;
+    this.seq = 0;
     let notification: NotificationManager | null = null;
     if (this.ctx.client.getSynctype() === SyncType.NOTIFIABLE) {
       notification = new NotificationManager(conf, ctx);
@@ -24,5 +24,9 @@ export default class SyncManager {
 
   public connect(): void {
     this.grpc = new OrtooServiceClient(this.serverAddr);
+  }
+
+  private nextSeq(): number {
+    return ++this.seq;
   }
 }

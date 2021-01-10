@@ -1,40 +1,49 @@
 import { CheckPoint as CP } from './protobuf/ortoo_pb';
+import { NumericType, uint32, Uint32, uint64, Uint64 } from '../types/uint';
 
 export class CheckPoint {
-  get sseq(): BigInt {
+  private _cseq: Uint32;
+  private _sseq: Uint64;
+
+  constructor(cseq: NumericType, sseq: NumericType) {
+    this._cseq = uint32(cseq);
+    this._sseq = uint64(sseq);
+  }
+
+  get sseq(): Uint64 {
     return this._sseq;
   }
 
-  set sseq(value: BigInt) {
+  set sseq(value: Uint64) {
     this._sseq = value;
   }
 
-  get cseq(): BigInt {
+  get cseq(): Uint32 {
     return this._cseq;
   }
 
-  set cseq(value: BigInt) {
+  set cseq(value: Uint32) {
     this._cseq = value;
   }
 
-  private _cseq: BigInt;
-  private _sseq: BigInt;
+  public setCseq(cseq: NumericType): CheckPoint {
+    this._cseq = uint32(cseq);
+    return this;
+  }
 
-  constructor(cseq: BigInt, sseq: BigInt) {
-    this._cseq = cseq;
-    this._sseq = sseq;
+  public setSseq(sseq: NumericType): CheckPoint {
+    this._sseq = uint64(sseq);
+    return this;
   }
 
   static fromProtobuf(cp: CP): CheckPoint {
-    const sseq: BigInt = BigInt(cp.getSseq());
-    const cseq: BigInt = BigInt(cp.getCseq());
-    return new CheckPoint(cseq, sseq);
+    return new CheckPoint(cp.getCseq(), cp.getSseq());
   }
 
   toProtobuf(): CP {
     const cp = new CP();
     cp.setSseq(this.sseq.toString());
-    cp.setCseq(this.sseq.toString());
+    cp.setCseq(this.cseq.toString());
     return cp;
   }
 }

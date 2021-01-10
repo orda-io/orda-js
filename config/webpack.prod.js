@@ -1,6 +1,6 @@
 const base = require('./webpack.base');
 const webpackMerge = require('webpack-merge');
-const TerserPlugin = require('terser-webpack-plugin');
+const terser = require('terser-webpack-plugin');
 
 module.exports = function () {
   const merged = webpackMerge.merge(base.config, {
@@ -9,7 +9,6 @@ module.exports = function () {
     },
     mode: 'production',
     output: {
-      path: base.root('./example'),
       filename: '[name].bundle.js',
       library: 'ortoo',
       libraryTarget: 'umd',
@@ -17,20 +16,12 @@ module.exports = function () {
       globalObject: `this`,
     },
     plugins: [],
-    devtool: 'inline-source-map',
-    module: {
-      rules: [
-        {
-          test: /\.ts$/,
-          use: ['ts-loader'],
-          exclude: /node_modules/,
-        },
-      ],
-    },
+    devtool: 'source-map',
+    module: {},
     optimization: {
-      minimize: true,
+      minimize: false, // TODO: should be true
       minimizer: [
-        new TerserPlugin({
+        new terser({
           sourceMap: false,
           terserOptions: {
             compress: {
@@ -43,6 +34,5 @@ module.exports = function () {
       ],
     },
   });
-  console.log(merged);
   return merged;
 };
