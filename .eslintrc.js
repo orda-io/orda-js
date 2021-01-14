@@ -19,6 +19,7 @@ module.exports = {
       'error',
       { destructuring: 'all', ignoreReadBeforeAssign: true },
     ],
+    'linebreak-style': 0,
     '@typescript-eslint/indent': [
       'error',
       2,
