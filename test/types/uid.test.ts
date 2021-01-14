@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { UID } from '../../src/protocols/uid';
+import { UID } from '../../src/types/uid';
 import { TestLogger } from '../helper';
 
 describe('Test UID', () => {

@@ -1,5 +1,5 @@
-import { CheckPoint as CP } from './protobuf/ortoo_pb';
-import { NumericType, uint32, Uint32, uint64, Uint64 } from '../types/uint';
+import { CheckPoint as CP } from '../protobuf/ortoo_pb';
+import { NumericType, uint32, Uint32, uint64, Uint64 } from './uint';
 
 export class CheckPoint {
   private _cseq: Uint32;

@@ -1,6 +1,6 @@
 import { parse, stringify, v4 as uuid } from 'uuid';
 
-export class UID {
+class UID {
   uid: Uint8Array;
 
   constructor(nil?: boolean) {
@@ -34,3 +34,9 @@ export class UID {
     return ret;
   }
 }
+
+class CUID extends UID {}
+
+class DUID extends UID {}
+
+export { UID, CUID, DUID };
