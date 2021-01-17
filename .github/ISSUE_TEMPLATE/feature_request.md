@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: 'feat: '
+title: ":sparkles: feat: "
 labels: feat
 assignees: ''
 
@@ -22,10 +22,6 @@ assignees: ''
 > describe briefly how you plan to proceed (itemize if possible)
   - [ ] ...
   - [ ] ...
-
-
-### Expected schedule?
-> Specify schedule you are supposed to do
 
 ### Checklists
  - [ ] Did you add labels?
