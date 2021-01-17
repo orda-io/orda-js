@@ -1,42 +1,40 @@
-import { SyncType } from './protocols/protobuf/ortoo_pb';
-import { OrtooLogLevel } from './utils/ortoo_logger';
+import { SyncType } from '@ooo/types/client';
+import { OrtooLoggerFactory, OrtooLogLevel } from '@ooo/utils/ortoo_logger';
 
 export class ClientConfig {
-  ServerAddr: string;
-  NotificationUri: string;
   CollectionName: string;
   SyncType: SyncType;
-  LogLevel?: OrtooLogLevel;
+  ServerAddr: string;
+  NotificationUri: string;
+  loggerFactory: OrtooLoggerFactory;
 
   constructor(
-    serverAddr: string,
-    notificationUri: string,
     collectionName: string,
-    syncType?: SyncType | undefined,
+    syncType?: SyncType,
+    serverAddr?: string,
+    notificationUri?: string,
     logLevel?: OrtooLogLevel
   ) {
-    this.ServerAddr = serverAddr;
-    this.NotificationUri = notificationUri;
     this.CollectionName = collectionName;
-    if (syncType !== undefined) {
-      this.SyncType = syncType;
-    } else {
-      this.SyncType = SyncType.LOCAL_ONLY;
-    }
+    this.SyncType = SyncType.LOCAL_ONLY;
+    this.ServerAddr = serverAddr ? serverAddr : '';
+    this.NotificationUri = notificationUri ? notificationUri : '';
     if (logLevel === undefined) {
-      this.LogLevel = 'trace';
+      this.loggerFactory = new OrtooLoggerFactory('trace');
     } else {
-      this.LogLevel = logLevel;
+      this.loggerFactory = new OrtooLoggerFactory(logLevel);
     }
   }
 }
 
-export function CreateLocalClientConfig(collectionName: string): ClientConfig {
+function createLocalClientConfig(collectionName: string): ClientConfig {
   return new ClientConfig(
+    collectionName,
+    SyncType.MANUALLY,
     'http://127.0.0.1:29065',
     'ws://127.0.0.1:18881/mqtt',
-    collectionName,
-    SyncType.LOCAL_ONLY,
     'trace'
   );
 }
+
+export { createLocalClientConfig };

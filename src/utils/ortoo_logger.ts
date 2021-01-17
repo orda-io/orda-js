@@ -6,7 +6,10 @@ export interface OrtooLogger {
   error: logFunction;
 }
 
-type logFunction = (message?: unknown, ...optionalParams: unknown[]) => void;
+export type logFunction = (
+  message?: unknown,
+  ...optionalParams: unknown[]
+) => void;
 
 interface IConsole {
   trace: logFunction;
@@ -74,9 +77,10 @@ export class OrtooLoggerFactory {
     if (LogLevels[this._logLevel] > LogLevels[ll]) {
       return this.dumb;
     }
+
     return fn.bind(
       null,
-      `${logColors[ll]}[${ll.toUpperCase()}] ${name}\x1B[0m`
+      `${logColors[ll]}[${ll.toUpperCase()}] ${name} \x1B[0m`
     );
   }
 
@@ -91,4 +95,4 @@ export class OrtooLoggerFactory {
   }
 }
 
-export const logger = new OrtooLoggerFactory('trace').getLogger('Ortoo');
+export const ortooLogger = new OrtooLoggerFactory('trace').getLogger('Ortoo');

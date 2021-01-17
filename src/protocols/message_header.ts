@@ -1,5 +1,5 @@
-import { MessageHeader, TypeOfMessage } from './protobuf/ortoo_pb';
-import { ProtocolVersion } from '../constants/constants';
+import { MessageHeader, TypeOfMessage } from '@ooo/protobuf/ortoo_pb';
+import { ProtocolVersion } from '@ooo/constants/constants';
 
 export function CreateMessageHeader(
   type: TypeOfMessage,

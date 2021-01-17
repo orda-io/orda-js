@@ -1,4 +1,8 @@
-export type NumericType = number | BigInt | string | Uint;
+export { Uint32, Uint64, Int32, Int64 };
+export { uint32, uint64, int32, int64 };
+export type NumericType = number | BigInt | string | Int;
+
+let enableRangeError = false;
 
 const errs = {
   TypeErr: (e: NumericType | undefined): TypeError => {
@@ -9,11 +13,19 @@ const errs = {
   },
 };
 
-abstract class Uint {
+abstract class Int {
   private num: BigInt;
 
   constructor(numeric?: NumericType) {
-    this.num = this.validate(numeric);
+    this.num = this.validate(numeric, true);
+  }
+
+  static get enableRangeError(): boolean {
+    return enableRangeError;
+  }
+
+  static set enableRangeError(value: boolean) {
+    enableRangeError = value;
   }
 
   protected abstract getMax(): BigInt;
@@ -34,42 +46,58 @@ abstract class Uint {
           throw errs.TypeErr(numeric);
         }
       case 'object':
-        return (numeric as Uint).num;
+        return (numeric as Int).num;
       default:
         throw errs.TypeErr(numeric);
     }
   }
 
-  protected validate(numeric?: NumericType): BigInt {
+  protected validate(numeric?: NumericType, throwError = false): BigInt {
     const num: BigInt = this.transform(numeric);
     if (num >= this.getMin() && num <= this.getMax()) {
       return num;
     }
-    throw errs.RangeErr(numeric);
+    if (Int.enableRangeError || throwError) {
+      throw new RangeError(
+        `value ${num} is out of range: ${this.getMin()} <= n <= ${this.getMax()} is allowed`
+      );
+    }
+    if (num > this.getMax()) {
+      return BigInt(this.getMin()) + (BigInt(num) & BigInt(this.getMax()));
+    }
+    // if(num < this.getMin()) {
+    return ~(BigInt(-num) - 1n) & BigInt(this.getMax());
   }
 
-  public add(numeric?: NumericType): Uint {
+  public add(numeric: NumericType = 1): Int {
     const result: BigInt = BigInt(this.num) + BigInt(this.transform(numeric));
     this.num = this.validate(result);
     return this;
   }
 
-  public sub(numeric?: NumericType): Uint {
+  public sub(numeric: NumericType = 1): Int {
     const result: BigInt = BigInt(this.num) - BigInt(this.transform(numeric));
     this.num = this.validate(result);
     return this;
   }
 
-  public mul(numeric?: NumericType): Uint {
+  public mul(numeric: NumericType): Int {
     const result: BigInt = BigInt(this.num) * BigInt(this.transform(numeric));
     this.num = this.validate(result);
     return this;
   }
 
-  public div(numeric?: NumericType): Uint {
+  public div(numeric: NumericType): Int {
     const result: BigInt = BigInt(this.num) / BigInt(this.transform(numeric));
     this.num = this.validate(result);
     return this;
+  }
+
+  public clone<T extends Int>(c: new (n?: NumericType) => T): T {
+    if (this instanceof Uint32) {
+      return new c(this.num);
+    }
+    return new c(this.num);
   }
 
   public get(): BigInt {
@@ -79,9 +107,14 @@ abstract class Uint {
   public toString(radix?: number): string {
     return this.num.toString(radix);
   }
+
+  public asNumber(): number {
+    return Number(this.num);
+  }
 }
 
-class Uint32 extends Uint {
+class Uint32 extends Int {
+  public static MIN_VALUE: BigInt = 0n;
   public static MAX_VALUE: BigInt = 4294967295n;
 
   protected getMax(): BigInt {
@@ -93,7 +126,8 @@ class Uint32 extends Uint {
   }
 }
 
-class Uint64 extends Uint {
+class Uint64 extends Int {
+  public static MIN_VALUE: BigInt = 0n;
   public static MAX_VALUE: BigInt = 18446744073709551615n;
 
   protected getMax(): BigInt {
@@ -105,6 +139,32 @@ class Uint64 extends Uint {
   }
 }
 
+class Int32 extends Int {
+  public static MIN_VALUE: BigInt = -2147483648n;
+  public static MAX_VALUE: BigInt = 2147483647n;
+
+  protected getMax(): BigInt {
+    return Int32.MAX_VALUE;
+  }
+
+  protected getMin(): BigInt {
+    return Int32.MIN_VALUE;
+  }
+}
+
+class Int64 extends Int {
+  public static MIN_VALUE: BigInt = -9223372036854775808n;
+  public static MAX_VALUE: BigInt = 9223372036854775807n;
+
+  protected getMax(): BigInt {
+    return Int64.MAX_VALUE;
+  }
+
+  protected getMin(): BigInt {
+    return Int64.MIN_VALUE;
+  }
+}
+
 function uint32(num?: NumericType): Uint32 {
   return new Uint32(num);
 }
@@ -113,4 +173,10 @@ function uint64(num?: NumericType): Uint64 {
   return new Uint64(num);
 }
 
-export { Uint32, Uint64, uint32, uint64 };
+function int32(num?: NumericType): Int32 {
+  return new Int32(num);
+}
+
+function int64(num?: NumericType): Int64 {
+  return new Int64(num);
+}

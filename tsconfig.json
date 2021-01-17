@@ -8,12 +8,25 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "paths": {
+      "@ooo/*": [
+        "src/*"
+      ],
+      "@test/*": [
+        "test/*"
+      ]
+    }
   },
   "include": [
-    "src"
+    "./src/**/*",
+    "./test/**/*"
   ],
   "exclude": [
+    "dist",
+    "example",
     "node_modules"
   ]
 }

@@ -1,11 +1,17 @@
-import { CheckPoint as CP } from './protobuf/ortoo_pb';
-import { NumericType, uint32, Uint32, uint64, Uint64 } from '../types/uint';
+import { CheckPoint as CP } from '@ooo/protobuf/ortoo_pb';
+import {
+  NumericType,
+  uint32,
+  Uint32,
+  uint64,
+  Uint64,
+} from '@ooo/types/integer';
 
 export class CheckPoint {
   private _cseq: Uint32;
   private _sseq: Uint64;
 
-  constructor(cseq: NumericType, sseq: NumericType) {
+  constructor(cseq?: NumericType, sseq?: NumericType) {
     this._cseq = uint32(cseq);
     this._sseq = uint64(sseq);
   }

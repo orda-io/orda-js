@@ -26,6 +26,13 @@
         "allowNamespace": true,
         "allowDeclareFields": true
       }
-    ]
+    ],
+    ["module-resolver", {
+      "root": ["."],
+      "alias": {
+        "@ooo": "./src",
+        "@test": "./test"
+      }
+    }]
   ]
 }

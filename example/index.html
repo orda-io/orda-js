@@ -7,8 +7,8 @@
   <script src="./test.js"></script>
   <script>
     console.log(ortoo);
-    var conf = new ortoo.ClientConfig("http://127.0.0.1:16091", "ws://127.0.0.1:9001", "hello_world", ortoo.SyncType.NOTIFIABLE);
-    var c = new ortoo.Client(conf, "hello");
+    var conf = ortoo.createClientConfig("http://127.0.0.1:16091", "ws://127.0.0.1:9001", "hello_world", ortoo.SyncType.NOTIFIABLE);
+    var c = ortoo.createClient(conf, "hello");
     console.log(c.syncManager);
   </script>
 </head>
