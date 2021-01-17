@@ -2,7 +2,7 @@ export { Uint32, Uint64, Int32, Int64 };
 export { uint32, uint64, int32, int64 };
 export type NumericType = number | BigInt | string | Int;
 
-let enableRangeError = true;
+let enableRangeError = false;
 
 const errs = {
   TypeErr: (e: NumericType | undefined): TypeError => {
@@ -15,8 +15,6 @@ const errs = {
 
 abstract class Int {
   private num: BigInt;
-
-  // private static _enableRangeError = true;
 
   constructor(numeric?: NumericType) {
     this.num = this.validate(numeric, true);

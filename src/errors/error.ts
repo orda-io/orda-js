@@ -1,4 +1,4 @@
-import { OrtooLogger } from '../utils/ortoo_logger';
+import { OrtooLogger } from '@ooo/utils/ortoo_logger';
 
 export const ErrorCode = {
   baseBasicCode: 0,

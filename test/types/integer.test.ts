@@ -5,7 +5,7 @@ import {
   uint32,
   Uint64,
   uint64,
-} from 'src/types/integer';
+} from '@ooo/types/integer';
 
 import { expect } from 'chai';
 

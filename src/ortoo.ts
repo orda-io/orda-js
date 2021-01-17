@@ -1,5 +1,5 @@
-import { Client } from './client';
-import { ClientConfig } from './config';
-import { SyncType } from './protocols/protobuf/ortoo_pb';
+export type { ClientConfig } from '@ooo/config';
+export type { Client } from '@ooo/client';
 
-export { Client, ClientConfig, SyncType };
+export { SyncType } from '@ooo/types/client';
+export { createLocalClientConfig } from '@ooo/config';

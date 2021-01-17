@@ -1,5 +1,5 @@
-import { ErrorCode, OrtooError } from './error';
-import { OrtooLogger } from '../utils/ortoo_logger';
+import { ErrorCode, OrtooError } from '@ooo/errors/error';
+import { OrtooLogger } from '@ooo/utils/ortoo_logger';
 
 export const ErrDatatype = {
   Create: class Create extends OrtooError {

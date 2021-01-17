@@ -1,8 +1,11 @@
-import { uint32, Uint32, uint64, Uint64 } from './uint';
-import { CUID } from './uid';
-import { OperationID as OperationIDPb } from '../protobuf/ortoo_pb';
+import { uint32, Uint32, uint64, Uint64 } from '@ooo/types/integer';
+import { CUID } from '@ooo/types/uid';
+import {
+  OperationID as OperationIDPb,
+  TypeOfOperation,
+} from '@ooo/protobuf/ortoo_pb';
 
-export { TypeOfOperation } from '../protobuf/ortoo_pb';
+export { TypeOfOperation };
 
 export class OperationId {
   private era: Uint32;
@@ -21,9 +24,22 @@ export class OperationId {
     this.seq = uint64(seq);
   }
 
+  toString(): string {
+    return (
+      `OpID[${this.era.toString(10)}` +
+      `:${this.lamport.toString(10)}` +
+      `:${this.cuid.toString()}` +
+      `:${this.seq.toString(10)}`
+    );
+  }
+
   next(): OperationId {
     this.lamport.add();
     this.seq.add();
+    return this.clone();
+  }
+
+  clone(): OperationId {
     return new OperationId(
       this.cuid,
       this.era.clone(Uint32),
@@ -35,6 +51,22 @@ export class OperationId {
   rollback(): void {
     this.lamport.sub();
     this.seq.sub();
+  }
+
+  compare(other: OperationId): number {
+    const diffErr = this.era.asNumber() - other.era.asNumber();
+    if (diffErr > 0) {
+      return 1;
+    } else if (diffErr < 0) {
+      return -1;
+    }
+    const diffLamport = this.lamport.asNumber() - other.lamport.asNumber();
+    if (diffLamport > 0) {
+      return 1;
+    } else if (diffLamport < 0) {
+      return -1;
+    }
+    return this.cuid.compare(other.cuid);
   }
 
   toProtobuf(): OperationIDPb {

@@ -1,4 +1,5 @@
 import { parse, stringify, v4 as uuid } from 'uuid';
+import { ShortUID } from '@ooo/constants/constants';
 
 class UID {
   uid: Uint8Array;
@@ -15,11 +16,15 @@ class UID {
     return this.uid;
   }
 
-  public String(): string {
+  public toString(): string {
     return stringify(this.uid).replace(/-/g, '');
   }
 
-  public Compare(o: UID): number {
+  public toShortString(): string {
+    return this.toString().substr(0, ShortUID);
+  }
+
+  public compare(o: UID): number {
     let ret = 0;
     this.uid.some((value: number, index: number, _: Uint8Array): unknown => {
       if (value > o.uid[index]) {

@@ -1,5 +1,5 @@
-import { Uint32, Uint64 } from './uint';
-import { CUID } from './uid';
+import { Uint32, Uint64 } from '@ooo/types/integer';
+import { CUID } from '@ooo/types/uid';
 
 export class Timestamp {
   private era: Uint32;

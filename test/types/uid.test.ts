@@ -1,6 +1,6 @@
 import { assert } from 'chai';
-import { UID } from '../../src/types/uid';
-import { TestLogger } from '../helper';
+import { UID } from '@ooo/types/uid';
+import { helper } from '@test/helper';
 
 describe('Test UID', () => {
   it('Can generate and compare UIDs', () => {
@@ -8,12 +8,12 @@ describe('Test UID', () => {
     const uid2 = new UID();
     const uid3 = new UID(true);
 
-    TestLogger.info('UID1:{}', uid1.String());
-    TestLogger.info('UID2:{}', uid2.String());
-    TestLogger.info('UID3:{}', uid3.String());
-    TestLogger.info('{}', uid1.Compare(uid1));
-    TestLogger.info('{} {}', uid1.Compare(uid1), 0);
-    TestLogger.info('{}', uid1.Compare(uid2));
-    assert.notEqual(uid1.Compare(uid2), 0);
+    helper.L.info('UID1:{}', uid1.toString());
+    helper.L.info('UID2:{}', uid2.toString());
+    helper.L.info('UID3:{}', uid3.toString());
+    helper.L.info('{}', uid1.compare(uid1));
+    helper.L.info('{} {}', uid1.compare(uid1), 0);
+    helper.L.info('{}', uid1.compare(uid2));
+    assert.notEqual(uid1.compare(uid2), 0);
   });
 });

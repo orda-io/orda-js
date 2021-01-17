@@ -1,4 +1,4 @@
-import { OrtooLoggerFactory } from '../../src/utils/ortoo_logger';
+import { OrtooLoggerFactory } from '@ooo/utils/ortoo_logger';
 
 function generate_error(): Error {
   throw new Error('generated error');

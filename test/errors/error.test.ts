@@ -1,6 +1,6 @@
-import { ErrDatatype } from '../../src/errors/datatype';
-import { TestLogger } from '../helper';
-import * as Assert from 'assert';
+import { ErrDatatype } from '@ooo/errors/datatype';
+import { helper } from '@test/helper';
+import { should } from 'chai';
 
 describe('Test OrtooError', () => {
   it('Can generate and catch a datatype error with log', async () => {
@@ -9,10 +9,10 @@ describe('Test OrtooError', () => {
     } catch (e) {
       return;
     }
-    Assert.fail();
+    should().fail();
   });
 });
 
 function generateError() {
-  throw new ErrDatatype.Create(TestLogger);
+  throw new ErrDatatype.Create(helper.L);
 }

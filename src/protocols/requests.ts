@@ -2,9 +2,9 @@ import {
   ClientRequest,
   ClientResponse,
   TypeOfMessage,
-} from '../protobuf/ortoo_pb';
-import { CreateMessageHeader } from './message_header';
-import { ClientModel } from '../types/client';
+} from '@ooo/protobuf/ortoo_pb';
+import { CreateMessageHeader } from '@ooo/protocols/message_header';
+import { ClientModel } from '@ooo/types/client';
 
 export { ClientRequest, ClientResponse };
 

@@ -22,7 +22,7 @@ const karmaConfig = {
   // list of files / patterns to load in the browser
   files: [
     {
-      pattern: 'test/**/*.ts',
+      pattern: './test/**/*.ts',
       included: true /* should be true to run tests */,
     },
   ],

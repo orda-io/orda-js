@@ -12,16 +12,17 @@
     "baseUrl": ".",
     "outDir": "dist",
     "paths": {
-      "*": [
+      "@ooo/*": [
         "src/*"
       ],
-      "test/*": [
+      "@test/*": [
         "test/*"
       ]
     }
   },
   "include": [
-    "./src"
+    "./src/**/*",
+    "./test/**/*"
   ],
   "exclude": [
     "dist",

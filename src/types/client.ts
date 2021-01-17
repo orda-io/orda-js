@@ -1,10 +1,9 @@
-import { CUID } from './uid';
-import { Client as ClientPb, SyncType } from '../protobuf/ortoo_pb';
-import { ShortUID } from '../constants/constants';
+import { CUID } from '@ooo/types/uid';
+import { Client as ClientPb, SyncType } from '@ooo/protobuf/ortoo_pb';
 
-export { SyncType };
+export { SyncType, ClientModel };
 
-export class ClientModel {
+class ClientModel {
   cuid: CUID;
   alias: string;
   collection: string;
@@ -36,8 +35,6 @@ export class ClientModel {
   }
 
   getLogName(): string {
-    const cuidString = this.cuid.String();
-    cuidString.substr(10);
-    return `${this.alias}:${cuidString.substr(ShortUID)}`;
+    return `${this.alias}:${this.cuid.toShortString()}`;
   }
 }

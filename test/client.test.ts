@@ -1,11 +1,11 @@
-import { CreateLocalClientConfig } from '../src/config';
-import { Client } from '../src/client';
+import { createLocalClientConfig } from '@ooo/config';
+import { Client } from '@ooo/client';
 
-describe('Test clients', () => {
+describe('Test Clients', () => {
   it('Can create a client', async () => {
-    const conf = CreateLocalClientConfig('hello_world');
-    const client = new Client(conf, 'hello');
-    await client.sendClientRequest();
+    const conf = createLocalClientConfig('hello_world');
+    const client: Client = new Client(conf, 'hello');
+    // await client.sendClientRequest();
     // Logger.log(client);
   });
 });

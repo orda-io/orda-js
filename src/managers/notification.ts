@@ -1,14 +1,14 @@
-import { ClientConfig } from '../config';
+import { ClientConfig } from '@ooo/config';
 import mqtt from 'mqtt';
 import { Packet } from 'mqtt-packet';
-import { OrtooContext } from '../context';
+import { ClientContext } from '@ooo/context';
 
 export class NotificationManager {
-  private readonly ctx: OrtooContext;
+  private readonly ctx: ClientContext;
   private readonly notificationUri: string;
   private mqttClient: mqtt.Client | null = null;
 
-  constructor(conf: ClientConfig, ctx: OrtooContext) {
+  constructor(conf: ClientConfig, ctx: ClientContext) {
     this.ctx = ctx;
     this.notificationUri = conf.NotificationUri;
   }
@@ -16,8 +16,8 @@ export class NotificationManager {
   public connect(): void {
     this.mqttClient = mqtt.connect(this.notificationUri, {
       clean: true,
-      clientId: this.ctx.client.cuid,
-      username: this.ctx.client.getAlias(),
+      clientId: this.ctx.client.cuid.toString(),
+      username: this.ctx.client.alias,
     });
 
     this.mqttClient.on('connect', this.onConnect);
