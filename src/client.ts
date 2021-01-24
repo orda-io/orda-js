@@ -4,7 +4,7 @@ import { ClientConfig } from '@ooo/config';
 import { DatatypeManager } from '@ooo/managers/datatype';
 import { ClientContext } from '@ooo/context';
 import { GrpcSyncManager } from '@ooo/managers/grpc_sync';
-import { Counter, CounterImpl } from '@ooo/datatypes/counter';
+import { _Counter, Counter } from '@ooo/datatypes/counter';
 import { TypeOfDatatype } from '@ooo/protobuf/ortoo_pb';
 import { IDatatype } from '@ooo/datatypes/datatype';
 
@@ -92,7 +92,7 @@ class Client {
 
     switch (type) {
       case TypeOfDatatype.COUNTER:
-        return new CounterImpl(this.ctx, key);
+        return new _Counter(this.ctx, key);
       case TypeOfDatatype.HASH_MAP:
         break;
       case TypeOfDatatype.LIST:

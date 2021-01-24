@@ -1,10 +1,20 @@
 import { parse, stringify, v4 as uuid } from 'uuid';
 import { ShortUID } from '@ooo/constants/constants';
 
+export { UID, CUID, DUID };
+
 class UID {
   uid: Uint8Array;
 
-  constructor(nil?: boolean) {
+  constructor(nil?: boolean, pb?: Uint8Array | string) {
+    if (pb) {
+      if (pb instanceof Uint8Array) {
+        this.uid = pb;
+      } else {
+        throw new Error('not implemented yet');
+      }
+      return;
+    }
     if (nil) {
       this.uid = new Uint8Array(16);
       return;
@@ -38,10 +48,13 @@ class UID {
     });
     return ret;
   }
+
+
 }
 
-class CUID extends UID {}
+class CUID extends UID {
+
+}
 
 class DUID extends UID {}
 
-export { UID, CUID, DUID };

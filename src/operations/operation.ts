@@ -4,15 +4,12 @@ import { Operation as OperationPb } from '@ooo/protobuf/ortoo_pb';
 export { Operation };
 
 abstract class Operation {
-  protected id?: OperationId;
+  id: OperationId;
   protected type: TypeOfOperation;
 
   protected constructor(type: TypeOfOperation) {
     this.type = type;
-  }
-
-  setId(opID: OperationId): void {
-    this.id = opID;
+    this.id = new OperationId();
   }
 
   abstract getContent(): string;
@@ -24,9 +21,13 @@ abstract class Operation {
   toOperationPb(): OperationPb {
     const pb = new OperationPb();
     const pbOp = new OperationPb();
-    pbOp.setId(this.id?.toProtobuf());
+    pbOp.setId(this.id.toPb());
     pbOp.setOptype(this.type);
     pbOp.setBody(this.getContent());
     return pb;
+  }
+
+  toString() : string{
+    return ``;
   }
 }

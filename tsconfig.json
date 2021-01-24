@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "moduleResolution": "node",
-    "allowJs": true,
+    "allowJs": false,
     "strict": true,
     "isolatedModules": true,
     "esModuleInterop": true,
@@ -21,11 +21,11 @@
     }
   },
   "include": [
+    "./src/protobuf/ortoo_pb.js",
     "./src/**/*",
     "./test/**/*"
   ],
   "exclude": [
-    "dist",
     "example",
     "node_modules"
   ]

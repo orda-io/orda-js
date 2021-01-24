@@ -1,6 +1,10 @@
 import { TypeOfDatatype } from '@ooo/protobuf/ortoo_pb';
 
-export { TypeOfDatatype, StateOfDatatype } from '@ooo/protobuf/ortoo_pb';
+export {
+  DatatypeMeta,
+  TypeOfDatatype,
+  StateOfDatatype,
+} from '@ooo/protobuf/ortoo_pb';
 
 export { DatatypeName };
 

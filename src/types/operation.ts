@@ -8,10 +8,10 @@ import {
 export { TypeOfOperation };
 
 export class OperationId {
-  private era: Uint32;
-  private lamport: Uint64;
-  private cuid: CUID;
-  private seq: Uint64;
+  era: Uint32;
+  lamport: Uint64;
+  cuid: CUID;
+  seq: Uint64;
 
   constructor(cuid?: CUID, era?: Uint32, lamport?: Uint64, seq?: Uint64) {
     this.era = uint32(era);
@@ -69,12 +69,21 @@ export class OperationId {
     return this.cuid.compare(other.cuid);
   }
 
-  toProtobuf(): OperationIDPb {
+  toPb(): OperationIDPb {
     const pb = new OperationIDPb();
     pb.setCuid(this.cuid.AsUint8Array);
     pb.setEra(this.era.asNumber());
     pb.setLamport(this.lamport.toString(10));
     pb.setSeq(this.seq.toString(10));
     return pb;
+  }
+
+  static fromPb(pb: OperationIDPb): OperationId {
+    return new OperationId(
+      new CUID(false, pb.getCuid()),
+      uint32(pb.getEra()),
+      uint64(pb.getLamport()),
+      uint64(pb.getSeq())
+    );
   }
 }

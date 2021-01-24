@@ -1,3 +1,5 @@
+export {}
+
 describe('Test notification manager', () => {
   it('Can connect MQTT server', async () => {
     // const conf = createLocalClientConfig('hello_world');
