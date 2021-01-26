@@ -1,10 +1,10 @@
 import {
   Int32,
-  int32,
+  int32, Int64,
   Uint32,
   uint32,
   Uint64,
-  uint64,
+  uint64
 } from '@ooo/types/integer';
 
 import { expect } from 'chai';
@@ -128,5 +128,17 @@ describe('Test Uint types', () => {
 
     const i32Min = int32(Int32.MIN_VALUE);
     expect(i32Min.sub(1).get()).to.equal(Int32.MAX_VALUE);
+  });
+
+  it('Can use static operator', () => {
+    const a1 = uint32(1);
+    const b1 = uint32(2);
+    const r1 = Int32.add(a1, b1);
+    expect(r1).to.instanceOf(Int32);
+    expect(r1.asNumber()).to.equal(3);
+
+    const r2 = Int64.sub(10, 3);
+    expect(r2).to.instanceOf(Int64);
+    expect(r2.asNumber()).to.equal(7);
   });
 });
