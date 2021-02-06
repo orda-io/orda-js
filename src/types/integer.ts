@@ -1,3 +1,5 @@
+import { ortooLogger } from '@ooo/utils/ortoo_logger';
+
 export { Uint32, Uint64, Int32, Int64 };
 export { uint32, uint64, int32, int64 };
 export type NumericType = number | BigInt | string | Int;
@@ -69,25 +71,25 @@ abstract class Int {
     return ~(BigInt(-num) - 1n) & BigInt(this.getMax());
   }
 
-  public add(numeric: NumericType = 1): Int {
+  public add(numeric: NumericType = 1): this {
     const result: BigInt = BigInt(this.num) + BigInt(this.transform(numeric));
     this.num = this.validate(result);
     return this;
   }
 
-  public sub(numeric: NumericType = 1): Int {
+  public sub(numeric: NumericType = 1): this {
     const result: BigInt = BigInt(this.num) - BigInt(this.transform(numeric));
     this.num = this.validate(result);
     return this;
   }
 
-  public mul(numeric: NumericType): Int {
+  public mul(numeric: NumericType): this {
     const result: BigInt = BigInt(this.num) * BigInt(this.transform(numeric));
     this.num = this.validate(result);
     return this;
   }
 
-  public div(numeric: NumericType): Int {
+  public div(numeric: NumericType): this {
     const result: BigInt = BigInt(this.num) / BigInt(this.transform(numeric));
     this.num = this.validate(result);
     return this;
@@ -100,6 +102,11 @@ abstract class Int {
     return new c(this.num);
   }
 
+  public compare(other: this): number {
+    const diff = BigInt(this.num) - BigInt(other.num);
+    return Number(diff);
+  }
+
   public get(): BigInt {
     return this.num;
   }
@@ -110,6 +117,42 @@ abstract class Int {
 
   public asNumber(): number {
     return Number(this.num);
+  }
+
+  toJSON(): number {
+    return Number(this.num);
+  }
+
+  public static add<T extends Int>(
+    this: new (num?: NumericType) => T,
+    a: NumericType,
+    b: NumericType
+  ): T {
+    return new this(a).add(b) as T;
+  }
+
+  public static sub<T extends Int>(
+    this: new (num?: NumericType) => T,
+    a: NumericType,
+    b: NumericType
+  ): T {
+    return new this(a).sub(b) as T;
+  }
+
+  public static mul<T extends Int>(
+    this: new (num?: NumericType) => T,
+    a: NumericType,
+    b: NumericType
+  ): T {
+    return new this(a).mul(b) as T;
+  }
+
+  public static div<T extends Int>(
+    this: new (num?: NumericType) => T,
+    a: NumericType,
+    b: NumericType
+  ): T {
+    return new this(a).div(b) as T;
   }
 }
 

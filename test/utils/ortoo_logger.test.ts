@@ -18,5 +18,6 @@ describe('Test OrtooLogger', () => {
     } catch (e) {
       logger.error('error message', e);
     }
+    logger.log('log withPos back');
   });
 });

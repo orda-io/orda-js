@@ -3,23 +3,48 @@ import { int32, Int32 } from '@ooo/types/integer';
 import { IncreaseOperation } from '@ooo/operations/counter';
 import { ClientContext, DatatypeContext } from '@ooo/context';
 import { Operation } from '@ooo/operations/operation';
-import { TypeOfDatatype } from '@ooo/types/datatype';
+import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { TypeOfOperation } from '@ooo/types/operation';
+import { TransactionContext } from '@ooo/datatypes/tansaction';
+import { Snapshot } from '@ooo/datatypes/snapshot';
+import { ErrDatatype } from '@ooo/errors/datatype';
+import { OrtooError } from '@ooo/errors/error';
+import { Wire } from '@ooo/datatypes/wired';
+import { SnapshotOperation } from '@ooo/operations/meta';
 
-export { CounterImpl };
+export { _Counter };
+export type { CounterTx, Counter };
 
-export interface Counter extends IDatatype {
+interface CounterTx extends IDatatype {
   get(): number;
 
   increase(delta?: number): number;
 }
 
-class CounterImpl extends Datatype implements Counter {
-  private snap: counterSnapshot;
+interface Counter extends CounterTx {
+  transaction(tag: string, fn: (counter: CounterTx) => boolean): boolean;
+}
 
-  constructor(ctx: ClientContext, key: string) {
-    super(ctx, key, TypeOfDatatype.COUNTER);
-    this.snap = new counterSnapshot(this.ctx);
+class _Counter extends Datatype implements Counter {
+  private snap: CounterSnapshot;
+
+  constructor(
+    ctx: ClientContext,
+    key: string,
+    state: StateOfDatatype,
+    wire?: Wire
+  ) {
+    super(ctx, key, TypeOfDatatype.COUNTER, state, wire);
+    this.snap = new CounterSnapshot(this.ctx);
+    this.resetRollbackContext();
+  }
+
+  getSnapshot(): Snapshot {
+    return this.snap;
+  }
+
+  setSnapshot(snap: string): void {
+    this.snap.fromJSON(snap);
   }
 
   get(): number {
@@ -27,27 +52,50 @@ class CounterImpl extends Datatype implements Counter {
   }
 
   increase(delta = 1): number {
-    this.ctx.L.info(delta);
-    const op = new IncreaseOperation(delta);
-    // this.executeLocalWithTra(op);
-    this.sentenceInTransaction(this.trxCtx, op, true);
-    return 0;
+    try {
+      const op = new IncreaseOperation(delta);
+      const ret: unknown[] = this.sentenceLocalInTx(op);
+      return (ret[0] as Int32).asNumber();
+    } catch (e) {
+      if (e instanceof OrtooError) {
+        throw e;
+      }
+      throw new ErrDatatype.IllegalParameters(this.ctx.L, e);
+    }
   }
 
   executeLocalOp(op: Operation): unknown {
+    return this.executeCommon(op);
+  }
+
+  executeRemoteOp(op: Operation): unknown {
+    return this.executeCommon(op);
+  }
+
+  private executeCommon(op: Operation): unknown {
     switch (op.getType()) {
+      case TypeOfOperation.SNAPSHOT:
+        const sop = op as SnapshotOperation;
+        this.snap.fromJSON(sop.getBody());
+        return;
       case TypeOfOperation.COUNTER_INCREASE:
         const iop = op as IncreaseOperation;
         return this.snap.increaseCommon(iop.c.delta);
     }
   }
 
-  executeRemoteOp(op: Operation): unknown {
-    return;
+  transaction(tag: string, txFunc: (counter: CounterTx) => boolean): boolean {
+    return this.doTransaction(tag, (twxCtx: TransactionContext): boolean => {
+      return txFunc(this);
+    });
   }
 }
 
-class counterSnapshot {
+interface ICounterSnapshot {
+  value: number;
+}
+
+class CounterSnapshot implements Snapshot {
   ctx: DatatypeContext;
   value: Int32;
 
@@ -57,7 +105,26 @@ class counterSnapshot {
   }
 
   increaseCommon(delta: Int32): Int32 {
-    this.ctx.L.debug(`add ${delta} to ${this.value.get()}`);
-    return this.value.add(delta) as Int32;
+    this.ctx.L.debug(`[COUNTER] add ${delta} to ${this.value.get()}`);
+    try {
+      return this.value.add(delta) as Int32;
+    } catch (e) {
+      throw new ErrDatatype.OutOfBound(this.ctx.L, e);
+    }
+  }
+
+  toJSON(): ICounterSnapshot {
+    return {
+      value: this.value.asNumber(),
+    };
+  }
+
+  toJSONString(): string {
+    return JSON.stringify(this.toJSON());
+  }
+
+  fromJSON(json: string): void {
+    const parsed: ICounterSnapshot = JSON.parse(json);
+    this.value = int32(parsed.value);
   }
 }

@@ -1,18 +1,27 @@
 import { OrtooLogger } from '@ooo/utils/ortoo_logger';
 
-export const ErrorCode = {
-  baseBasicCode: 0,
-  baseDatatypeCode: 100,
+export const BaseErrorCode = {
+  Common: 0,
+  Datatype: 100,
 };
 
 export class OrtooError extends Error {
-  private code: number;
+  code: number;
 
-  constructor(code: number, msg: string, log?: OrtooLogger) {
-    super(`[${code}] ${msg}`);
+  constructor(
+    code: number,
+    msg: string,
+    log?: OrtooLogger,
+    e?: Error,
+    ...args: string[]
+  ) {
+    super(`[${code}] ${msg} ${e?.message}`);
     this.code = code;
+    if (e) {
+      this.stack = e.stack;
+    }
     if (log) {
-      log.error(this);
+      log.error(this.message, ...args, '\n', this.stack);
     }
   }
 }

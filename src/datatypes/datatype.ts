@@ -1,14 +1,38 @@
-import { TransactionalDatatype } from '@ooo/datatypes/tansactional';
-import { TypeOfDatatype } from '@ooo/types/datatype'
+import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { ClientContext } from '@ooo/context';
-import { IBaseDatatype } from '@ooo/datatypes/base';
+import { Wire, WiredDatatype } from '@ooo/datatypes/wired';
+import { SnapshotOperation } from '@ooo/operations/meta';
 
-export interface IDatatype extends IBaseDatatype {
+export { Datatype };
+export type { IDatatype };
 
+interface IDatatype {
+  readonly key: string;
+
+  readonly type: TypeOfDatatype;
+
+  readonly state: StateOfDatatype;
+
+  sync(): Promise<void>;
 }
 
-export abstract class Datatype extends TransactionalDatatype {
-  protected constructor(ctx: ClientContext, key: string, type: TypeOfDatatype) {
-    super(ctx, key, type);
+abstract class Datatype extends WiredDatatype {
+  protected constructor(
+    ctx: ClientContext,
+    key: string,
+    type: TypeOfDatatype,
+    state: StateOfDatatype,
+    wire?: Wire
+  ) {
+    super(ctx, key, type, state, wire);
+  }
+
+  subscribeOrCreate() {
+    if (this.state === StateOfDatatype.DUE_TO_SUBSCRIBE) {
+      return;
+    }
+    this.sentenceLocalInTx(
+      new SnapshotOperation(this.state, this.getSnapshot().toJSONString())
+    );
   }
 }

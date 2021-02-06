@@ -2,7 +2,7 @@ import { Operation } from '@ooo/operations/operation';
 import { Int32 } from '@ooo/types/integer';
 import { TypeOfOperation } from '@ooo/types/operation';
 
-class increaseContent {
+class increaseBody {
   delta: Int32;
 
   constructor(delta: number) {
@@ -11,14 +11,14 @@ class increaseContent {
 }
 
 class IncreaseOperation extends Operation {
-  c: increaseContent;
+  c: increaseBody;
 
   constructor(delta: number) {
     super(TypeOfOperation.COUNTER_INCREASE);
-    this.c = new increaseContent(delta);
+    this.c = new increaseBody(delta);
   }
 
-  getContent(): string {
+  getBody(): string {
     return JSON.stringify(this.c);
   }
 }

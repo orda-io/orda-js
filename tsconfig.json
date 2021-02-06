@@ -1,14 +1,15 @@
-{
+ {
   "compilerOptions": {
     "target": "esnext",
     "moduleResolution": "node",
-    "allowJs": true,
+    "allowJs": false,
     "strict": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
     "baseUrl": ".",
     "outDir": "dist",
     "paths": {
@@ -21,12 +22,18 @@
     }
   },
   "include": [
+    "./src/protobuf/ortoo_pb.js",
     "./src/**/*",
     "./test/**/*"
   ],
   "exclude": [
-    "dist",
     "example",
     "node_modules"
-  ]
+  ],
+  "typedocOptions": {
+    "entryPoints": ["src/ortoo.ts"],
+    "name": "Ortoo-js",
+    "theme": "node_modules/eledoc/bin/default/",
+    "out": "docs"
+  }
 }
