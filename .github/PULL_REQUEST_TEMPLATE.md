@@ -1,6 +1,7 @@
 ### Relevant issues
- - Resolved / fixed issues: # (will be closed automatically if this PR merged)
- - Additional reference: #
+
+- Resolved / fixed issues: #
+- Additional reference: #
 
 ### Checklists
  - [ ] New tests created?
