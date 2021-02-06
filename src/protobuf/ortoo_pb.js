@@ -438,29 +438,41 @@ proto.ortoo.Client.prototype.serializeBinary = function() {
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.ortoo.Client.serializeBinaryToWriter = function (message, writer) {
+proto.ortoo.Client.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getCuid_asU8();
   if (f.length > 0) {
-    writer.writeBytes(1, f);
+    writer.writeBytes(
+      1,
+      f
+    );
   }
   f = message.getAlias();
   if (f.length > 0) {
-    writer.writeString(2, f);
+    writer.writeString(
+      2,
+      f
+    );
   }
   f = message.getCollection();
   if (f.length > 0) {
-    writer.writeString(3, f);
+    writer.writeString(
+      3,
+      f
+    );
   }
   f = message.getSynctype();
   if (f !== 0.0) {
-    writer.writeEnum(4, f);
+    writer.writeEnum(
+      4,
+      f
+    );
   }
 };
 
 
 /**
- * optional bytes Client = 1;
+ * optional bytes CUID = 1;
  * @return {!(string|Uint8Array)}
  */
 proto.ortoo.Client.prototype.getCuid = function() {
@@ -469,7 +481,7 @@ proto.ortoo.Client.prototype.getCuid = function() {
 
 
 /**
- * optional bytes Client = 1;
+ * optional bytes CUID = 1;
  * This is a type-conversion wrapper around `getCuid()`
  * @return {string}
  */
@@ -480,7 +492,7 @@ proto.ortoo.Client.prototype.getCuid_asB64 = function() {
 
 
 /**
- * optional bytes Client = 1;
+ * optional bytes CUID = 1;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
  * This is a type-conversion wrapper around `getCuid()`
@@ -720,7 +732,7 @@ proto.ortoo.Timestamp.prototype.setLamport = function(value) {
 
 
 /**
- * optional bytes Client = 3;
+ * optional bytes CUID = 3;
  * @return {!(string|Uint8Array)}
  */
 proto.ortoo.Timestamp.prototype.getCuid = function() {
@@ -729,7 +741,7 @@ proto.ortoo.Timestamp.prototype.getCuid = function() {
 
 
 /**
- * optional bytes Client = 3;
+ * optional bytes CUID = 3;
  * This is a type-conversion wrapper around `getCuid()`
  * @return {string}
  */
@@ -740,7 +752,7 @@ proto.ortoo.Timestamp.prototype.getCuid_asB64 = function() {
 
 
 /**
- * optional bytes Client = 3;
+ * optional bytes CUID = 3;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
  * This is a type-conversion wrapper around `getCuid()`
@@ -950,7 +962,7 @@ proto.ortoo.OperationID.prototype.setLamport = function(value) {
 
 
 /**
- * optional bytes Client = 3;
+ * optional bytes CUID = 3;
  * @return {!(string|Uint8Array)}
  */
 proto.ortoo.OperationID.prototype.getCuid = function() {
@@ -959,7 +971,7 @@ proto.ortoo.OperationID.prototype.getCuid = function() {
 
 
 /**
- * optional bytes Client = 3;
+ * optional bytes CUID = 3;
  * This is a type-conversion wrapper around `getCuid()`
  * @return {string}
  */
@@ -970,7 +982,7 @@ proto.ortoo.OperationID.prototype.getCuid_asB64 = function() {
 
 
 /**
- * optional bytes Client = 3;
+ * optional bytes CUID = 3;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
  * This is a type-conversion wrapper around `getCuid()`
@@ -1873,7 +1885,7 @@ proto.ortoo.NotificationPushPull.serializeBinaryToWriter = function(message, wri
 
 
 /**
- * optional string Client = 1;
+ * optional string CUID = 1;
  * @return {string}
  */
 proto.ortoo.NotificationPushPull.prototype.getCuid = function() {
@@ -3517,10 +3529,10 @@ proto.ortoo.StateOfDatatype = {
   DUE_TO_CREATE: 0,
   DUE_TO_SUBSCRIBE: 1,
   DUE_TO_SUBSCRIBE_CREATE: 2,
-  SUBSCRIBED: 4,
-  DUE_TO_UNSUBSCRIBE: 5,
-  UNSUBSCRIBED: 6,
-  DELETED: 7
+  SUBSCRIBED: 3,
+  DUE_TO_UNSUBSCRIBE: 4,
+  UNSUBSCRIBED: 5,
+  DELETED: 6
 };
 
 /**

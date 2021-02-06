@@ -6,25 +6,24 @@
 
 // GENERATED CODE -- DO NOT EDIT!
 
-
 /* eslint-disable */
 // @ts-nocheck
-
 
 import * as grpcWeb from 'grpc-web';
 
 import * as ortoo_pb from './ortoo_pb';
 
-
 export class OrtooServiceClient {
   client_: grpcWeb.AbstractClientBase;
   hostname_: string;
-  credentials_: null | { [index: string]: string; };
-  options_: null | { [index: string]: any; };
+  credentials_: null | { [index: string]: string };
+  options_: null | { [index: string]: any };
 
-  constructor (hostname: string,
-               credentials?: null | { [index: string]: string; },
-               options?: null | { [index: string]: any; }) {
+  constructor(
+    hostname: string,
+    credentials?: null | { [index: string]: string },
+    options?: null | { [index: string]: any }
+  ) {
     if (!options) options = {};
     if (!credentials) credentials = {};
     options['format'] = 'binary';
@@ -45,34 +44,35 @@ export class OrtooServiceClient {
 
   processPushPull(
     request: ortoo_pb.PushPullRequest,
-    metadata: grpcWeb.Metadata | null): Promise<ortoo_pb.PushPullResponse>;
+    metadata: grpcWeb.Metadata | null
+  ): Promise<ortoo_pb.PushPullResponse>;
 
   processPushPull(
     request: ortoo_pb.PushPullRequest,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.Error,
-               response: ortoo_pb.PushPullResponse) => void): grpcWeb.ClientReadableStream<ortoo_pb.PushPullResponse>;
+    callback: (err: grpcWeb.Error, response: ortoo_pb.PushPullResponse) => void
+  ): grpcWeb.ClientReadableStream<ortoo_pb.PushPullResponse>;
 
   processPushPull(
     request: ortoo_pb.PushPullRequest,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.Error,
-               response: ortoo_pb.PushPullResponse) => void) {
+    callback?: (err: grpcWeb.Error, response: ortoo_pb.PushPullResponse) => void
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
-        this.hostname_ +
-          '/ortoo.OrtooService/ProcessPushPull',
+        this.hostname_ + '/ortoo.OrtooService/ProcessPushPull',
         request,
         metadata || {},
         this.methodInfoProcessPushPull,
-        callback);
+        callback
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/ortoo.OrtooService/ProcessPushPull',
-    request,
-    metadata || {},
-    this.methodInfoProcessPushPull);
+      this.hostname_ + '/ortoo.OrtooService/ProcessPushPull',
+      request,
+      metadata || {},
+      this.methodInfoProcessPushPull
+    );
   }
 
   methodInfoProcessClient = new grpcWeb.AbstractClientBase.MethodInfo(
@@ -85,35 +85,34 @@ export class OrtooServiceClient {
 
   processClient(
     request: ortoo_pb.ClientRequest,
-    metadata: grpcWeb.Metadata | null): Promise<ortoo_pb.ClientResponse>;
+    metadata: grpcWeb.Metadata | null
+  ): Promise<ortoo_pb.ClientResponse>;
 
   processClient(
     request: ortoo_pb.ClientRequest,
     metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.Error,
-               response: ortoo_pb.ClientResponse) => void): grpcWeb.ClientReadableStream<ortoo_pb.ClientResponse>;
+    callback: (err: grpcWeb.Error, response: ortoo_pb.ClientResponse) => void
+  ): grpcWeb.ClientReadableStream<ortoo_pb.ClientResponse>;
 
   processClient(
     request: ortoo_pb.ClientRequest,
     metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.Error,
-               response: ortoo_pb.ClientResponse) => void) {
+    callback?: (err: grpcWeb.Error, response: ortoo_pb.ClientResponse) => void
+  ) {
     if (callback !== undefined) {
       return this.client_.rpcCall(
-        this.hostname_ +
-          '/ortoo.OrtooService/ProcessClient',
+        this.hostname_ + '/ortoo.OrtooService/ProcessClient',
         request,
         metadata || {},
         this.methodInfoProcessClient,
-        callback);
+        callback
+      );
     }
     return this.client_.unaryCall(
-    this.hostname_ +
-      '/ortoo.OrtooService/ProcessClient',
-    request,
-    metadata || {},
-    this.methodInfoProcessClient);
+      this.hostname_ + '/ortoo.OrtooService/ProcessClient',
+      request,
+      metadata || {},
+      this.methodInfoProcessClient
+    );
   }
-
 }
-

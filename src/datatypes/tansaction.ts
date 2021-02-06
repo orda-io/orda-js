@@ -1,40 +1,53 @@
-import { WiredDatatype } from '@ooo/datatypes/wired';
 import { Operation } from '@ooo/operations/operation';
 import { TransactionOperation } from '@ooo/operations/meta';
 import { ClientContext } from '@ooo/context';
-import { DatatypeMeta, TypeOfDatatype } from '@ooo/types/datatype';
-import { Datatype } from '@ooo/datatypes/datatype';
+import {
+  DatatypeMeta,
+  StateOfDatatype,
+  TypeOfDatatype,
+} from '@ooo/types/datatype';
+import { BaseDatatype } from '@ooo/datatypes/base';
 
-const NotUserTxTag = 'NotUserTransactionTag!@#$%ORTOO';
+const LOCAL_TX_TAG = 'LocalTransactionTag!@#$%OrToO';
+const REMOTE_TX_TAG = 'RemoteTransactionTag!@#$%OrToO';
 
 export { TransactionContext, TransactionDatatype };
 
-class TransactionDatatype extends WiredDatatype {
+abstract class TransactionDatatype extends BaseDatatype {
   private inProgress: boolean;
   private txCtxInProgress: TransactionContext | null; // if null, no transaction in progress.
   private rollbackCtx!: RollbackContext;
 
-  constructor(
+  protected constructor(
     ctx: ClientContext,
     key: string,
     type: TypeOfDatatype,
-    impl: Datatype
+    state: StateOfDatatype
   ) {
-    super(ctx, key, type, impl);
+    super(ctx, key, type, state);
     this.inProgress = false;
     this.txCtxInProgress = null;
-    // this.rollbackCtx = new RollbackContext(this.getMeta(), '');
   }
 
-  sentenceInTx(op: Operation, isLocal: boolean): unknown {
-    let ret;
-    this.doTransaction(NotUserTxTag, (txCtx) => {
-      if (isLocal) {
-        ret = this.sentenceInBase(op); // might throw error
+  sentenceLocalInTx(...opArray: Operation[]): unknown[] {
+    return this.sentenceInTx(true, ...opArray);
+  }
+
+  sentenceRemoteInTx(...opArray: Operation[]): unknown[] {
+    return this.sentenceInTx(false, ...opArray);
+  }
+
+  private sentenceInTx(isLocal: boolean, ...opArray: Operation[]): unknown[] {
+    const ret = new Array<unknown>();
+    this.doTransaction(isLocal ? LOCAL_TX_TAG : REMOTE_TX_TAG, (txCtx) => {
+      opArray.forEach((op) => {
+        if (isLocal) {
+          ret.push(this.sentenceLocal(op)); // might throw error
+        } else {
+          ret.push(this.sentenceRemote(op));
+        }
         txCtx.push(op);
-        return true;
-      } else {
-      }
+      });
       return true;
     });
     return ret;
@@ -48,9 +61,8 @@ class TransactionDatatype extends WiredDatatype {
   doTransaction(
     tag: string,
     txFunc: (txCtx: TransactionContext) => boolean
-    // txCtxInImpl: TransactionContext | null // null if called in transaction(), but not in in sentenceInTx()
   ): boolean {
-    const began = this.#beginTransaction(tag);
+    const began = this.beginTransaction(tag);
     try {
       const result = txFunc(this.txCtxInProgress!); // might throw error, then go to finally in cascade
       if (began) {
@@ -60,50 +72,52 @@ class TransactionDatatype extends WiredDatatype {
       if (began) {
         this.endTransaction();
       }
+      this.trySync();
     }
     return true;
   }
 
   /* return true if a transaction really begins; otherwise false */
-  #beginTransaction = (tag: string): boolean => {
+  private beginTransaction(tag: string): boolean {
     if (this.inProgress) {
       return false; // already began
     }
     this.inProgress = true;
     this.txCtxInProgress = new TransactionContext(tag);
-    this.ctx.L.debug(`begin transaction: ${tag}`);
-    if (!Object.is(tag, NotUserTxTag)) {
+    this.ctx.L.debug(`[🔒🔻] BEGIN: ${tag}`);
+    if (tag !== LOCAL_TX_TAG && tag !== REMOTE_TX_TAG) {
       const op = new TransactionOperation(tag);
       op.id = this.opId.next();
       this.txCtxInProgress.push(op);
     }
     return true;
-  };
+  }
 
-  endTransaction(): void {
+  abstract deliverTransaction(opList: Operation[]): void;
+
+  abstract trySync(): void;
+
+  private endTransaction(): void {
     try {
       if (this.txCtxInProgress?.success) {
         if (this.txCtxInProgress.opBuffer.length > 0) {
           const op = this.txCtxInProgress.opBuffer[0];
           if (op instanceof TransactionOperation) {
-            op.c.numOfOps = this.txCtxInProgress.opBuffer.length;
+            op.body.numOfOps = this.txCtxInProgress.opBuffer.length;
           }
           this.ctx.L.debug(
-            `transaction has ${this.txCtxInProgress.opBuffer.length} operations`
+            `[🔒] contains ${this.txCtxInProgress.opBuffer.length} operation(s)`
           );
         }
         this.rollbackCtx.push(this.txCtxInProgress.opBuffer);
-        // if (isLocal) {
-        //   // this.deliverTransaction(txCtx.opBuffer);
-        // }
-        // if (!Object.is(this.txCtxInProgress.tag, NotUserTxTag)) {
-
-        // }
+        if (REMOTE_TX_TAG !== this.txCtxInProgress.tag) {
+          this.deliverTransaction(this.txCtxInProgress.opBuffer);
+        }
       } else {
         this.rollback();
       }
     } finally {
-      this.ctx.L.debug(`end transaction: ${this.txCtxInProgress?.tag}`);
+      this.ctx.L.debug(`[🔒🔺] END: ${this.txCtxInProgress?.tag}`);
       this.releaseTx();
     }
   }
@@ -116,27 +130,26 @@ class TransactionDatatype extends WiredDatatype {
   }
 
   rollback(): void {
-    this.ctx.L.debug(`begin rollback:${this.txCtxInProgress?.tag}`);
+    this.ctx.L.debug(`[🔒🔃🔻] BEGIN rollback:${this.txCtxInProgress?.tag}`);
     this.setMetaAndSnapshot(this.rollbackCtx.meta, this.rollbackCtx.snap);
     this.rollbackCtx.opBuffer.forEach((op) => {
       this.replay(op);
     });
     this.resetRollbackContext();
-    this.ctx.L.debug(`end rollback:${this.txCtxInProgress?.tag}`);
+    this.ctx.L.debug(`[🔒🔃🔺] END rollback:${this.txCtxInProgress?.tag}`);
   }
 
   resetRollbackContext(): RollbackContext {
     this.rollbackCtx = new RollbackContext(
       this.getMeta(),
-      JSON.stringify(this.impl.getSnapshot())
+      JSON.stringify(this.getSnapshot())
     );
-    this.ctx.L.info(this.rollbackCtx.snap);
     return this.rollbackCtx;
   }
 
   setTransactionContextAndLock(tag: string): TransactionContext {
-    if (!Object.is(tag, NotUserTxTag)) {
-      this.ctx.L.debug(`begin transaction: ${tag}`, tag);
+    if (!Object.is(tag, LOCAL_TX_TAG)) {
+      this.ctx.L.debug(`[🔒] begin transaction: ${tag}`, tag);
     }
     this.inProgress = true;
     return new TransactionContext(tag);
@@ -154,7 +167,7 @@ class TransactionContext {
     this.opBuffer = new Array<Operation>();
   }
 
-  push(op: Operation) {
+  push(op: Operation): void {
     this.opBuffer.push(op);
   }
 }

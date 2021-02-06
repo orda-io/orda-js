@@ -1,4 +1,4 @@
-{
+ {
   "compilerOptions": {
     "target": "esnext",
     "moduleResolution": "node",
@@ -9,6 +9,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
     "baseUrl": ".",
     "outDir": "dist",
     "paths": {
@@ -28,5 +29,11 @@
   "exclude": [
     "example",
     "node_modules"
-  ]
+  ],
+  "typedocOptions": {
+    "entryPoints": ["src/ortoo.ts"],
+    "name": "Ortoo-js",
+    "theme": "node_modules/eledoc/bin/default/",
+    "out": "docs"
+  }
 }

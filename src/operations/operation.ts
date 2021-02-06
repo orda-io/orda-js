@@ -1,33 +1,38 @@
-import { OperationId, TypeOfOperation } from '@ooo/types/operation';
-import { Operation as OperationPb } from '@ooo/protobuf/ortoo_pb';
+import {
+  OperationPb,
+  OperationId,
+  TypeOfOperation,
+} from '@ooo/types/operation';
 
-export { Operation };
+export { Operation, OperationPb };
 
 abstract class Operation {
   id: OperationId;
-  protected type: TypeOfOperation;
+  type: TypeOfOperation;
 
   protected constructor(type: TypeOfOperation) {
     this.type = type;
     this.id = new OperationId();
   }
 
-  abstract getContent(): string;
+  abstract getBody(): string;
 
   getType(): TypeOfOperation {
     return this.type;
   }
 
-  toOperationPb(): OperationPb {
+  toPb(): OperationPb {
     const pb = new OperationPb();
     const pbOp = new OperationPb();
     pbOp.setId(this.id.toPb());
     pbOp.setOptype(this.type);
-    pbOp.setBody(this.getContent());
+    pbOp.setBody(this.getBody());
     return pb;
   }
 
-  toString() : string{
-    return ``;
+  toString(): string {
+    return `${
+      this.constructor.name
+    }(id:"${this.id.toString()}", body:${this.getBody()})`;
   }
 }

@@ -7,46 +7,40 @@ import {
   Uint64,
 } from '@ooo/types/integer';
 
-export class CheckPoint {
-  private _cseq: Uint32;
-  private _sseq: Uint64;
+export { CheckPoint };
 
-  constructor(cseq?: NumericType, sseq?: NumericType) {
-    this._cseq = uint32(cseq);
-    this._sseq = uint64(sseq);
-  }
+class CheckPoint {
+  cseq: Uint64;
+  sseq: Uint64;
 
-  get sseq(): Uint64 {
-    return this._sseq;
-  }
-
-  set sseq(value: Uint64) {
-    this._sseq = value;
-  }
-
-  get cseq(): Uint32 {
-    return this._cseq;
-  }
-
-  set cseq(value: Uint32) {
-    this._cseq = value;
+  constructor(sseq?: NumericType, cseq?: NumericType) {
+    this.sseq = uint64(sseq);
+    this.cseq = uint64(cseq);
   }
 
   public setCseq(cseq: NumericType): CheckPoint {
-    this._cseq = uint32(cseq);
+    this.cseq = uint64(cseq);
     return this;
   }
 
   public setSseq(sseq: NumericType): CheckPoint {
-    this._sseq = uint64(sseq);
+    this.sseq = uint64(sseq);
     return this;
   }
 
-  static fromProtobuf(cp: CP): CheckPoint {
-    return new CheckPoint(cp.getCseq(), cp.getSseq());
+  public clone(): CheckPoint {
+    return new CheckPoint(this.cseq, this.sseq);
   }
 
-  toProtobuf(): CP {
+  public toString(): string {
+    return `(${this.sseq}, ${this.cseq})`;
+  }
+
+  static fromProtobuf(cp: CP): CheckPoint {
+    return new CheckPoint(cp.getSseq(), cp.getCseq());
+  }
+
+  toPb(): CP {
     const cp = new CP();
     cp.setSseq(this.sseq.toString());
     cp.setCseq(this.cseq.toString());

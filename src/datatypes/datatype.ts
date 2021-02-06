@@ -1,57 +1,38 @@
-import { TransactionDatatype } from '@ooo/datatypes/tansaction';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { ClientContext, DatatypeContext } from '@ooo/context';
-import { Operation } from '@ooo/operations/operation';
-import { Snapshot } from '@ooo/datatypes/snapshot';
+import { ClientContext } from '@ooo/context';
+import { Wire, WiredDatatype } from '@ooo/datatypes/wired';
+import { SnapshotOperation } from '@ooo/operations/meta';
 
-export interface IDatatype {
-  key: string;
+export { Datatype };
+export type { IDatatype };
 
-  type: TypeOfDatatype;
+interface IDatatype {
+  readonly key: string;
 
-  state: StateOfDatatype;
+  readonly type: TypeOfDatatype;
+
+  readonly state: StateOfDatatype;
+
+  sync(): Promise<void>;
 }
 
-export type DatatypeSeed = ClientContext | TransactionDatatype;
+abstract class Datatype extends WiredDatatype {
+  protected constructor(
+    ctx: ClientContext,
+    key: string,
+    type: TypeOfDatatype,
+    state: StateOfDatatype,
+    wire?: Wire
+  ) {
+    super(ctx, key, type, state, wire);
+  }
 
-export abstract class Datatype implements IDatatype {
-  protected txDatatype: TransactionDatatype;
-
-  protected constructor(seed: DatatypeSeed, key: string, type: TypeOfDatatype) {
-    if (seed instanceof ClientContext) {
-      this.txDatatype = new TransactionDatatype(seed, key, type, this);
-    } else {
-      this.txDatatype = seed;
+  subscribeOrCreate() {
+    if (this.state === StateOfDatatype.DUE_TO_SUBSCRIBE) {
+      return;
     }
+    this.sentenceLocalInTx(
+      new SnapshotOperation(this.state, this.getSnapshot().toJSONString())
+    );
   }
-
-  get key(): string {
-    return this.txDatatype.key;
-  }
-
-  get state(): StateOfDatatype {
-    return this.txDatatype.state;
-  }
-
-  get type(): TypeOfDatatype {
-    return this.txDatatype.type;
-  }
-
-  get ctx(): DatatypeContext {
-    return this.txDatatype.ctx;
-  }
-
-  sentence(op: Operation, isLocal = true): unknown {
-    return this.txDatatype.sentenceInTx(op, isLocal);
-  }
-
-  abstract executeLocalOp(op: Operation): unknown;
-
-  abstract executeRemoteOp(op: Operation): unknown;
-
-  abstract getSnapshot(): Snapshot;
-
-  abstract setSnapshot(snap: string): void;
-
-
 }

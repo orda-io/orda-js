@@ -1,18 +1,21 @@
 import { Suite } from 'mocha';
 import { helper } from '@test/helper';
-import { _Counter, Counter, CounterTx } from '@ooo/datatypes/counter';
+import { _Counter, CounterTx } from '@ooo/datatypes/counter';
 import { expect } from 'chai';
-import { Int32, Uint32 } from '@ooo/types/integer';
+import { Int32 } from '@ooo/types/integer';
 import { ErrDatatype } from '@ooo/errors/datatype';
 
 describe('Test Transaction', function (this: Suite): void {
-  it('Can transaction', async () => {
-    const client = helper.getLocalClient(helper.getClientName(this));
-    const counter = client.createCounter(helper.getDatatypeName(this));
+  it('Can transaction', () => {
+    const client = helper.getLocalClient(helper.ctName(this));
+    const counter = client.createCounter(helper.dtName(this));
     const _counter = counter as _Counter;
     expect(counter.increase(1)).to.equal(1);
+
     Int32.enableRangeError = true;
     const oldOpId = _counter.ctx.datatype.opId.clone();
+
+    helper.L.info('before error, opId:', oldOpId.toString());
     expect(() => counter.increase(Number(Int32.MAX_VALUE))).to.throw(
       ErrDatatype.OutOfBound
     );

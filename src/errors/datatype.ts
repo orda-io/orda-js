@@ -1,7 +1,10 @@
 import { BaseErrorCode, OrtooError } from '@ooo/errors/error';
 import { OrtooLogger } from '@ooo/utils/ortoo_logger';
+import { StateOfDatatype, StateOfDatatypeNames } from '@ooo/types/datatype';
 
-export const ErrDatatype = {
+export { ErrDatatype };
+
+const ErrDatatype = {
   Create: class Create extends OrtooError {
     constructor(logger?: OrtooLogger) {
       super(BaseErrorCode.Datatype, 'fail to create datatype:', logger);
@@ -61,6 +64,21 @@ export const ErrDatatype = {
       super(
         BaseErrorCode.Datatype + 8,
         'fail due to out of bound error',
+        logger,
+        e
+      );
+    }
+  },
+  IllegalPushPullOption: class IllegalPushPullOption extends OrtooError {
+    constructor(
+      option: string,
+      state: StateOfDatatype,
+      logger?: OrtooLogger,
+      e?: Error
+    ) {
+      super(
+        BaseErrorCode.Datatype + 9,
+        `fail to apply PushPull due to illegal PushPullOption(${option}) on state ${StateOfDatatypeNames[state]}`,
         logger,
         e
       );

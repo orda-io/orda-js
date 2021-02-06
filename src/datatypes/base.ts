@@ -2,75 +2,106 @@ import { DUID } from '@ooo/types/uid';
 import { OperationId } from '@ooo/types/operation';
 import {
   DatatypeMeta,
-  DatatypeName,
+  DatatypeNames,
   StateOfDatatype,
+  StateOfDatatypeNames,
   TypeOfDatatype,
 } from '@ooo/types/datatype';
 import { ClientContext, DatatypeContext } from '@ooo/context';
 import { Operation } from '@ooo/operations/operation';
-import { Datatype } from '@ooo/datatypes/datatype';
 import { OperationID } from '@ooo/protobuf/ortoo_pb';
+import { Snapshot } from '@ooo/datatypes/snapshot';
+import { logOp } from '@ooo/decorators/decorators';
 
 export abstract class BaseDatatype {
-  id: DUID;
+  private _id: DUID;
   key: string;
   type: TypeOfDatatype;
   opId: OperationId;
   ctx: DatatypeContext;
-  state: StateOfDatatype;
-  impl: Datatype;
+  private _state: StateOfDatatype;
 
   protected constructor(
     clientCtx: ClientContext,
     key: string,
     type: TypeOfDatatype,
-    impl: Datatype
+    state: StateOfDatatype
   ) {
     this.key = key;
-    this.id = new DUID();
+    this._id = new DUID();
     this.type = type;
     this.opId = new OperationId(clientCtx.client.cuid);
-    this.state = StateOfDatatype.DUE_TO_CREATE;
+    this._state = state;
     this.ctx = new DatatypeContext(clientCtx, this);
-    this.impl = impl;
 
-    this.ctx.L.debug(`created ${DatatypeName[this.type]} `);
+    this.ctx.L.debug(
+      `[BASE] created ${DatatypeNames[this.type]} as ${
+        StateOfDatatypeNames[this._state]
+      }`
+    );
   }
 
-  // getKey(): string {
-  //   return this.key;
-  // }
-  //
-  // getState(): StateOfDatatype {
-  //   return this.state;
-  // }
-  //
-  // getType(): TypeOfDatatype {
-  //   return this.type;
-  // }
+  set id(value: DUID) {
+    this._id = value;
+    this.ctx.updateLogger();
+  }
 
-  protected sentenceInBase(op: Operation): unknown {
+  get id(): DUID {
+    return this._id;
+  }
+
+  get state(): StateOfDatatype {
+    return this._state;
+  }
+
+  set state(state: StateOfDatatype) {
+    if (this._state === state) {
+      return;
+    }
+    this.ctx.L.debug(
+      `[BASE] change state: ${StateOfDatatypeNames[this._state]} -> ${
+        StateOfDatatypeNames[state]
+      }`
+    );
+    this._state = state;
+  }
+
+  abstract executeLocalOp(op: Operation): unknown;
+
+  abstract executeRemoteOp(op: Operation): unknown;
+
+  abstract getSnapshot(): Snapshot;
+
+  abstract setSnapshot(snap: string): void;
+
+  @logOp()
+  protected sentenceLocal(op: Operation): unknown {
     op.id = this.opId.next();
     try {
-      return this.impl.executeLocalOp(op);
+      return this.executeLocalOp(op);
     } catch (e) {
       this.opId.rollback();
       throw e;
     }
   }
 
+  @logOp()
+  protected sentenceRemote(op: Operation): unknown {
+    this.opId.sync(op.id);
+    return this.executeRemoteOp(op);
+  }
+
   protected replay(op: Operation): void {
     if (this.opId.cuid.compare(op.id.cuid) === 0) {
-      this.sentenceInBase(op);
+      this.sentenceLocal(op);
     } else {
-      // remote
     }
   }
 
   protected getMeta(): DatatypeMeta {
     const meta = new DatatypeMeta();
     meta.setKey(this.key);
-    meta.setDuid(this.id.AsUint8Array);
+    meta.setDuid(this._id.AsUint8Array);
     meta.setOpid(this.opId.toPb());
     meta.setState(this.state);
     meta.setTypeof(this.type);
@@ -79,7 +110,7 @@ export abstract class BaseDatatype {
 
   protected setMeta(meta: DatatypeMeta): void {
     this.key = meta.getKey();
-    this.id = new DUID(false, meta.getDuid());
+    this._id = new DUID(false, meta.getDuid());
     this.opId = OperationId.fromPb(meta.getOpid() as OperationID);
     this.state = meta.getState();
     this.type = meta.getTypeof();
@@ -87,6 +118,6 @@ export abstract class BaseDatatype {
 
   protected setMetaAndSnapshot(meta: DatatypeMeta, snap: string): void {
     this.setMeta(meta);
-    this.impl.setSnapshot(snap);
+    this.setSnapshot(snap);
   }
 }

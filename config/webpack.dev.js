@@ -9,7 +9,7 @@ module.exports = function () {
       path: base.root('./dist'),
       publicPath: '/',
     },
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
     devServer: {
       contentBase: base.root('./dist'),
       hot: true,

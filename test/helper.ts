@@ -5,29 +5,33 @@ import { CUID } from '@ooo/types/uid';
 import { Suite } from 'mocha';
 import { Client } from '@ooo/client';
 import { ClientConfig } from '@ooo/config';
-
+import { WireManager } from '@ooo/managers/wire';
+import { MD5 } from 'crypto-js';
 export { helper };
 
 const testLoggerFactory = new OrtooLoggerFactory('trace');
 
-const testLogger = testLoggerFactory.getLogger('test');
-
 const helper = {
   loggerFactory: testLoggerFactory,
 
-  L: testLogger,
+  L: testLoggerFactory.getLogger('test'),
 
-  getLocalClient(alias: string): Client {
+  getLocalClient(alias: string, wireManager?: WireManager): Client {
     const conf = new ClientConfig('ortoo-js-test', SyncType.LOCAL_ONLY);
-    return new Client(conf, 'ortoo-js-test-client');
+    return new Client(conf, alias, wireManager);
   },
 
-  getDatatypeName(s: Suite): string {
-    return s.ctx.test ? s.ctx.test.title.replace(/\s/g, '') : 'none';
+  dtName(s: Suite): string {
+    const postfix = MD5(s.ctx.test?.title!).toString();
+    return `crdt-${postfix.slice(28)}`;
   },
 
-  getClientName(s: Suite): string {
-    return s.title.replace(/\s/g, '');
+  ctName(s: Suite, additional?: unknown): string {
+    let name = MD5(s.title!).toString().slice(28);
+    if (additional) {
+      name = name.concat(`-${additional}`);
+    }
+    return `client-${name}`;
   },
 
   createClientContext(s: Suite): ClientContext {

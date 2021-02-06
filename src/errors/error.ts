@@ -6,7 +6,7 @@ export const BaseErrorCode = {
 };
 
 export class OrtooError extends Error {
-  private code: number;
+  code: number;
 
   constructor(
     code: number,

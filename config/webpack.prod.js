@@ -22,7 +22,7 @@ module.exports = function () {
       minimize: false, // TODO: should be true
       minimizer: [
         new terser({
-          sourceMap: false,
+          // sourceMap: false,
           terserOptions: {
             compress: {
               drop_console: true,

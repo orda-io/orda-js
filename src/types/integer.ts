@@ -71,25 +71,25 @@ abstract class Int {
     return ~(BigInt(-num) - 1n) & BigInt(this.getMax());
   }
 
-  public add(numeric: NumericType = 1): Int {
+  public add(numeric: NumericType = 1): this {
     const result: BigInt = BigInt(this.num) + BigInt(this.transform(numeric));
     this.num = this.validate(result);
     return this;
   }
 
-  public sub(numeric: NumericType = 1): Int {
+  public sub(numeric: NumericType = 1): this {
     const result: BigInt = BigInt(this.num) - BigInt(this.transform(numeric));
     this.num = this.validate(result);
     return this;
   }
 
-  public mul(numeric: NumericType): Int {
+  public mul(numeric: NumericType): this {
     const result: BigInt = BigInt(this.num) * BigInt(this.transform(numeric));
     this.num = this.validate(result);
     return this;
   }
 
-  public div(numeric: NumericType): Int {
+  public div(numeric: NumericType): this {
     const result: BigInt = BigInt(this.num) / BigInt(this.transform(numeric));
     this.num = this.validate(result);
     return this;
@@ -100,6 +100,11 @@ abstract class Int {
       return new c(this.num);
     }
     return new c(this.num);
+  }
+
+  public compare(other: this): number {
+    const diff = BigInt(this.num) - BigInt(other.num);
+    return Number(diff);
   }
 
   public get(): BigInt {

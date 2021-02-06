@@ -1,11 +1,18 @@
-import { uint32, Uint32, uint64, Uint64 } from '@ooo/types/integer';
+import {
+  NumericType,
+  uint32,
+  Uint32,
+  uint64,
+  Uint64,
+} from '@ooo/types/integer';
 import { CUID } from '@ooo/types/uid';
 import {
   OperationID as OperationIDPb,
   TypeOfOperation,
+  Operation as OperationPb,
 } from '@ooo/protobuf/ortoo_pb';
 
-export { TypeOfOperation };
+export { TypeOfOperation, OperationIDPb, OperationPb };
 
 export class OperationId {
   era: Uint32;
@@ -13,7 +20,12 @@ export class OperationId {
   cuid: CUID;
   seq: Uint64;
 
-  constructor(cuid?: CUID, era?: Uint32, lamport?: Uint64, seq?: Uint64) {
+  constructor(
+    cuid?: CUID,
+    lamport?: NumericType,
+    era?: NumericType,
+    seq?: NumericType
+  ) {
     this.era = uint32(era);
     this.lamport = uint64(lamport);
     if (cuid) {
@@ -26,9 +38,9 @@ export class OperationId {
 
   toString(): string {
     return (
-      `OpID[${this.era.toString(10)}` +
+      `${this.era.toString(10)}` +
       `:${this.lamport.toString(10)}` +
-      `:${this.cuid.toString()}` +
+      `:${this.cuid.toShortString()}` +
       `:${this.seq.toString(10)}`
     );
   }
@@ -42,10 +54,18 @@ export class OperationId {
   clone(): OperationId {
     return new OperationId(
       this.cuid,
-      this.era.clone(Uint32),
       this.lamport.clone(Uint64),
+      this.era.clone(Uint32),
       this.seq.clone(Uint64)
     );
+  }
+
+  sync(other: OperationId) {
+    if (this.lamport < other.lamport) {
+      this.lamport = other.lamport;
+    } else {
+      this.lamport.add();
+    }
   }
 
   rollback(): void {
@@ -72,8 +92,8 @@ export class OperationId {
   toPb(): OperationIDPb {
     const pb = new OperationIDPb();
     pb.setCuid(this.cuid.AsUint8Array);
-    pb.setEra(this.era.asNumber());
     pb.setLamport(this.lamport.toString(10));
+    pb.setEra(this.era.asNumber());
     pb.setSeq(this.seq.toString(10));
     return pb;
   }
@@ -81,8 +101,8 @@ export class OperationId {
   static fromPb(pb: OperationIDPb): OperationId {
     return new OperationId(
       new CUID(false, pb.getCuid()),
-      uint32(pb.getEra()),
       uint64(pb.getLamport()),
+      uint32(pb.getEra()),
       uint64(pb.getSeq())
     );
   }

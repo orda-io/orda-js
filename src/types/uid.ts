@@ -26,12 +26,20 @@ class UID {
     return this.uid;
   }
 
+  setUID(uid: this): this {
+    this.uid = uid.uid;
+    return this;
+  }
+
   public toString(): string {
     return stringify(this.uid).replace(/-/g, '');
   }
 
   public toShortString(): string {
-    return this.toString().substr(0, ShortUID);
+    const str = this.toString();
+    return (
+      str.substr(0, ShortUID / 2) + '~' + str.substr(str.length - ShortUID / 2)
+    );
   }
 
   public compare(o: UID): number {
@@ -48,13 +56,8 @@ class UID {
     });
     return ret;
   }
-
-
 }
 
-class CUID extends UID {
-
-}
+class CUID extends UID {}
 
 class DUID extends UID {}
-

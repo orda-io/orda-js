@@ -1,14 +1,16 @@
-import { Datatype, DatatypeSeed, IDatatype } from '@ooo/datatypes/datatype';
+import { Datatype, IDatatype } from '@ooo/datatypes/datatype';
 import { int32, Int32 } from '@ooo/types/integer';
 import { IncreaseOperation } from '@ooo/operations/counter';
-import { DatatypeContext } from '@ooo/context';
+import { ClientContext, DatatypeContext } from '@ooo/context';
 import { Operation } from '@ooo/operations/operation';
-import { TypeOfDatatype } from '@ooo/types/datatype';
+import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { TypeOfOperation } from '@ooo/types/operation';
 import { TransactionContext } from '@ooo/datatypes/tansaction';
 import { Snapshot } from '@ooo/datatypes/snapshot';
 import { ErrDatatype } from '@ooo/errors/datatype';
 import { OrtooError } from '@ooo/errors/error';
+import { Wire } from '@ooo/datatypes/wired';
+import { SnapshotOperation } from '@ooo/operations/meta';
 
 export { _Counter };
 export type { CounterTx, Counter };
@@ -26,14 +28,15 @@ interface Counter extends CounterTx {
 class _Counter extends Datatype implements Counter {
   private snap: CounterSnapshot;
 
-  constructor(seed: DatatypeSeed, key: string, snap?: CounterSnapshot) {
-    super(seed, key, TypeOfDatatype.COUNTER);
-    if (snap) {
-      this.snap = snap;
-    } else {
-      this.snap = new CounterSnapshot(this.ctx);
-      this.txDatatype.resetRollbackContext();
-    }
+  constructor(
+    ctx: ClientContext,
+    key: string,
+    state: StateOfDatatype,
+    wire?: Wire
+  ) {
+    super(ctx, key, TypeOfDatatype.COUNTER, state, wire);
+    this.snap = new CounterSnapshot(this.ctx);
+    this.resetRollbackContext();
   }
 
   getSnapshot(): Snapshot {
@@ -51,8 +54,8 @@ class _Counter extends Datatype implements Counter {
   increase(delta = 1): number {
     try {
       const op = new IncreaseOperation(delta);
-      const ret = this.sentence(op) as Int32;
-      return ret.asNumber();
+      const ret: unknown[] = this.sentenceLocalInTx(op);
+      return (ret[0] as Int32).asNumber();
     } catch (e) {
       if (e instanceof OrtooError) {
         throw e;
@@ -62,27 +65,29 @@ class _Counter extends Datatype implements Counter {
   }
 
   executeLocalOp(op: Operation): unknown {
+    return this.executeCommon(op);
+  }
+
+  executeRemoteOp(op: Operation): unknown {
+    return this.executeCommon(op);
+  }
+
+  private executeCommon(op: Operation): unknown {
     switch (op.getType()) {
+      case TypeOfOperation.SNAPSHOT:
+        const sop = op as SnapshotOperation;
+        this.snap.fromJSON(sop.getBody());
+        return;
       case TypeOfOperation.COUNTER_INCREASE:
         const iop = op as IncreaseOperation;
         return this.snap.increaseCommon(iop.c.delta);
     }
   }
 
-  executeRemoteOp(op: Operation): unknown {
-    return;
-  }
-
   transaction(tag: string, txFunc: (counter: CounterTx) => boolean): boolean {
-    const clone = new _Counter(this.txDatatype, this.key, this.snap);
-    return this.txDatatype.doTransaction(
-      tag,
-      (txCtx: TransactionContext): boolean => {
-        // clone.txCtx = txCtx; // created in beginTransaction()
-        return txFunc(clone);
-      }
-      // clone.txCtx // initially null
-    );
+    return this.doTransaction(tag, (twxCtx: TransactionContext): boolean => {
+      return txFunc(this);
+    });
   }
 }
 
@@ -100,7 +105,7 @@ class CounterSnapshot implements Snapshot {
   }
 
   increaseCommon(delta: Int32): Int32 {
-    this.ctx.L.debug(`add ${delta} to ${this.value.get()}`);
+    this.ctx.L.debug(`[COUNTER] add ${delta} to ${this.value.get()}`);
     try {
       return this.value.add(delta) as Int32;
     } catch (e) {
@@ -114,8 +119,12 @@ class CounterSnapshot implements Snapshot {
     };
   }
 
+  toJSONString(): string {
+    return JSON.stringify(this.toJSON());
+  }
+
   fromJSON(json: string): void {
-    const counterSnapshot: ICounterSnapshot = JSON.parse(json);
-    this.value = int32(counterSnapshot.value);
+    const parsed: ICounterSnapshot = JSON.parse(json);
+    this.value = int32(parsed.value);
   }
 }
