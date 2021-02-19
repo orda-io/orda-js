@@ -309,10 +309,10 @@ function readString(bb: ByteBuffer, count: number): string {
 
   for (let i = 0; i < count; i++) {
     let c1 = bytes[i + offset],
-            c2: number,
-            c3: number,
-            c4: number,
-            c: number;
+      c2: number,
+      c3: number,
+      c4: number,
+      c: number;
 
     // 1 byte
     if ((c1 & 0x80) === 0) {

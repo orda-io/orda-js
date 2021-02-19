@@ -10,7 +10,7 @@
     "clean:dist": "rimraf dist",
     "clean:coverage": "rimraf coverage",
     "eslint:fix": "eslint --ext .tsx,.ts --fix ./src",
-    "prettier": "prettier --config ./.prettierrc --write ./src/**/*.{json,ts,tsx}",
+    "prettier": "prettier --config .prettierrc.json --write ./src/**/*.{json,ts,tsx}",
     "gen-openapi": "npx openapi-typescript http://127.0.0.1:29861/swagger/ortoo.grpc.swagger.json --output ./src/generated/openapi.ts && npx eslint --fix ./src/generated/openapi.ts",
     "gen-protobuf": "npx pbjs ../ortoo-js.back/ortoo/proto/ortoo.enum.proto --ts ./src/generated/proto.ts && npx eslint --fix ./src/generated/proto.ts && sed -i 's/export const enum/export enum/g' src/generated/proto.ts",
     "build:dev": "npm run clean && webpack --config=./config/webpack.dev.js --stats-all --profile --bail",

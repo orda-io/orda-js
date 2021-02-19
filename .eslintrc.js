@@ -36,4 +36,5 @@ module.exports = {
       { path: 'always', types: 'never', lib: 'never' },
     ],
   },
+  ignorePatterns: ['dist/', 'node_modules/'],
 };
