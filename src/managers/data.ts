@@ -1,11 +1,10 @@
 import { ClientContext } from '@ooo/context';
 import { WireManager } from '@ooo/managers/wire';
 import { Datatype } from '@ooo/datatypes/datatype';
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/protobuf/ortoo_pb';
 import { _Counter } from '@ooo/datatypes/counter';
-import { DatatypeNames } from '@ooo/types/datatype';
 import { PushPullPack } from '@ooo/types/pushpullpack';
 import { Mutex } from 'async-mutex';
+import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 
 export class DataManager {
   private ctx: ClientContext;
@@ -41,7 +40,7 @@ export class DataManager {
   ): Datatype {
     let data: Datatype | undefined = this.dataMap.get(key);
     if (data) {
-      this.ctx.L.warn(`${DatatypeNames[type]} ${key} already exists`);
+      this.ctx.L.warn(`${type} ${key} already exists`);
       return data;
     }
 
@@ -50,7 +49,7 @@ export class DataManager {
         data = new _Counter(this.ctx, key, state, this.wireManager);
         this.dataMap.set(key, data);
         break;
-      case TypeOfDatatype.HASH_MAP:
+      case TypeOfDatatype.MAP:
       case TypeOfDatatype.LIST:
       case TypeOfDatatype.DOCUMENT:
       default:

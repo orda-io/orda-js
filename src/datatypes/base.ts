@@ -1,17 +1,14 @@
 import { DUID } from '@ooo/types/uid';
 import { OperationId } from '@ooo/types/operation';
-import {
-  DatatypeMeta,
-  DatatypeNames,
-  StateOfDatatype,
-  StateOfDatatypeNames,
-  TypeOfDatatype,
-} from '@ooo/types/datatype';
 import { ClientContext, DatatypeContext } from '@ooo/context';
 import { Operation } from '@ooo/operations/operation';
-import { OperationID } from '@ooo/protobuf/ortoo_pb';
 import { Snapshot } from '@ooo/datatypes/snapshot';
 import { logOp } from '@ooo/decorators/decorators';
+import {
+  DatatypeMeta,
+  StateOfDatatype,
+  TypeOfDatatype,
+} from '@ooo/types/datatype';
 
 export abstract class BaseDatatype {
   private _id: DUID;
@@ -33,12 +30,7 @@ export abstract class BaseDatatype {
     this.opId = new OperationId(clientCtx.client.cuid);
     this._state = state;
     this.ctx = new DatatypeContext(clientCtx, this);
-
-    this.ctx.L.debug(
-      `[BASE] created ${DatatypeNames[this.type]} as ${
-        StateOfDatatypeNames[this._state]
-      }`
-    );
+    this.ctx.L.debug(`[BASE] created ${this.type} as ${this._state}`);
   }
 
   set id(value: DUID) {
@@ -58,11 +50,7 @@ export abstract class BaseDatatype {
     if (this._state === state) {
       return;
     }
-    this.ctx.L.debug(
-      `[BASE] change state: ${StateOfDatatypeNames[this._state]} -> ${
-        StateOfDatatypeNames[state]
-      }`
-    );
+    this.ctx.L.debug(`[BASE] change state: ${this._state} -> ${state}`);
     this._state = state;
   }
 
@@ -99,21 +87,21 @@ export abstract class BaseDatatype {
   }
 
   protected getMeta(): DatatypeMeta {
-    const meta = new DatatypeMeta();
-    meta.setKey(this.key);
-    meta.setDuid(this._id.AsUint8Array);
-    meta.setOpid(this.opId.toPb());
-    meta.setState(this.state);
-    meta.setTypeof(this.type);
-    return meta;
+    return new DatatypeMeta(
+      this.key,
+      this._id,
+      this.opId.clone(),
+      this.state,
+      this.type
+    );
   }
 
   protected setMeta(meta: DatatypeMeta): void {
-    this.key = meta.getKey();
-    this._id = new DUID(false, meta.getDuid());
-    this.opId = OperationId.fromPb(meta.getOpid() as OperationID);
-    this.state = meta.getState();
-    this.type = meta.getTypeof();
+    this.key = meta.key;
+    this._id = meta.id;
+    this.opId = meta.opId;
+    this.state = meta.state;
+    this.type = meta.type;
   }
 
   protected setMetaAndSnapshot(meta: DatatypeMeta, snap: string): void {

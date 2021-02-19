@@ -1,7 +1,5 @@
-import { OrtooLogger, ortooLogger } from '@ooo/utils/ortoo_logger';
+import { ortooLogger } from '@ooo/utils/ortoo_logger';
 import { Operation } from '@ooo/operations/operation';
-import { Datatype } from '@ooo/datatypes/datatype';
-import { TransactionDatatype } from '@ooo/datatypes/tansaction';
 import { BaseDatatype } from '@ooo/datatypes/base';
 
 export { logNew, logOp };

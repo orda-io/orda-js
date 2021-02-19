@@ -1,13 +1,8 @@
-import { PushPullPack as PushPullPackPb } from '@ooo/protobuf/ortoo_pb';
-import {
-  DatatypeNames,
-  StateOfDatatype,
-  TypeOfDatatype,
-} from '@ooo/types/datatype';
 import { DUID } from '@ooo/types/uid';
 import { CheckPoint } from '@ooo/types/checkpoint';
 import { Uint32 } from '@ooo/types/integer';
-import { Operation, OperationPb } from '@ooo/operations/operation';
+import { Operation, OperationOa } from '@ooo/operations/operation';
+import { StateOfDatatype, TypeOfDatatype } from '@ooo/generated/proto';
 
 export { PushPullPack, PushPullOptions, PPOptions };
 
@@ -104,7 +99,7 @@ class PushPullPack {
   }
 
   toString(): string {
-    let ret = `{ ${DatatypeNames[this.type]} ${
+    let ret = `{ ${this.type} ${
       this.key
     }(${this.duid.toShortString()}) ${this.checkPoint.toString()}, era:${
       this.era
@@ -116,22 +111,22 @@ class PushPullPack {
     return ret.concat('] }');
   }
 
-  get pbOpList(): OperationPb[] {
-    const pbOpList = new Array<OperationPb>();
-    this.opList.forEach((op) => pbOpList.push(op.toPb()));
+  get operationOaList(): OperationOa[] {
+    const pbOpList = new Array<OperationOa>();
+    this.opList.forEach((op) => pbOpList.push(op.toOpenApi()));
     return pbOpList;
   }
 
-  toPb(): PushPullPackPb {
-    const pb = new PushPullPackPb();
-    pb.setEra(this.era.asNumber());
-    pb.setKey(this.key);
-    pb.setType(this.type);
-    pb.setCheckpoint(this.checkPoint.toPb());
-    pb.setDuid(this.duid.AsUint8Array);
-    pb.setOperationsList(this.pbOpList);
-    pb.setOption(this.option.valueOf());
-
-    return pb;
-  }
+  // toPb(): PushPullPackPb {
+  //   const pb = new PushPullPackPb();
+  //   pb.setEra(this.era.asNumber());
+  //   pb.setKey(this.key);
+  //   pb.setType(this.type);
+  //   pb.setCheckpoint(this.checkPoint.toPb());
+  //   pb.setDuid(this.duid.AsUint8Array);
+  //   pb.setOperationsList(this.pbOpList);
+  //   pb.setOption(this.option.valueOf());
+  //
+  //   return pb;
+  // }
 }

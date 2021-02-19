@@ -1,7 +1,6 @@
 import { Operation } from '@ooo/operations/operation';
 import { TypeOfOperation } from '@ooo/types/operation';
 import { StateOfDatatype } from '@ooo/types/datatype';
-import { logNew } from '@ooo/decorators/decorators';
 
 export { TransactionOperation, SnapshotOperation };
 

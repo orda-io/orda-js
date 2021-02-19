@@ -1,13 +1,9 @@
-import { CheckPoint as CP } from '@ooo/protobuf/ortoo_pb';
-import {
-  NumericType,
-  uint32,
-  Uint32,
-  uint64,
-  Uint64,
-} from '@ooo/types/integer';
+import { NumericType, uint64, Uint64 } from '@ooo/types/integer';
+import { definitions } from '@ooo/generated/openapi';
 
 export { CheckPoint };
+
+type CheckPointOa = definitions['ortooCheckPoint'];
 
 class CheckPoint {
   cseq: Uint64;
@@ -36,14 +32,10 @@ class CheckPoint {
     return `(${this.sseq}, ${this.cseq})`;
   }
 
-  static fromProtobuf(cp: CP): CheckPoint {
-    return new CheckPoint(cp.getSseq(), cp.getCseq());
-  }
-
-  toPb(): CP {
-    const cp = new CP();
-    cp.setSseq(this.sseq.toString());
-    cp.setCseq(this.cseq.toString());
-    return cp;
+  toOpenApi(): CheckPointOa {
+    return {
+      sseq: this.sseq.toString(),
+      cseq: this.cseq.toString(),
+    };
   }
 }

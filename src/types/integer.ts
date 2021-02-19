@@ -1,5 +1,3 @@
-import { ortooLogger } from '@ooo/utils/ortoo_logger';
-
 export { Uint32, Uint64, Int32, Int64 };
 export { uint32, uint64, int32, int64 };
 export type NumericType = number | BigInt | string | Int;

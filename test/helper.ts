@@ -1,12 +1,13 @@
 import { OrtooLoggerFactory } from '@ooo/utils/ortoo_logger';
 import { ClientContext } from '@ooo/context';
-import { ClientModel, SyncType } from '@ooo/types/client';
+import { ClientModel } from '@ooo/types/client';
 import { CUID } from '@ooo/types/uid';
 import { Suite } from 'mocha';
 import { Client } from '@ooo/client';
 import { ClientConfig } from '@ooo/config';
 import { WireManager } from '@ooo/managers/wire';
 import { MD5 } from 'crypto-js';
+import { SyncType } from '@ooo/generated/proto';
 export { helper };
 
 const testLoggerFactory = new OrtooLoggerFactory('trace');

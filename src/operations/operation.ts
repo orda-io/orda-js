@@ -1,10 +1,9 @@
-import {
-  OperationPb,
-  OperationId,
-  TypeOfOperation,
-} from '@ooo/types/operation';
+import { OperationId, TypeOfOperation } from '@ooo/types/operation';
+import { definitions } from '@ooo/generated/openapi';
 
-export { Operation, OperationPb };
+export { Operation };
+
+export type OperationOa = definitions['ortooOperation'];
 
 abstract class Operation {
   id: OperationId;
@@ -21,13 +20,12 @@ abstract class Operation {
     return this.type;
   }
 
-  toPb(): OperationPb {
-    const pb = new OperationPb();
-    const pbOp = new OperationPb();
-    pbOp.setId(this.id.toPb());
-    pbOp.setOptype(this.type);
-    pbOp.setBody(this.getBody());
-    return pb;
+  toOpenApi(): OperationOa {
+    return {
+      ID: this.id.toOpenApi(),
+      opType: this.type,
+      body: this.getBody(),
+    };
   }
 
   toString(): string {

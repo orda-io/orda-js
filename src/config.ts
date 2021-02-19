@@ -1,5 +1,5 @@
-import { SyncType } from '@ooo/types/client';
 import { OrtooLoggerFactory, OrtooLogLevel } from '@ooo/utils/ortoo_logger';
+import { SyncType } from '@ooo/types/client';
 
 export class ClientConfig {
   CollectionName: string;
