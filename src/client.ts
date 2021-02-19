@@ -1,13 +1,13 @@
-import { ClientModel, SyncType } from '@ooo/types/client';
 import { CUID } from '@ooo/types/uid';
 import { ClientConfig } from '@ooo/config';
 import { DataManager } from '@ooo/managers/data';
 import { ClientContext } from '@ooo/context';
 import { Counter } from '@ooo/datatypes/counter';
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/protobuf/ortoo_pb';
 import { IDatatype } from '@ooo/datatypes/datatype';
 import { WireManager } from '@ooo/managers/wire';
 import { GrpcWireManager } from '@ooo/managers/grpc_wire';
+import { ClientModel, SyncType } from '@ooo/types/client';
+import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 
 export { Client };
 

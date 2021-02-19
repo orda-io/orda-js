@@ -1,7 +1,8 @@
 import { CUID } from '@ooo/types/uid';
-import { Client as ClientPb, SyncType } from '@ooo/protobuf/ortoo_pb';
+import { SyncType } from '@ooo/generated/proto';
 
-export { SyncType, ClientModel };
+export { ClientModel };
+export { SyncType };
 
 class ClientModel {
   cuid: CUID;
@@ -21,14 +22,19 @@ class ClientModel {
     this.syncType = syncType;
   }
 
-  toClientPb(): ClientPb {
-    const clientPb = new ClientPb();
-    clientPb.setCuid(this.cuid.AsUint8Array);
-    clientPb.setAlias(this.alias);
-    clientPb.setCollection(this.collection);
-    clientPb.setSynctype(this.syncType);
-    return clientPb;
-  }
+  // toPb(): ortoo.Client {
+  //   const pb = ortoo.Client.fromObject(this);
+  //   return pb;
+  // }
+  //
+  // toClientPb(): ClientPb {
+  //   const clientPb = new ClientPb();
+  //   clientPb.setCuid(this.cuid.AsUint8Array);
+  //   clientPb.setAlias(this.alias);
+  //   clientPb.setCollection(this.collection);
+  //   clientPb.setSynctype(this.syncType);
+  //   return clientPb;
+  // }
 
   getCuidAsArray(): Uint8Array {
     return this.cuid.AsUint8Array;

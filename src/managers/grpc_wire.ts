@@ -1,6 +1,5 @@
 import { WireManager } from '@ooo/managers/wire';
 import { uint32, Uint32 } from '@ooo/types/integer';
-import { OrtooServiceClient } from '@ooo/protobuf/OrtooServiceClientPb';
 import { ClientContext } from '@ooo/context';
 import { ClientConfig } from '@ooo/config';
 import { DataManager } from '@ooo/managers/data';
@@ -12,7 +11,7 @@ export { GrpcWireManager };
 class GrpcWireManager implements WireManager {
   private seq: Uint32;
   private readonly serverAddr: string;
-  private grpc?: OrtooServiceClient;
+  // private grpc?: OrtooServiceClient;
   // private notification?: NotificationManager | null;
   private ctx: ClientContext;
 
@@ -32,7 +31,7 @@ class GrpcWireManager implements WireManager {
   }
 
   public connect(): void {
-    this.grpc = new OrtooServiceClient(this.serverAddr);
+    // this.grpc = new OrtooServiceClient(this.serverAddr);
   }
 
   private nextSeq(): Uint32 {

@@ -6,13 +6,11 @@ import {
   Uint64,
 } from '@ooo/types/integer';
 import { CUID } from '@ooo/types/uid';
-import {
-  OperationID as OperationIDPb,
-  TypeOfOperation,
-  Operation as OperationPb,
-} from '@ooo/protobuf/ortoo_pb';
+import { definitions } from '@ooo/generated/openapi';
 
-export { TypeOfOperation, OperationIDPb, OperationPb };
+export { TypeOfOperation } from '@ooo/generated/proto';
+
+type OperationIdOa = definitions['ortooOperationID'];
 
 export class OperationId {
   era: Uint32;
@@ -60,7 +58,7 @@ export class OperationId {
     );
   }
 
-  sync(other: OperationId) {
+  sync(other: OperationId): void {
     if (this.lamport < other.lamport) {
       this.lamport = other.lamport;
     } else {
@@ -89,21 +87,21 @@ export class OperationId {
     return this.cuid.compare(other.cuid);
   }
 
-  toPb(): OperationIDPb {
-    const pb = new OperationIDPb();
-    pb.setCuid(this.cuid.AsUint8Array);
-    pb.setLamport(this.lamport.toString(10));
-    pb.setEra(this.era.asNumber());
-    pb.setSeq(this.seq.toString(10));
-    return pb;
+  toOpenApi(): OperationIdOa {
+    return {
+      era: this.era.asNumber(),
+      lamport: this.lamport.toString(),
+      CUID: this.cuid.toString(),
+      seq: this.seq.toString(),
+    };
   }
 
-  static fromPb(pb: OperationIDPb): OperationId {
+  static fromOpenApi(oa: OperationIdOa): OperationId {
     return new OperationId(
-      new CUID(false, pb.getCuid()),
-      uint64(pb.getLamport()),
-      uint32(pb.getEra()),
-      uint64(pb.getSeq())
+      new CUID(false, oa.CUID),
+      uint64(oa.lamport),
+      uint32(oa.era),
+      uint64(oa.seq)
     );
   }
 }

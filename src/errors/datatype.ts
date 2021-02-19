@@ -1,6 +1,6 @@
 import { BaseErrorCode, OrtooError } from '@ooo/errors/error';
 import { OrtooLogger } from '@ooo/utils/ortoo_logger';
-import { StateOfDatatype, StateOfDatatypeNames } from '@ooo/types/datatype';
+import { StateOfDatatype } from '@ooo/types/datatype';
 
 export { ErrDatatype };
 
@@ -78,7 +78,7 @@ const ErrDatatype = {
     ) {
       super(
         BaseErrorCode.Datatype + 9,
-        `fail to apply PushPull due to illegal PushPullOption(${option}) on state ${StateOfDatatypeNames[state]}`,
+        `fail to apply PushPull due to illegal PushPullOption(${option}) on state ${state}`,
         logger,
         e
       );

@@ -13,7 +13,7 @@ import { TransactionDatatype } from '@ooo/datatypes/tansaction';
 import { Mutex } from 'async-mutex';
 import { DUID } from '@ooo/types/uid';
 import { ErrDatatype } from '@ooo/errors/datatype';
-import { SyncType } from '@ooo/protobuf/ortoo_pb';
+import { SyncType } from '@ooo/types/client';
 
 export { WiredDatatype };
 export type { Wire };
@@ -167,7 +167,8 @@ abstract class WiredDatatype extends TransactionDatatype {
       // this.opBuffer = new Array<Operation>();
       // this.opId = new OperationId(this.opId.cuid, 0);
       // }
-      case StateOfDatatype.DUE_TO_CREATE | StateOfDatatype.DUE_TO_SUBSCRIBE:
+      case StateOfDatatype.DUE_TO_CREATE:
+      case StateOfDatatype.DUE_TO_SUBSCRIBE:
         this.state = StateOfDatatype.SUBSCRIBED;
         this.id = ppp.duid;
         break;

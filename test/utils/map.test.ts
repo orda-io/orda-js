@@ -1,5 +1,5 @@
-import { ortooLogger, OrtooLoggerFactory } from '@ooo/utils/ortoo_logger';
-import { Int64, int64, Uint64 } from '@ooo/types/integer';
+import { ortooLogger } from '@ooo/utils/ortoo_logger';
+import { Int64, int64 } from '@ooo/types/integer';
 import { OooMap } from '@ooo/utils/map';
 import { expect } from 'chai';
 
