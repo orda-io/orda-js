@@ -2,7 +2,8 @@ import { DUID } from '@ooo/types/uid';
 import { CheckPoint } from '@ooo/types/checkpoint';
 import { Uint32 } from '@ooo/types/integer';
 import { Operation, OperationOa } from '@ooo/operations/operation';
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/generated/proto';
+import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
+// import { OrtooStateOfDatatype as StateOfDatatype } from '@ooo/generated/openapi';
 
 export { PushPullPack, PushPullOptions, PPOptions };
 

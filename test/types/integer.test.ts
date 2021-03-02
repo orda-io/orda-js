@@ -1,10 +1,11 @@
 import {
   Int32,
-  int32, Int64,
+  int32,
+  Int64,
   Uint32,
   uint32,
   Uint64,
-  uint64
+  uint64,
 } from '@ooo/types/integer';
 
 import { expect } from 'chai';

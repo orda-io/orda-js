@@ -1,11 +1,13 @@
 import { OrtooLoggerFactory, OrtooLogLevel } from '@ooo/utils/ortoo_logger';
 import { SyncType } from '@ooo/types/client';
 
+export { createLocalClientConfig };
+
 export class ClientConfig {
-  CollectionName: string;
-  SyncType: SyncType;
-  ServerAddr: string;
-  NotificationUri: string;
+  collectionName: string;
+  syncType: SyncType;
+  serverAddr: string;
+  notificationUri: string;
   loggerFactory: OrtooLoggerFactory;
 
   constructor(
@@ -15,10 +17,10 @@ export class ClientConfig {
     notificationUri?: string,
     logLevel?: OrtooLogLevel
   ) {
-    this.CollectionName = collectionName;
-    this.SyncType = SyncType.LOCAL_ONLY;
-    this.ServerAddr = serverAddr ? serverAddr : '';
-    this.NotificationUri = notificationUri ? notificationUri : '';
+    this.collectionName = collectionName;
+    this.syncType = syncType ? syncType : SyncType.LOCAL_ONLY;
+    this.serverAddr = serverAddr ? serverAddr : '';
+    this.notificationUri = notificationUri ? notificationUri : '';
     if (logLevel === undefined) {
       this.loggerFactory = new OrtooLoggerFactory('trace');
     } else {
@@ -31,10 +33,8 @@ function createLocalClientConfig(collectionName: string): ClientConfig {
   return new ClientConfig(
     collectionName,
     SyncType.MANUALLY,
-    'http://127.0.0.1:29065',
+    'http://127.0.0.1:29862',
     'ws://127.0.0.1:18881/mqtt',
     'trace'
   );
 }
-
-export { createLocalClientConfig };

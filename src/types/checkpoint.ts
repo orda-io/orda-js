@@ -1,9 +1,7 @@
 import { NumericType, uint64, Uint64 } from '@ooo/types/integer';
-import { definitions } from '@ooo/generated/openapi';
+import { OrtooCheckPoint as CheckPointOa } from '@ooo/generated/openapi';
 
 export { CheckPoint };
-
-type CheckPointOa = definitions['ortooCheckPoint'];
 
 class CheckPoint {
   cseq: Uint64;

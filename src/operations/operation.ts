@@ -1,9 +1,8 @@
 import { OperationId, TypeOfOperation } from '@ooo/types/operation';
-import { definitions } from '@ooo/generated/openapi';
+import { OrtooOperation as OperationOa } from '@ooo/generated/openapi';
 
+export type { OperationOa };
 export { Operation };
-
-export type OperationOa = definitions['ortooOperation'];
 
 abstract class Operation {
   id: OperationId;

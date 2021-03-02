@@ -11,6 +11,7 @@ import { ErrDatatype } from '@ooo/errors/datatype';
 import { OrtooError } from '@ooo/errors/error';
 import { Wire } from '@ooo/datatypes/wired';
 import { SnapshotOperation } from '@ooo/operations/meta';
+import { DatatypeHandlers } from '@ooo/handlers/handlers';
 
 export { _Counter };
 export type { CounterTx, Counter };
@@ -32,7 +33,8 @@ class _Counter extends Datatype implements Counter {
     ctx: ClientContext,
     key: string,
     state: StateOfDatatype,
-    wire?: Wire
+    wire?: Wire,
+    handlers?: DatatypeHandlers
   ) {
     super(ctx, key, TypeOfDatatype.COUNTER, state, wire);
     this.snap = new CounterSnapshot(this.ctx);

@@ -5,9 +5,10 @@ import { ClientContext } from '@ooo/context';
 import { Counter } from '@ooo/datatypes/counter';
 import { IDatatype } from '@ooo/datatypes/datatype';
 import { WireManager } from '@ooo/managers/wire';
-import { GrpcWireManager } from '@ooo/managers/grpc_wire';
+import { GrpcGatewayWireManager } from '@ooo/managers/grpc_gateway_wire';
 import { ClientModel, SyncType } from '@ooo/types/client';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
+import { DatatypeHandlers } from '@ooo/handlers/handlers';
 
 export { Client };
 
@@ -20,15 +21,16 @@ class Client {
   private state: clientState;
   private readonly model: ClientModel;
   private readonly ctx: ClientContext;
-  private wireManager!: WireManager;
+  private wireManager?: WireManager;
   private dataManager: DataManager;
+  private handlers?: DatatypeHandlers;
 
   constructor(conf: ClientConfig, alias: string, wireManager?: WireManager) {
     this.model = new ClientModel(
       new CUID(),
       alias,
-      conf.CollectionName,
-      conf.SyncType
+      conf.collectionName,
+      conf.syncType
     );
 
     this.ctx = new ClientContext(this.model, conf.loggerFactory);
@@ -37,14 +39,20 @@ class Client {
     if (wireManager) {
       this.wireManager = wireManager;
     } else {
-      if (conf.SyncType !== SyncType.LOCAL_ONLY) {
-        this.wireManager = new GrpcWireManager(conf, this.ctx);
+      if (conf.syncType !== SyncType.LOCAL_ONLY) {
+        this.wireManager = new GrpcGatewayWireManager(conf, this.ctx);
       }
     }
 
     this.dataManager = new DataManager(this.ctx, this.wireManager);
     this.wireManager?.addDataManager(this.ctx, this.dataManager);
-    this.ctx.L.debug(`created Client ${alias}`);
+    this.ctx.L.debug(`created Client '${alias}'`);
+  }
+
+  public async connect(): Promise<boolean> {
+    return this.wireManager
+      ? this.wireManager.connect()
+      : Promise.resolve(true);
   }
 
   // private async sendClientRequest(): Promise<void> {
@@ -79,44 +87,55 @@ class Client {
     return this.state === clientState.CONNECTED;
   }
 
-  public createCounter(key: string): Counter {
+  public createCounter(key: string, handlers?: DatatypeHandlers): Counter {
     return this.subscribeOrCreateDatatype(
       key,
       TypeOfDatatype.COUNTER,
-      StateOfDatatype.DUE_TO_CREATE
+      StateOfDatatype.DUE_TO_CREATE,
+      handlers
     ) as Counter;
   }
 
-  public subscribeCounter(key: string): Counter {
+  public subscribeCounter(key: string, handlers?: DatatypeHandlers): Counter {
     return this.subscribeOrCreateDatatype(
       key,
       TypeOfDatatype.COUNTER,
-      StateOfDatatype.DUE_TO_SUBSCRIBE
+      StateOfDatatype.DUE_TO_SUBSCRIBE,
+      handlers
     ) as Counter;
   }
 
   /**
    * subscribe Counter with the given key if it exists in the ortoo server;
-   * otherwise, the Ortoo server is going to create and subcribe a new Counter of the given key.
+   * otherwise, the Ortoo server is going to create and subscribe a new Counter of the given key.
    * @param {string} key
+   * @param {DatatypeHandlers} handlers
    * @returns {Counter}
    */
-  public subscribeOrCreateCounter(key: string): Counter {
+  public subscribeOrCreateCounter(
+    key: string,
+    handlers?: DatatypeHandlers
+  ): Counter {
     return this.subscribeOrCreateDatatype(
       key,
       TypeOfDatatype.COUNTER,
-      StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE
+      StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE,
+      handlers
     ) as Counter;
   }
 
   private subscribeOrCreateDatatype(
     key: string,
     type: TypeOfDatatype,
-    state: StateOfDatatype
+    state: StateOfDatatype,
+    handlers?: DatatypeHandlers
   ): IDatatype {
-    return this.dataManager.subscribeOrCreateDatatype(key, type, state);
-
-    // let datatype: Datatype;
+    return this.dataManager.subscribeOrCreateDatatype(
+      key,
+      type,
+      state,
+      handlers
+    );
   }
 
   public sync(): Promise<void> {

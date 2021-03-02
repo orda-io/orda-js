@@ -1,7 +1,10 @@
 import { DUID } from '@ooo/types/uid';
 import { OperationId } from '@ooo/types/operation';
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/generated/proto';
-export { StateOfDatatype, TypeOfDatatype } from '@ooo/generated/proto';
+import {
+  OrtooStateOfDatatype as StateOfDatatype,
+  OrtooTypeOfDatatype as TypeOfDatatype,
+} from '@ooo/generated/openapi';
+export { StateOfDatatype, TypeOfDatatype };
 
 export class DatatypeMeta {
   key: string;

@@ -1,13 +1,15 @@
 import { OrtooLoggerFactory } from '@ooo/utils/ortoo_logger';
 import { ClientContext } from '@ooo/context';
-import { ClientModel } from '@ooo/types/client';
+import { ClientModel, SyncType } from '@ooo/types/client';
 import { CUID } from '@ooo/types/uid';
 import { Suite } from 'mocha';
 import { Client } from '@ooo/client';
 import { ClientConfig } from '@ooo/config';
 import { WireManager } from '@ooo/managers/wire';
 import { MD5 } from 'crypto-js';
-import { SyncType } from '@ooo/generated/proto';
+import { Api, ApiConfig } from '@ooo/generated/openapi';
+import * as Assert from 'assert';
+
 export { helper };
 
 const testLoggerFactory = new OrtooLoggerFactory('trace');
@@ -35,6 +37,27 @@ const helper = {
     return `client-${name}`;
   },
 
+  async createCollection(conf: ClientConfig) {
+    const apiConfig: ApiConfig = {
+      baseUrl: conf.serverAddr,
+    };
+    const ortoo = new Api(apiConfig);
+    await ortoo.api
+      .ortooServiceCreateCollections(conf.collectionName)
+      .then((response) => {
+        this.L.debug(
+          `Collection '${response.data.collection}' is successfully created`
+        );
+      })
+      .catch((err) => {
+        Assert.fail(err);
+        // this.L.error(err);
+      })
+      .finally(() => {
+        this.L.debug('finished createCollection()');
+      });
+  },
+
   createClientContext(s: Suite): ClientContext {
     const cm = new ClientModel(
       new CUID(),
@@ -43,5 +66,18 @@ const helper = {
       SyncType.LOCAL_ONLY
     );
     return new ClientContext(cm, testLoggerFactory);
+  },
+
+  createLocalClientConfig(
+    collectionName: string,
+    syncType?: SyncType
+  ): ClientConfig {
+    return new ClientConfig(
+      collectionName,
+      syncType ? syncType : SyncType.MANUALLY,
+      'http://127.0.0.1:29862',
+      'ws://127.0.0.1:18881/mqtt',
+      'trace'
+    );
   },
 };

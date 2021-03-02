@@ -10,7 +10,7 @@ export class NotificationManager {
 
   constructor(conf: ClientConfig, ctx: ClientContext) {
     this.ctx = ctx;
-    this.notificationUri = conf.NotificationUri;
+    this.notificationUri = conf.notificationUri;
   }
 
   public connect(): void {

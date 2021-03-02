@@ -11,7 +11,7 @@ export type { WireManager };
 interface WireManager extends Wire {
   addDataManager(ctx: ClientContext, dataManager: DataManager): void;
 
-  connect(): void;
+  connect(): Promise<boolean>;
 
   sync(): void;
 

@@ -1,8 +1,10 @@
-export {}
+import { createLocalClientConfig } from '@ooo/config';
+
+export {};
 
 describe('Test notification manager', () => {
   it('Can connect MQTT server', async () => {
-    // const conf = createLocalClientConfig('hello_world');
+    const conf = createLocalClientConfig('hello_world');
     // const clientModel = new ClientModel(
     //   new CUID(),
     //   it.name,
