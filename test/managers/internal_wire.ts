@@ -8,7 +8,7 @@ import {
   PushPullOptions,
   PushPullPack,
 } from '@ooo/types/pushpullpack';
-import { uint64, Uint64 } from '@ooo/types/integer';
+import { uint64 } from '@ooo/types/integer';
 import { Operation } from '@ooo/operations/operation';
 import { OrtooLogger } from '@ooo/utils/ortoo_logger';
 import { OooMap } from '@ooo/utils/map';
@@ -132,8 +132,8 @@ class InternalWireManager implements WireManager {
     //
   }
 
-  connect(): void {
-    //
+  async exchangeClient(): Promise<void> {
+    return Promise.resolve();
   }
 
   deliverTransaction(datatype: WiredDatatype): void {
@@ -152,5 +152,9 @@ class InternalWireManager implements WireManager {
   addDataManager(ctx: ClientContext, dataManager: DataManager): void {
     this.loggerMap.set(ctx.cuid, ctx.L);
     this.dataManagers.set(ctx.cuid, dataManager);
+  }
+
+  close(): void {
+    //
   }
 }

@@ -63,6 +63,8 @@ abstract class WiredDatatype extends TransactionDatatype {
     }
   }
 
+  abstract callOnRemoteOperations(opList: unknown[]): void;
+
   private syncCheckPoint(newCheckPoint: CheckPoint): void {
     const oldCheckPoint = this.checkPoint.clone();
     if (this.checkPoint.cseq.compare(newCheckPoint.cseq) < 0) {

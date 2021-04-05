@@ -6,11 +6,12 @@ import {
   Uint64,
 } from '@ooo/types/integer';
 import { CUID } from '@ooo/types/uid';
-import { definitions } from '@ooo/generated/openapi';
+import {
+  OrtooOperationID as OperationIdOa,
+  OrtooTypeOfOperation as TypeOfOperation,
+} from '@ooo/generated/openapi';
 
-export { TypeOfOperation } from '@ooo/generated/proto';
-
-type OperationIdOa = definitions['ortooOperationID'];
+export { TypeOfOperation };
 
 export class OperationId {
   era: Uint32;

@@ -19,7 +19,7 @@ module.exports = function () {
     devtool: 'source-map',
     module: {},
     optimization: {
-      minimize: false, // TODO: should be true
+      minimize: true, // TODO: should be true
       minimizer: [
         new terser({
           // sourceMap: false,

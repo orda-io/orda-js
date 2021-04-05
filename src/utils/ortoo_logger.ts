@@ -1,3 +1,5 @@
+import { isBrowser } from '@ooo/utils/browser_or_node';
+
 export type { OrtooLogger, OrtooLogLevel };
 export { OrtooLoggerFactory, ortooLogger };
 
@@ -52,7 +54,7 @@ const posToBackend = () => {
   };
 };
 
-const REGEX = /(\(.*\))/g;
+const REGEX = /([at].*)/g;
 
 function getFilePos(whichStack: number): string {
   const errStr = new Error()?.stack;
@@ -60,14 +62,13 @@ function getFilePos(whichStack: number): string {
     const results = errStr.match(REGEX);
     let errPos =
       results && results.length > whichStack + 1 ? results[whichStack] : '';
-    errPos = errPos.replace(/\\/g, '/');
+    errPos = errPos.replace(/\\/g, '/').replace(/[(|)]/g, '');
     const begin = Math.max(
       errPos.indexOf('/src/'),
       errPos.indexOf('/test/'),
       0
     );
-    errPos = errPos.substring(begin, errPos.length - 1);
-    return errPos;
+    return errPos.substring(begin);
   }
   return '';
 }
@@ -76,11 +77,6 @@ function withFilePos(fn: logFunction, header?: string): logFunction {
   const errPos = getFilePos(3);
   return fn.bind(null, `${errPos} |${header}`);
 }
-
-const checkBrowser = new Function(
-  'try {return this===window;}catch(e){ return false;}'
-);
-const isBrowser = checkBrowser();
 
 class OrtooConsole implements IConsole {
   private readonly name: string;
@@ -160,7 +156,7 @@ class OrtooConsole implements IConsole {
   }
 
   get info(): logFunction {
-    if (this.isSilent('debug')) {
+    if (this.isSilent('info')) {
       return this.dumb;
     }
     if (this.withPos && !isBrowser) {

@@ -2,7 +2,6 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
     'plugin:@typescript-eslint/recommended',
-    'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
   ],
   plugins: ['@typescript-eslint', 'prettier'],
@@ -36,4 +35,5 @@ module.exports = {
       { path: 'always', types: 'never', lib: 'never' },
     ],
   },
+  ignorePatterns: ['dist/', 'node_modules/'],
 };

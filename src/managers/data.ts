@@ -5,6 +5,7 @@ import { _Counter } from '@ooo/datatypes/counter';
 import { PushPullPack } from '@ooo/types/pushpullpack';
 import { Mutex } from 'async-mutex';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
+import { DatatypeHandlers } from '@ooo/handlers/handlers';
 
 export class DataManager {
   private ctx: ClientContext;
@@ -36,7 +37,8 @@ export class DataManager {
   subscribeOrCreateDatatype(
     key: string,
     type: TypeOfDatatype,
-    state: StateOfDatatype
+    state: StateOfDatatype,
+    handlers?: DatatypeHandlers
   ): Datatype {
     let data: Datatype | undefined = this.dataMap.get(key);
     if (data) {
@@ -46,7 +48,7 @@ export class DataManager {
 
     switch (type) {
       case TypeOfDatatype.COUNTER:
-        data = new _Counter(this.ctx, key, state, this.wireManager);
+        data = new _Counter(this.ctx, key, state, this.wireManager, handlers);
         this.dataMap.set(key, data);
         break;
       case TypeOfDatatype.MAP:

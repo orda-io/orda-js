@@ -7,7 +7,7 @@ describe('Test Counter', function (this: Suite): void {
     const client = helper.getLocalClient(helper.ctName(this));
     const counter = client.createCounter(helper.dtName(this));
     counter.increase(int32(Int32.MAX_VALUE).asNumber());
-
+    counter.state;
     helper.L.info(counter.get());
     counter.increase();
     helper.L.info(counter.get());

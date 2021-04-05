@@ -9,8 +9,11 @@ import {
   StateOfDatatype,
   TypeOfDatatype,
 } from '@ooo/types/datatype';
+import { OrtooError } from '@ooo/errors/error';
 
-export abstract class BaseDatatype {
+export { BaseDatatype };
+
+abstract class BaseDatatype {
   private _id: DUID;
   key: string;
   type: TypeOfDatatype;
@@ -51,8 +54,17 @@ export abstract class BaseDatatype {
       return;
     }
     this.ctx.L.debug(`[BASE] change state: ${this._state} -> ${state}`);
+    const oldState = this._state;
     this._state = state;
+    this.callOnStateChange(oldState, this._state);
   }
+
+  abstract callOnStateChange(
+    oldState: StateOfDatatype,
+    newState: StateOfDatatype
+  ): void;
+
+  abstract callOnErrors(...errs: OrtooError[]): void;
 
   abstract executeLocalOp(op: Operation): unknown;
 
