@@ -58,6 +58,10 @@ const helper = {
       });
   },
 
+  sleep(sec: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, sec * 1000));
+  },
+
   createClientContext(s: Suite): ClientContext {
     const cm = new ClientModel(
       new CUID(),

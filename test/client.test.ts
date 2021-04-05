@@ -4,12 +4,15 @@ import { expect } from 'chai';
 import { SyncType } from '@ooo/types/client';
 
 describe('Test Clients', () => {
-  it('Can create a client', async () => {
+  it('Can connect a client', async () => {
     const conf1 = helper.createLocalClientConfig('NOT_EXIST');
 
     const client1: Client = new Client(conf1, 'client1');
-    const connected1 = await client1.connect();
-    expect(connected1).to.false;
+    try {
+      await client1.connect();
+      expect.fail();
+    } catch (e) {}
+    expect(client1.isConnected()).to.false;
 
     const conf = helper.createLocalClientConfig(
       'hello_world',
@@ -17,12 +20,14 @@ describe('Test Clients', () => {
     );
     await helper.createCollection(conf);
     const client2: Client = new Client(conf, 'client2');
-    const connected2 = await client2.connect();
-    expect(connected2).to.true;
+    try {
+      await client2.connect();
+    } catch (e) {
+      expect.fail();
+    }
+    expect(client2.isConnected()).to.true;
 
-    // await client.connect();
-    // client.isConnected();
-    // await client.sendClientRequest();
-    // Logger.log(client);
+    client1.close();
+    client2.close();
   });
 });

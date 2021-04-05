@@ -3,6 +3,7 @@ import { OrtooLogger } from '@ooo/utils/ortoo_logger';
 export const BaseErrorCode = {
   Common: 0,
   Datatype: 100,
+  Client: 200,
 };
 
 export class OrtooError extends Error {

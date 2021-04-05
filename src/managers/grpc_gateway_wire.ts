@@ -12,6 +12,8 @@ import {
   OrtooHeader,
   OrtooRequestType,
 } from '@ooo/generated/openapi';
+import { ErrClient } from '@ooo/errors/client';
+import { NotifyManager } from '@ooo/managers/notify';
 
 export { GrpcGatewayWireManager };
 
@@ -22,6 +24,7 @@ class GrpcGatewayWireManager implements WireManager {
   private dataManager?: DataManager;
   private openApi: Api<any>;
   private ctx: ClientContext;
+  private notifyManager: NotifyManager;
 
   constructor(conf: ClientConfig, ctx: ClientContext) {
     this.ctx = ctx;
@@ -30,6 +33,7 @@ class GrpcGatewayWireManager implements WireManager {
       baseUrl: conf.serverAddr,
     };
     this.openApi = new Api(apiConfig);
+    this.notifyManager = new NotifyManager(conf, ctx);
   }
 
   addDataManager(ctx: ClientContext, dataManager: DataManager): void {
@@ -43,7 +47,7 @@ class GrpcGatewayWireManager implements WireManager {
     };
   }
 
-  public async connect(): Promise<boolean> {
+  public async exchangeClient(): Promise<void> {
     const req: OrtooClientMessage = {
       header: this.createHeader(OrtooRequestType.CLIENTS),
       collection: this.ctx.client.collection,
@@ -59,15 +63,16 @@ class GrpcGatewayWireManager implements WireManager {
       );
       const clientMsg = result.data;
       this.ctx.L.debug(
-        `connected by client '${clientMsg.clientAlias}'(${clientMsg.cuid}) in collection '${clientMsg.collection}'.`
+        `received ClientMessage '${clientMsg.clientAlias}'(${clientMsg.cuid}) in collection '${clientMsg.collection}'.`
       );
+      this.notifyManager.connect();
     } catch (e) {
-      this.ctx.L.error(e.error.message);
-      return Promise.resolve(false);
+      const err = new ErrClient.Connect(this.ctx.L, e.error.message);
+      return Promise.reject(err);
     } finally {
-      this.ctx.L.debug('finished connection');
+      this.ctx.L.debug('finished exchangeClient()');
     }
-    return Promise.resolve(true);
+    return Promise.resolve();
   }
 
   private connectCatch(error: any) {
@@ -95,5 +100,10 @@ class GrpcGatewayWireManager implements WireManager {
 
   exchangePushPull(...pushPullList: PushPullPack[]): void {
     //
+  }
+
+  close(): void {
+    this.notifyManager.disconnect();
+    this.ctx.L.debug(`closed grpc_gateway_wire`);
   }
 }

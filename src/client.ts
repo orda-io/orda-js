@@ -21,9 +21,8 @@ class Client {
   private state: clientState;
   private readonly model: ClientModel;
   private readonly ctx: ClientContext;
-  private wireManager?: WireManager;
-  private dataManager: DataManager;
-  private handlers?: DatatypeHandlers;
+  private readonly wireManager?: WireManager;
+  private readonly dataManager: DataManager;
 
   constructor(conf: ClientConfig, alias: string, wireManager?: WireManager) {
     this.model = new ClientModel(
@@ -49,10 +48,23 @@ class Client {
     this.ctx.L.debug(`created Client '${alias}'`);
   }
 
-  public async connect(): Promise<boolean> {
-    return this.wireManager
-      ? this.wireManager.connect()
-      : Promise.resolve(true);
+  public async connect(): Promise<void> {
+    if (this.state === clientState.NOT_CONNECTED && this.wireManager) {
+      return this.wireManager
+        .exchangeClient()
+        .then(() => {
+          this.state = clientState.CONNECTED;
+        })
+        .catch(() => {
+          this.state = clientState.NOT_CONNECTED;
+        });
+    }
+    return Promise.resolve();
+  }
+
+  public close(): void {
+    this.wireManager?.close();
+    this.ctx.L.debug(`closed client '${this.ctx.client.alias}'`);
   }
 
   // private async sendClientRequest(): Promise<void> {

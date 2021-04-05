@@ -1,5 +1,5 @@
-export type { ClientConfig } from '@ooo/config';
-export type { Client } from '@ooo/client';
+export { ClientConfig } from '@ooo/config';
+export { Client } from '@ooo/client';
 
-export { SyncType } from '@ooo/types/client';
+export type { SyncType } from '@ooo/types/client';
 export { createLocalClientConfig } from '@ooo/config';

@@ -24,7 +24,13 @@ export interface OrtooClientMessage {
   /** @format byte */
   cuid?: string;
   clientAlias?: string;
+  clientType?: OrtooClientType;
   syncType?: OrtooSyncType;
+}
+
+export enum OrtooClientType {
+  PERSISTENT = "PERSISTENT",
+  EPHEMERAL = "EPHEMERAL",
 }
 
 export interface OrtooCollectionMessage {
@@ -43,6 +49,7 @@ export interface OrtooDatatypeMeta {
 
 export interface OrtooHeader {
   version?: string;
+  agent?: string;
   type?: OrtooRequestType;
 }
 
@@ -172,7 +179,7 @@ export interface FullRequestParams extends Omit<RequestInit, "body"> {
   /** query params */
   query?: QueryParamsType;
   /** format of response (i.e. response.json() -> format: "json") */
-  format?: keyof Omit<Body, "body" | "bodyUsed">;
+  format?: ResponseFormat;
   /** request body */
   body?: unknown;
   /** base url */

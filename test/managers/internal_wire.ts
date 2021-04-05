@@ -132,8 +132,8 @@ class InternalWireManager implements WireManager {
     //
   }
 
-  async connect(): Promise<boolean> {
-    return Promise.resolve(true);
+  async exchangeClient(): Promise<void> {
+    return Promise.resolve();
   }
 
   deliverTransaction(datatype: WiredDatatype): void {
@@ -152,5 +152,9 @@ class InternalWireManager implements WireManager {
   addDataManager(ctx: ClientContext, dataManager: DataManager): void {
     this.loggerMap.set(ctx.cuid, ctx.L);
     this.dataManagers.set(ctx.cuid, dataManager);
+  }
+
+  close(): void {
+    //
   }
 }

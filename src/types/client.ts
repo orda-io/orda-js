@@ -22,10 +22,6 @@ class ClientModel {
     this.syncType = syncType;
   }
 
-  getCuidAsArray(): Uint8Array {
-    return this.cuid.AsUint8Array;
-  }
-
   getLogName(): string {
     return `${this.collection}:${this.alias}:${this.cuid.toShortString()}`;
   }

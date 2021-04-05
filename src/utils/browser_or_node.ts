@@ -7,4 +7,5 @@ const isBrowser = checkBrowser();
 
 if (!isBrowser) {
   global.fetch = require('node-fetch');
+  global.WebSocket = require('ws');
 }
