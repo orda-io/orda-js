@@ -5,7 +5,7 @@ import {
   uint64,
   Uint64,
 } from '@ooo/types/integer';
-import { CUID } from '@ooo/types/uid';
+import { createNullUID, CUID, strcmp } from '@ooo/types/uid';
 import {
   OrtooOperationID as OperationIdOa,
   OrtooTypeOfOperation as TypeOfOperation,
@@ -30,7 +30,7 @@ export class OperationId {
     if (cuid) {
       this.cuid = cuid;
     } else {
-      this.cuid = new CUID(true);
+      this.cuid = createNullUID();
     }
     this.seq = uint64(seq);
   }
@@ -39,7 +39,7 @@ export class OperationId {
     return (
       `${this.era.toString(10)}` +
       `:${this.lamport.toString(10)}` +
-      `:${this.cuid.toShortString()}` +
+      `:${this.cuid}` +
       `:${this.seq.toString(10)}`
     );
   }
@@ -85,7 +85,7 @@ export class OperationId {
     } else if (diffLamport < 0) {
       return -1;
     }
-    return this.cuid.compare(other.cuid);
+    return strcmp(this.cuid, other.cuid);
   }
 
   toOpenApi(): OperationIdOa {
@@ -99,7 +99,7 @@ export class OperationId {
 
   static fromOpenApi(oa: OperationIdOa): OperationId {
     return new OperationId(
-      new CUID(false, oa.CUID),
+      oa.CUID,
       uint64(oa.lamport),
       uint32(oa.era),
       uint64(oa.seq)

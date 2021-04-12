@@ -28,10 +28,10 @@ export class DataManager {
         pushPullPackList.push(ppp);
       }
     });
-    return new Promise<void>((resolve, reject) => {
-      this.wireManager?.exchangePushPull(...pushPullPackList);
-      resolve();
-    });
+    if (this.wireManager) {
+      return this.wireManager.exchangePushPull(...pushPullPackList);
+    }
+    return Promise.resolve();
   }
 
   subscribeOrCreateDatatype(

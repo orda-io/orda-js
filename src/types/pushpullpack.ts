@@ -3,7 +3,11 @@ import { CheckPoint } from '@ooo/types/checkpoint';
 import { Uint32 } from '@ooo/types/integer';
 import { Operation, OperationOa } from '@ooo/operations/operation';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-// import { OrtooStateOfDatatype as StateOfDatatype } from '@ooo/generated/openapi';
+import {
+  OrtooCheckPoint,
+  OrtooOperation,
+  OrtooPushPullPack,
+} from '@ooo/generated/openapi';
 
 export { PushPullPack, PushPullOptions, PPOptions };
 
@@ -100,11 +104,11 @@ class PushPullPack {
   }
 
   toString(): string {
-    let ret = `{ ${this.type} ${
-      this.key
-    }(${this.duid.toShortString()}) ${this.checkPoint.toString()}, era:${
-      this.era
-    } ${PPOptions.toString(this.option)} (${this.opList.length})[ `;
+    let ret = `{ ${this.type} ${this.key}(${
+      this.duid
+    }) ${this.checkPoint.toString()}, era:${this.era} ${PPOptions.toString(
+      this.option
+    )} (${this.opList.length})[ `;
     for (const op of this.opList) {
       const opStr = op.toString();
       ret = ret.concat(opStr);
@@ -116,6 +120,18 @@ class PushPullPack {
     const pbOpList = new Array<OperationOa>();
     this.opList.forEach((op) => pbOpList.push(op.toOpenApi()));
     return pbOpList;
+  }
+
+  toOpenApi(): OrtooPushPullPack {
+    return {
+      DUID: this.duid,
+      key: this.key,
+      option: this.option,
+      checkPoint: this.checkPoint.toOpenApi(),
+      era: this.era.asNumber(),
+      type: this.type,
+      operations: this.operationOaList,
+    };
   }
 
   // toPb(): PushPullPackPb {

@@ -20,8 +20,6 @@ export interface OrtooCheckPoint {
 export interface OrtooClientMessage {
   header?: OrtooHeader;
   collection?: string;
-
-  /** @format byte */
   cuid?: string;
   clientAlias?: string;
   clientType?: OrtooClientType;
@@ -39,8 +37,6 @@ export interface OrtooCollectionMessage {
 
 export interface OrtooDatatypeMeta {
   key?: string;
-
-  /** @format byte */
   DUID?: string;
   opID?: OrtooOperationID;
   typeOf?: OrtooTypeOfDatatype;
@@ -67,8 +63,6 @@ export interface OrtooOperationID {
 
   /** @format uint64 */
   lamport?: string;
-
-  /** @format byte */
   CUID?: string;
 
   /** @format uint64 */
@@ -78,14 +72,11 @@ export interface OrtooOperationID {
 export interface OrtooPushPullMessage {
   header?: OrtooHeader;
   collection?: string;
-
-  /** @format byte */
   cuid?: string;
   PushPullPacks?: OrtooPushPullPack[];
 }
 
 export interface OrtooPushPullPack {
-  /** @format byte */
   DUID?: string;
   key?: string;
 
@@ -95,9 +86,7 @@ export interface OrtooPushPullPack {
 
   /** @format int64 */
   era?: number;
-
-  /** @format int32 */
-  type?: number;
+  type?: OrtooTypeOfDatatype;
   operations?: OrtooOperation[];
 }
 
@@ -315,7 +304,11 @@ export class HttpClient<SecurityDataType = unknown> {
     cancelToken,
     ...params
   }: FullRequestParams): Promise<HttpResponse<T, E>> => {
-    const secureParams = (secure && this.securityWorker && (await this.securityWorker(this.securityData))) || {};
+    const secureParams =
+      ((typeof secure === "boolean" ? secure : this.baseApiParams.secure) &&
+        this.securityWorker &&
+        (await this.securityWorker(this.securityData))) ||
+      {};
     const requestParams = this.mergeRequestParams(params, secureParams);
     const queryString = query && this.toQueryString(query);
     const payloadFormatter = this.contentFormatters[type || ContentType.Json];
@@ -367,10 +360,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags OrtooService
-     * @name OrtooServiceCreateCollections
+     * @name OrtooServiceCreateCollection
      * @request PUT:/api/v1/collections/{collection}
      */
-    ortooServiceCreateCollections: (collection: string, params: RequestParams = {}) =>
+    ortooServiceCreateCollection: (collection: string, params: RequestParams = {}) =>
       this.request<OrtooCollectionMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}`,
         method: "PUT",
@@ -439,6 +432,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "POST",
         body: body,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags OrtooService
+     * @name OrtooServiceResetCollection
+     * @request PUT:/api/v1/collections/{collection}/reset
+     */
+    ortooServiceResetCollection: (collection: string, params: RequestParams = {}) =>
+      this.request<OrtooCollectionMessage, RpcStatus>({
+        path: `/api/v1/collections/${collection}/reset`,
+        method: "PUT",
         format: "json",
         ...params,
       }),

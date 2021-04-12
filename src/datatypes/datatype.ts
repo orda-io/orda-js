@@ -4,6 +4,7 @@ import { Wire, WiredDatatype } from '@ooo/datatypes/wired';
 import { SnapshotOperation } from '@ooo/operations/meta';
 import { DatatypeHandlers } from '@ooo/handlers/handlers';
 import { OrtooError } from '@ooo/errors/error';
+import { encodeStateOfDatatype } from '@ooo/generated/proto.enum';
 
 export { Datatype };
 export type { IDatatype };
@@ -59,7 +60,10 @@ abstract class Datatype extends WiredDatatype {
       return;
     }
     this.sentenceLocalInTx(
-      new SnapshotOperation(this.state, this.getSnapshot().toJSONString())
+      new SnapshotOperation(
+        encodeStateOfDatatype[this.state],
+        this.getSnapshot().toJSONString()
+      )
     );
   }
 }

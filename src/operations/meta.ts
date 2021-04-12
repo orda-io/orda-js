@@ -5,19 +5,19 @@ import { StateOfDatatype } from '@ooo/types/datatype';
 export { TransactionOperation, SnapshotOperation };
 
 class snapshotBody {
-  state: StateOfDatatype;
-  snapshot: string;
+  State: number;
+  Snapshot: string;
 
-  constructor(state: StateOfDatatype, snapshot: string) {
-    this.state = state;
-    this.snapshot = snapshot;
+  constructor(state: number, snapshot: string) {
+    this.State = state;
+    this.Snapshot = snapshot;
   }
 }
 
 class SnapshotOperation extends Operation {
   body: snapshotBody;
 
-  constructor(state: StateOfDatatype, snapshot: string) {
+  constructor(state: number, snapshot: string) {
     super(TypeOfOperation.SNAPSHOT);
     this.body = new snapshotBody(state, snapshot);
   }

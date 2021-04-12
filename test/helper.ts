@@ -1,7 +1,7 @@
 import { OrtooLoggerFactory } from '@ooo/utils/ortoo_logger';
 import { ClientContext } from '@ooo/context';
 import { ClientModel, SyncType } from '@ooo/types/client';
-import { CUID } from '@ooo/types/uid';
+import { createUID } from '@ooo/types/uid';
 import { Suite } from 'mocha';
 import { Client } from '@ooo/client';
 import { ClientConfig } from '@ooo/config';
@@ -13,7 +13,7 @@ import * as Assert from 'assert';
 export { helper };
 
 const testLoggerFactory = new OrtooLoggerFactory('trace');
-
+const TestDB = 'ortoo-js-test';
 const helper = {
   loggerFactory: testLoggerFactory,
 
@@ -37,13 +37,13 @@ const helper = {
     return `client-${name}`;
   },
 
-  async createCollection(conf: ClientConfig) {
+  async resetCollection(conf: ClientConfig) {
     const apiConfig: ApiConfig = {
       baseUrl: conf.serverAddr,
     };
     const ortoo = new Api(apiConfig);
     await ortoo.api
-      .ortooServiceCreateCollections(conf.collectionName)
+      .ortooServiceResetCollection(conf.collectionName)
       .then((response) => {
         this.L.debug(
           `Collection '${response.data.collection}' is successfully created`
@@ -64,7 +64,7 @@ const helper = {
 
   createClientContext(s: Suite): ClientContext {
     const cm = new ClientModel(
-      new CUID(),
+      createUID(),
       s.title.replace(/\s/g, ''),
       'test_collection',
       SyncType.LOCAL_ONLY
@@ -72,7 +72,11 @@ const helper = {
     return new ClientContext(cm, testLoggerFactory);
   },
 
-  createLocalClientConfig(
+  createTestClientConfig(syncType?: SyncType): ClientConfig {
+    return this.createClientConfig(TestDB, syncType);
+  },
+
+  createClientConfig(
     collectionName: string,
     syncType?: SyncType
   ): ClientConfig {

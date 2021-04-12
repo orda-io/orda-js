@@ -1,4 +1,4 @@
-import { CUID } from '@ooo/types/uid';
+import { createUID, CUID } from '@ooo/types/uid';
 import { ClientConfig } from '@ooo/config';
 import { DataManager } from '@ooo/managers/data';
 import { ClientContext } from '@ooo/context';
@@ -26,7 +26,7 @@ class Client {
 
   constructor(conf: ClientConfig, alias: string, wireManager?: WireManager) {
     this.model = new ClientModel(
-      new CUID(),
+      createUID(),
       alias,
       conf.collectionName,
       conf.syncType

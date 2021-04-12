@@ -1,6 +1,6 @@
 import { createLocalClientConfig } from '@ooo/config';
 import { ClientModel, SyncType } from '@ooo/types/client';
-import { CUID } from '@ooo/types/uid';
+import { createUID, CUID } from '@ooo/types/uid';
 import { ClientContext } from '@ooo/context';
 import { helper } from '@test/helper';
 import { NotifyManager } from '@ooo/managers/notify';
@@ -12,7 +12,7 @@ describe('Test Notify Manager', () => {
   it('Can connect EMQX server', async () => {
     const conf = createLocalClientConfig('hello_world');
     const clientModel = new ClientModel(
-      new CUID(),
+      createUID(),
       it.name,
       'hello_world',
       SyncType.NOTIFIABLE
@@ -25,9 +25,6 @@ describe('Test Notify Manager', () => {
     }, 2000);
     const disconnect = sinon.spy(notifyManager, 'onMessageArrived');
     notifyManager.subscribe('ortoo-js/test');
-
-    await helper.sleep(2);
-
     notifyManager.disconnect();
     // sinon.assert.calledOnce(disconnect);
   });
