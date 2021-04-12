@@ -16,13 +16,6 @@ assignees: ''
 ----
 > describe briefly why you would like to add
 
-
-### How to do?
-----
-> describe briefly how you plan to proceed (itemize if possible)
-  - [ ] ...
-  - [ ] ...
-
 ### Checklists
  - [ ] Did you add labels?
  - [ ] Did you assign project? 
