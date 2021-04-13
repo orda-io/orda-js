@@ -1,4 +1,4 @@
-import { createUID, CUID } from '@ooo/types/uid';
+import { createUID } from '@ooo/types/uid';
 import { ClientConfig } from '@ooo/config';
 import { DataManager } from '@ooo/managers/data';
 import { ClientContext } from '@ooo/context';
@@ -66,30 +66,6 @@ class Client {
     this.wireManager?.close();
     this.ctx.L.debug(`closed client '${this.ctx.client.alias}'`);
   }
-
-  // private async sendClientRequest(): Promise<void> {
-  //   const clientRequest = CreateClientRequest(1, this.model);
-  //
-  //   this.ctx.L.info('sendClientRequest3', clientRequest);
-  //   const call = this.grpcClient.processClient(
-  //     clientRequest,
-  //     null,
-  //     (err: grpcWeb.Error, response: ClientResponse) => {
-  //       if (err !== null) {
-  //         this.ctx.L.error(err.message);
-  //         return;
-  //       }
-  //       this.ctx.L.info(`Response:${response}`);
-  //     }
-  //   );
-  //   this.ctx.L.info('end processClient');
-  //
-  //   await call.on('status', (status: grpcWeb.Status) => {
-  //     this.ctx.L.info(`Status:${status.code}`);
-  //     this.ctx.L.info(`Status:${status.details}`);
-  //     this.ctx.L.info(`Status:${status.metadata}`);
-  //   });
-  // }
 
   private getName(): string {
     return this.model.getLogName(); //`${this.model.alias}:${this.model.cuid.toShortString()}`;

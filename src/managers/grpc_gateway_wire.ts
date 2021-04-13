@@ -98,7 +98,7 @@ class GrpcGatewayWireManager implements WireManager {
       cuid: this.ctx.cuid,
       PushPullPacks: ppps,
     };
-    this.ctx.L.debug(`send pushPull: ${JSON.stringify(req)}`);
+    this.ctx.L.debug(`send push: ${JSON.stringify(req)}`);
     try {
       const result = await this.openApi.api.ortooServiceProcessPushPull(
         this.ctx.client.collection,
@@ -106,7 +106,10 @@ class GrpcGatewayWireManager implements WireManager {
         req
       );
       const clientMsg = result.data;
-      this.ctx.L.debug(clientMsg);
+      this.ctx.L.debug(
+        `receive pull: ${JSON.stringify(clientMsg.PushPullPacks)}`
+      );
+      this.dataManager?.applyPushPullPack(clientMsg.PushPullPacks!);
     } catch (e) {
       this.ctx.L.error('fail to exchange push-pull:', e);
     } finally {

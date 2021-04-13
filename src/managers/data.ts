@@ -6,6 +6,7 @@ import { PushPullPack } from '@ooo/types/pushpullpack';
 import { Mutex } from 'async-mutex';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { DatatypeHandlers } from '@ooo/handlers/handlers';
+import { OrtooPushPullPack } from '@ooo/generated/openapi';
 
 export class DataManager {
   private ctx: ClientContext;
@@ -63,10 +64,13 @@ export class DataManager {
     throw new Error('not implemented yet');
   }
 
-  applyPushPullPack(ppp: PushPullPack) {
-    const datatype = this.dataMap.get(ppp.key);
-    if (datatype) {
-      datatype.applyPushPullPack(ppp);
+  applyPushPullPack(pushPullPacks: OrtooPushPullPack[]) {
+    for (const oppp of pushPullPacks) {
+      const ppp = PushPullPack.fromOpenApi(oppp, this.ctx.L);
+      const datatype = this.dataMap.get(ppp.key);
+      if (datatype) {
+        datatype.applyPushPullPack(ppp);
+      }
     }
   }
 }

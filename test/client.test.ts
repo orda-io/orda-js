@@ -29,7 +29,7 @@ describe('Test Clients', function (this: Suite): void {
     client2.close();
   });
 
-  it('Can create a counter', async () => {
+  it('Can subscribe and create a counter', async () => {
     const conf1 = helper.createTestClientConfig();
     await helper.resetCollection(conf1);
 
@@ -41,7 +41,7 @@ describe('Test Clients', function (this: Suite): void {
     }
 
     const counter1 = client1.subscribeOrCreateCounter(helper.dtName(this));
-    counter1.increase();
+    counter1.increase(2);
     await client1.sync();
     client1.close();
 
@@ -50,7 +50,7 @@ describe('Test Clients', function (this: Suite): void {
 
     const counter2 = client2.subscribeOrCreateCounter(helper.dtName(this));
     await client2.sync();
-    helper.L.info(counter2.get());
+    expect(counter2.get()).to.equal(2);
     client2.close();
   });
 });

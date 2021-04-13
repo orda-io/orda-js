@@ -1,6 +1,7 @@
 import { Operation } from '@ooo/operations/operation';
 import { TypeOfOperation } from '@ooo/types/operation';
-import { StateOfDatatype } from '@ooo/types/datatype';
+import { ErrDatatype } from '@ooo/errors/datatype';
+import { OrtooLogger } from '@ooo/utils/ortoo_logger';
 
 export { TransactionOperation, SnapshotOperation };
 
@@ -24,6 +25,15 @@ class SnapshotOperation extends Operation {
 
   getBody(): string {
     return JSON.stringify(this.body);
+  }
+
+  static fromOpenApi(body: string, logger?: OrtooLogger): SnapshotOperation {
+    try {
+      const bodySnapshot: snapshotBody = JSON.parse(body);
+      return new SnapshotOperation(bodySnapshot.State, bodySnapshot.Snapshot);
+    } catch (e) {
+      throw new ErrDatatype.Marshal(logger, e);
+    }
   }
 }
 

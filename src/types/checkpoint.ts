@@ -36,4 +36,8 @@ class CheckPoint {
       cseq: this.cseq.toString(),
     };
   }
+
+  static fromOpenApi(cp: CheckPointOa): CheckPoint {
+    return new CheckPoint(cp.sseq, cp.cseq);
+  }
 }
