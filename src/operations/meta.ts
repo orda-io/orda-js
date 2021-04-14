@@ -1,29 +1,39 @@
 import { Operation } from '@ooo/operations/operation';
 import { TypeOfOperation } from '@ooo/types/operation';
-import { StateOfDatatype } from '@ooo/types/datatype';
+import { ErrDatatype } from '@ooo/errors/datatype';
+import { OrtooLogger } from '@ooo/utils/ortoo_logger';
 
 export { TransactionOperation, SnapshotOperation };
 
 class snapshotBody {
-  state: StateOfDatatype;
-  snapshot: string;
+  State: number;
+  Snapshot: string;
 
-  constructor(state: StateOfDatatype, snapshot: string) {
-    this.state = state;
-    this.snapshot = snapshot;
+  constructor(state: number, snapshot: string) {
+    this.State = state;
+    this.Snapshot = snapshot;
   }
 }
 
 class SnapshotOperation extends Operation {
   body: snapshotBody;
 
-  constructor(state: StateOfDatatype, snapshot: string) {
+  constructor(state: number, snapshot: string) {
     super(TypeOfOperation.SNAPSHOT);
     this.body = new snapshotBody(state, snapshot);
   }
 
   getBody(): string {
     return JSON.stringify(this.body);
+  }
+
+  static fromOpenApi(body: string, logger?: OrtooLogger): SnapshotOperation {
+    try {
+      const bodySnapshot: snapshotBody = JSON.parse(body);
+      return new SnapshotOperation(bodySnapshot.State, bodySnapshot.Snapshot);
+    } catch (e) {
+      throw new ErrDatatype.Marshal(logger, e);
+    }
   }
 }
 

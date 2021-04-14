@@ -50,8 +50,8 @@ const ErrDatatype = {
     }
   },
   Marshal: class Marshal extends OrtooError {
-    constructor(logger?: OrtooLogger) {
-      super(BaseErrorCode.Datatype + 7, 'fail to (un)marshal:', logger);
+    constructor(logger?: OrtooLogger, e?: Error) {
+      super(BaseErrorCode.Datatype + 7, 'fail to (un)marshal:', logger, e);
     }
   },
   NoTarget: class NoTarget extends OrtooError {

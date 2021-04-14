@@ -15,7 +15,7 @@ interface WireManager extends Wire {
 
   sync(): void;
 
-  exchangePushPull(...pushPullList: PushPullPack[]): void;
+  exchangePushPull(...pushPullList: PushPullPack[]): Promise<void>;
 
   close(): void;
 }

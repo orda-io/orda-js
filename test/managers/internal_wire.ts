@@ -31,13 +31,13 @@ class InternalWireManager implements WireManager {
     this.duidMap = new OooMap<string, DUID>();
   }
 
-  exchangePushPull(...pushPullList: PushPullPack[]): void {
+  exchangePushPull(...pushPullList: PushPullPack[]): Promise<void> {
     pushPullList.forEach((ppp) => {
       const firstOp = ppp.opList[0];
       const ownerCuid = firstOp.id.cuid;
       this.exchangePushPullForSender(ownerCuid, ppp);
       if (ppp.opList.length <= 0) {
-        return;
+        return Promise.resolve();
       }
       this.dataManagers.forEach((dm, cuid) => {
         if (ownerCuid !== cuid) {
@@ -46,6 +46,7 @@ class InternalWireManager implements WireManager {
         }
       });
     });
+    return Promise.resolve();
   }
 
   private getCheckPoint(cuid: CUID, key: string): CheckPoint {

@@ -9,11 +9,15 @@ import {
   Api,
   ApiConfig,
   OrtooClientMessage,
+  OrtooClientType,
   OrtooHeader,
+  OrtooPushPullMessage,
+  OrtooPushPullPack,
   OrtooRequestType,
 } from '@ooo/generated/openapi';
 import { ErrClient } from '@ooo/errors/client';
 import { NotifyManager } from '@ooo/managers/notify';
+import { getAgent } from '@ooo/constants/constants';
 
 export { GrpcGatewayWireManager };
 
@@ -43,22 +47,28 @@ class GrpcGatewayWireManager implements WireManager {
   private createHeader(type: OrtooRequestType): OrtooHeader {
     return {
       version: ProtocolVersion,
+      agent: getAgent(),
       type: type,
     };
   }
 
   public async exchangeClient(): Promise<void> {
+    const arr: Uint8Array = new Uint8Array();
+    arr.buffer;
+
     const req: OrtooClientMessage = {
       header: this.createHeader(OrtooRequestType.CLIENTS),
       collection: this.ctx.client.collection,
-      cuid: this.ctx.client.cuid.toString(),
+      cuid: this.ctx.client.cuid,
+      clientType: OrtooClientType.EPHEMERAL,
       clientAlias: this.ctx.client.alias,
       syncType: this.ctx.client.syncType,
     };
+    this.ctx.L.info(`${JSON.stringify(req)}`);
     try {
       const result = await this.openApi.api.ortooServiceProcessClient(
         this.ctx.client.collection,
-        this.ctx.client.cuid.toString(),
+        this.ctx.client.cuid,
         req
       );
       const clientMsg = result.data;
@@ -73,6 +83,43 @@ class GrpcGatewayWireManager implements WireManager {
       this.ctx.L.debug('finished exchangeClient()');
     }
     return Promise.resolve();
+  }
+
+  public async exchangePushPull(
+    ...pushPullList: PushPullPack[]
+  ): Promise<void> {
+    const ppps: OrtooPushPullPack[] = new Array<OrtooPushPullPack>();
+    for (const pushPullPack of pushPullList) {
+      ppps.push(pushPullPack.toOpenApi());
+    }
+    const req: OrtooPushPullMessage = {
+      header: this.createHeader(OrtooRequestType.PUSHPULLS),
+      collection: this.ctx.client.collection,
+      cuid: this.ctx.cuid,
+      PushPullPacks: ppps,
+    };
+    this.ctx.L.debug(`send push: ${JSON.stringify(req)}`);
+    try {
+      const result = await this.openApi.api.ortooServiceProcessPushPull(
+        this.ctx.client.collection,
+        this.ctx.client.cuid,
+        req
+      );
+      const clientMsg = result.data;
+      this.ctx.L.debug(
+        `receive pull: ${JSON.stringify(clientMsg.PushPullPacks)}`
+      );
+      this.dataManager?.applyPushPullPack(clientMsg.PushPullPacks!);
+    } catch (e) {
+      this.ctx.L.error('fail to exchange push-pull:', e);
+    } finally {
+      this.ctx.L.debug('finished exchangePushPull()');
+    }
+    return Promise.resolve();
+  }
+
+  async deliverTransaction(wired: WiredDatatype) {
+    //
   }
 
   private connectCatch(error: any) {
@@ -90,15 +137,7 @@ class GrpcGatewayWireManager implements WireManager {
     //
   }
 
-  async deliverTransaction(wired: WiredDatatype) {
-    //
-  }
-
   sync(): void {
-    //
-  }
-
-  exchangePushPull(...pushPullList: PushPullPack[]): void {
     //
   }
 

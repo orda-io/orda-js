@@ -23,6 +23,6 @@ class ClientModel {
   }
 
   getLogName(): string {
-    return `${this.collection}:${this.alias}:${this.cuid.toShortString()}`;
+    return `${this.collection}:${this.alias}:${this.cuid}`;
   }
 }

@@ -42,8 +42,8 @@ export class DatatypeContext extends ClientContext {
   }
 
   public getLogName(): string {
-    return `${this.client.getLogName()}:${
-      this.datatype.key
-    }:${this.datatype.id.toShortString()}`;
+    return `${this.client.getLogName()}:${this.datatype.key}:${
+      this.datatype.id
+    }`;
   }
 }

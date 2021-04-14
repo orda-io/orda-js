@@ -1,4 +1,4 @@
-import { DUID } from '@ooo/types/uid';
+import { createUID, DUID } from '@ooo/types/uid';
 import { OperationId } from '@ooo/types/operation';
 import { ClientContext, DatatypeContext } from '@ooo/context';
 import { Operation } from '@ooo/operations/operation';
@@ -14,7 +14,7 @@ import { OrtooError } from '@ooo/errors/error';
 export { BaseDatatype };
 
 abstract class BaseDatatype {
-  private _id: DUID;
+  private _id: string;
   key: string;
   type: TypeOfDatatype;
   opId: OperationId;
@@ -28,7 +28,7 @@ abstract class BaseDatatype {
     state: StateOfDatatype
   ) {
     this.key = key;
-    this._id = new DUID();
+    this._id = createUID();
     this.type = type;
     this.opId = new OperationId(clientCtx.client.cuid);
     this._state = state;
@@ -92,7 +92,7 @@ abstract class BaseDatatype {
   }
 
   protected replay(op: Operation): void {
-    if (this.opId.cuid.compare(op.id.cuid) === 0) {
+    if (this.opId.cuid === op.id.cuid) {
       this.sentenceLocal(op);
     } else {
     }

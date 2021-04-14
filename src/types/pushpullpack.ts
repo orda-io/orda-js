@@ -1,9 +1,10 @@
-import { DUID } from '@ooo/types/uid';
 import { CheckPoint } from '@ooo/types/checkpoint';
-import { Uint32 } from '@ooo/types/integer';
+import { uint32, Uint32 } from '@ooo/types/integer';
 import { Operation, OperationOa } from '@ooo/operations/operation';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-// import { OrtooStateOfDatatype as StateOfDatatype } from '@ooo/generated/openapi';
+import { OrtooPushPullPack } from '@ooo/generated/openapi';
+import { OrtooLogger } from '@ooo/utils/ortoo_logger';
+import { convertOpenApiOperation } from '@ooo/operations/converter';
 
 export { PushPullPack, PushPullOptions, PPOptions };
 
@@ -73,7 +74,7 @@ const PushPullOptions = {
 };
 
 class PushPullPack {
-  duid: DUID;
+  duid: string;
   key: string;
   type: TypeOfDatatype;
   checkPoint: CheckPoint;
@@ -82,7 +83,7 @@ class PushPullPack {
   opList: Operation[];
 
   constructor(
-    duid: DUID,
+    duid: string,
     key: string,
     type: TypeOfDatatype,
     checkPoint: CheckPoint,
@@ -100,11 +101,11 @@ class PushPullPack {
   }
 
   toString(): string {
-    let ret = `{ ${this.type} ${
-      this.key
-    }(${this.duid.toShortString()}) ${this.checkPoint.toString()}, era:${
-      this.era
-    } ${PPOptions.toString(this.option)} (${this.opList.length})[ `;
+    let ret = `{ ${this.type} ${this.key}(${
+      this.duid
+    }) ${this.checkPoint.toString()}, era:${this.era} ${PPOptions.toString(
+      this.option
+    )} (${this.opList.length})[ `;
     for (const op of this.opList) {
       const opStr = op.toString();
       ret = ret.concat(opStr);
@@ -118,16 +119,38 @@ class PushPullPack {
     return pbOpList;
   }
 
-  // toPb(): PushPullPackPb {
-  //   const pb = new PushPullPackPb();
-  //   pb.setEra(this.era.asNumber());
-  //   pb.setKey(this.key);
-  //   pb.setType(this.type);
-  //   pb.setCheckpoint(this.checkPoint.toPb());
-  //   pb.setDuid(this.duid.AsUint8Array);
-  //   pb.setOperationsList(this.pbOpList);
-  //   pb.setOption(this.option.valueOf());
-  //
-  //   return pb;
-  // }
+  toOpenApi(): OrtooPushPullPack {
+    return {
+      DUID: this.duid,
+      key: this.key,
+      option: this.option,
+      checkPoint: this.checkPoint.toOpenApi(),
+      era: this.era.asNumber(),
+      type: this.type,
+      operations: this.operationOaList,
+    };
+  }
+
+  static fromOpenApi(
+    ppp: OrtooPushPullPack,
+    logger?: OrtooLogger
+  ): PushPullPack {
+    const opList: Operation[] = new Array<Operation>();
+    if (ppp.operations) {
+      for (const oop of ppp.operations) {
+        opList.push(convertOpenApiOperation(oop, logger));
+      }
+    }
+
+    const p = new PushPullPack(
+      ppp.DUID!,
+      ppp.key!,
+      ppp.type!,
+      CheckPoint.fromOpenApi(ppp.checkPoint!),
+      uint32(ppp.era!),
+      ppp.option!,
+      opList
+    );
+    return p;
+  }
 }

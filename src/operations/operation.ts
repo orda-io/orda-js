@@ -23,7 +23,7 @@ abstract class Operation {
     return {
       ID: this.id.toOpenApi(),
       opType: this.type,
-      body: this.getBody(),
+      body: Buffer.from(this.getBody()).toString('base64'),
     };
   }
 
