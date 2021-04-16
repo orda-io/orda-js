@@ -18,6 +18,7 @@ import {
 import { ErrClient } from '@ooo/errors/client';
 import { NotifyManager } from '@ooo/managers/notify';
 import { getAgent } from '@ooo/constants/constants';
+import { StateOfDatatype } from '@ooo/generated/proto.enum';
 
 export { GrpcGatewayWireManager };
 
@@ -64,7 +65,7 @@ class GrpcGatewayWireManager implements WireManager {
       clientAlias: this.ctx.client.alias,
       syncType: this.ctx.client.syncType,
     };
-    this.ctx.L.info(`${JSON.stringify(req)}`);
+    this.ctx.L.debug(`send ClientMessage ${JSON.stringify(req)}`);
     try {
       const result = await this.openApi.api.ortooServiceProcessClient(
         this.ctx.client.collection,
@@ -105,11 +106,17 @@ class GrpcGatewayWireManager implements WireManager {
         this.ctx.client.cuid,
         req
       );
-      const clientMsg = result.data;
-      this.ctx.L.debug(
-        `receive pull: ${JSON.stringify(clientMsg.PushPullPacks)}`
-      );
-      this.dataManager?.applyPushPullPack(clientMsg.PushPullPacks!);
+      const pulled = result.data;
+      if (pulled.PushPullPacks) {
+        this.ctx.L.debug(
+          `receive pull: ${JSON.stringify(pulled.PushPullPacks)}`
+        );
+        const pushPullPacks: PushPullPack[] = new Array<PushPullPack>();
+        for (const ppp of pulled.PushPullPacks!) {
+          pushPullPacks.push(PushPullPack.fromOpenApi(ppp));
+        }
+        this.dataManager?.applyPushPullPack(...pushPullPacks);
+      }
     } catch (e) {
       this.ctx.L.error('fail to exchange push-pull:', e);
     } finally {
@@ -133,8 +140,10 @@ class GrpcGatewayWireManager implements WireManager {
     return currentSeq;
   }
 
-  OnChangeDatatypeState(): void {
-    //
+  onChangeDatatypeState(wired: WiredDatatype): void {
+    if (wired.state === StateOfDatatype.SUBSCRIBED) {
+      // this.notifyManager.subscribe;
+    }
   }
 
   sync(): void {

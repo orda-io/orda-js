@@ -21,7 +21,7 @@ export type { Wire };
 interface Wire {
   deliverTransaction(wired: WiredDatatype): void;
 
-  OnChangeDatatypeState(): void;
+  onChangeDatatypeState(wired: WiredDatatype): void;
 }
 
 abstract class WiredDatatype extends TransactionDatatype {
@@ -61,6 +61,10 @@ abstract class WiredDatatype extends TransactionDatatype {
     } finally {
       this.ctx.L.debug('[🚆🔺] END applyPushPull');
     }
+  }
+
+  public notifyWireOnChangeState(): void {
+    this.wire?.onChangeDatatypeState(this);
   }
 
   abstract callOnRemoteOperations(opList: unknown[]): void;

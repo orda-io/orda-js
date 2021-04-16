@@ -15,8 +15,7 @@ describe('Test Clients', function (this: Suite): void {
     } catch (e) {}
     expect(client1.isConnected()).to.false;
 
-    const conf = helper.createTestClientConfig(SyncType.NOTIFIABLE);
-    await helper.resetCollection(conf);
+    const conf = await helper.createTestClientConfig(SyncType.NOTIFIABLE);
     const client2: Client = new Client(conf, 'client2');
     try {
       await client2.connect();
@@ -30,8 +29,7 @@ describe('Test Clients', function (this: Suite): void {
   });
 
   it('Can subscribe and create a counter', async () => {
-    const conf1 = helper.createTestClientConfig();
-    await helper.resetCollection(conf1);
+    const conf1 = await helper.createTestClientConfig();
 
     const client1: Client = new Client(conf1, 'client1');
     try {

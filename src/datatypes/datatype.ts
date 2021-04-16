@@ -38,6 +38,13 @@ abstract class Datatype extends WiredDatatype {
     oldState: StateOfDatatype,
     newState: StateOfDatatype
   ): Promise<void> {
+    if (
+      newState === StateOfDatatype.SUBSCRIBED ||
+      newState === StateOfDatatype.UNSUBSCRIBED ||
+      newState === StateOfDatatype.DELETED
+    ) {
+      this.notifyWireOnChangeState();
+    }
     if (this.handlers && this.handlers.onStateChange) {
       this.handlers.onStateChange(this, oldState, newState);
     }
