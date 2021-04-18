@@ -41,11 +41,12 @@ class GrpcGatewayWireManager implements WireManager {
     this.notifyManager = new NotifyManager(conf, ctx);
   }
 
-  addDataManager(ctx: ClientContext, dataManager: DataManager): void {
+  addDataManager(dataManager: DataManager): void {
     this.dataManager = dataManager;
+    this.notifyManager.addNotifyReceiver(dataManager);
   }
 
-  private createHeader(type: OrtooRequestType): OrtooHeader {
+  private static createHeader(type: OrtooRequestType): OrtooHeader {
     return {
       version: ProtocolVersion,
       agent: getAgent(),
@@ -58,14 +59,14 @@ class GrpcGatewayWireManager implements WireManager {
     arr.buffer;
 
     const req: OrtooClientMessage = {
-      header: this.createHeader(OrtooRequestType.CLIENTS),
+      header: GrpcGatewayWireManager.createHeader(OrtooRequestType.CLIENTS),
       collection: this.ctx.client.collection,
       cuid: this.ctx.client.cuid,
       clientType: OrtooClientType.EPHEMERAL,
       clientAlias: this.ctx.client.alias,
       syncType: this.ctx.client.syncType,
     };
-    this.ctx.L.debug(`send ClientMessage ${JSON.stringify(req)}`);
+    this.ctx.L.debug(`[🚀🔻] send ClientMessage ${JSON.stringify(req)}`);
     try {
       const result = await this.openApi.api.ortooServiceProcessClient(
         this.ctx.client.collection,
@@ -74,14 +75,14 @@ class GrpcGatewayWireManager implements WireManager {
       );
       const clientMsg = result.data;
       this.ctx.L.debug(
-        `received ClientMessage '${clientMsg.clientAlias}'(${clientMsg.cuid}) in collection '${clientMsg.collection}'.`
+        `[🚀] received ClientMessage '${clientMsg.clientAlias}'(${clientMsg.cuid}) in collection '${clientMsg.collection}'.`
       );
       this.notifyManager.connect();
     } catch (e) {
       const err = new ErrClient.Connect(this.ctx.L, e.error.message);
       return Promise.reject(err);
     } finally {
-      this.ctx.L.debug('finished exchangeClient()');
+      this.ctx.L.debug('[🚀🔺] finished exchangeClient()');
     }
     return Promise.resolve();
   }
@@ -89,17 +90,17 @@ class GrpcGatewayWireManager implements WireManager {
   public async exchangePushPull(
     ...pushPullList: PushPullPack[]
   ): Promise<void> {
-    const ppps: OrtooPushPullPack[] = new Array<OrtooPushPullPack>();
+    const pppList: OrtooPushPullPack[] = new Array<OrtooPushPullPack>();
     for (const pushPullPack of pushPullList) {
-      ppps.push(pushPullPack.toOpenApi());
+      pppList.push(pushPullPack.toOpenApi());
     }
     const req: OrtooPushPullMessage = {
-      header: this.createHeader(OrtooRequestType.PUSHPULLS),
+      header: GrpcGatewayWireManager.createHeader(OrtooRequestType.PUSHPULLS),
       collection: this.ctx.client.collection,
       cuid: this.ctx.cuid,
-      PushPullPacks: ppps,
+      PushPullPacks: pppList,
     };
-    this.ctx.L.debug(`send push: ${JSON.stringify(req)}`);
+    this.ctx.L.debug(`[🚀🔻] send PUSH: ${JSON.stringify(req)}`);
     try {
       const result = await this.openApi.api.ortooServiceProcessPushPull(
         this.ctx.client.collection,
@@ -109,29 +110,25 @@ class GrpcGatewayWireManager implements WireManager {
       const pulled = result.data;
       if (pulled.PushPullPacks) {
         this.ctx.L.debug(
-          `receive pull: ${JSON.stringify(pulled.PushPullPacks)}`
+          `[🚀] receive PULL: ${JSON.stringify(pulled.PushPullPacks)}`
         );
         const pushPullPacks: PushPullPack[] = new Array<PushPullPack>();
-        for (const ppp of pulled.PushPullPacks!) {
+        for (const ppp of pulled.PushPullPacks) {
           pushPullPacks.push(PushPullPack.fromOpenApi(ppp));
         }
         this.dataManager?.applyPushPullPack(...pushPullPacks);
       }
     } catch (e) {
-      this.ctx.L.error('fail to exchange push-pull:', e);
+      const err = new ErrClient.PushPull(this.ctx.L, e.error.message);
+      return Promise.reject(err);
     } finally {
-      this.ctx.L.debug('finished exchangePushPull()');
+      this.ctx.L.debug('[🚀🔺] finished exchangePushPull()');
     }
     return Promise.resolve();
   }
 
   async deliverTransaction(wired: WiredDatatype) {
     //
-  }
-
-  private connectCatch(error: any) {
-    switch (error.response.status) {
-    }
   }
 
   private nextSeq(): Uint32 {
@@ -142,16 +139,12 @@ class GrpcGatewayWireManager implements WireManager {
 
   onChangeDatatypeState(wired: WiredDatatype): void {
     if (wired.state === StateOfDatatype.SUBSCRIBED) {
-      // this.notifyManager.subscribe;
+      this.notifyManager.subscribeDatatype(wired.key);
     }
-  }
-
-  sync(): void {
-    //
   }
 
   close(): void {
     this.notifyManager.disconnect();
-    this.ctx.L.debug(`closed grpc_gateway_wire`);
+    this.ctx.L.debug(`[🚀👆] closed grpc_gateway_wire`);
   }
 }

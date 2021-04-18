@@ -1,17 +1,16 @@
-import { CUID } from '@ooo/types/uid';
 import { OrtooSyncType as SyncType } from '@ooo/generated/openapi';
 
 export { ClientModel };
 export { SyncType };
 
 class ClientModel {
-  cuid: CUID;
+  cuid: string;
   alias: string;
   collection: string;
   syncType: SyncType;
 
   constructor(
-    cuid: CUID,
+    cuid: string,
     alias: string,
     collection: string,
     syncType: SyncType

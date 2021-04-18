@@ -1,6 +1,5 @@
 import { WireManager } from '@ooo/managers/wire';
 import { WiredDatatype } from '@ooo/datatypes/wired';
-import { ClientContext } from '@ooo/context';
 import { DataManager } from '@ooo/managers/data';
 import { CUID, DUID } from '@ooo/types/uid';
 import {
@@ -138,7 +137,6 @@ class InternalWireManager implements WireManager {
   }
 
   deliverTransaction(datatype: WiredDatatype): void {
-    // datatype.ctx.L.info('deliverTransaction');
     const pushPullPack = datatype.createPushPullPack();
     if (pushPullPack === null) {
       return;
@@ -146,13 +144,9 @@ class InternalWireManager implements WireManager {
     this.exchangePushPull(pushPullPack);
   }
 
-  sync(): void {
-    //
-  }
-
-  addDataManager(ctx: ClientContext, dataManager: DataManager): void {
-    this.loggerMap.set(ctx.cuid, ctx.L);
-    this.dataManagers.set(ctx.cuid, dataManager);
+  addDataManager(dataManager: DataManager): void {
+    this.loggerMap.set(dataManager.ctx.cuid, dataManager.ctx.L);
+    this.dataManagers.set(dataManager.ctx.cuid, dataManager);
   }
 
   close(): void {

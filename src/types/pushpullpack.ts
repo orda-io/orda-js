@@ -142,15 +142,14 @@ class PushPullPack {
       }
     }
 
-    const p = new PushPullPack(
+    return new PushPullPack(
       ppp.DUID!,
       ppp.key!,
-      ppp.type!,
+      ppp.type ? ppp.type : TypeOfDatatype.COUNTER,
       CheckPoint.fromOpenApi(ppp.checkPoint!),
-      uint32(ppp.era!),
-      ppp.option!,
+      ppp.era ? uint32(ppp.era) : uint32(0),
+      ppp.option ? ppp.option : PushPullOptions.normal,
       opList
     );
-    return p;
   }
 }

@@ -63,6 +63,14 @@ abstract class WiredDatatype extends TransactionDatatype {
     }
   }
 
+  public syncIfNeeded(sseq: Uint64): boolean {
+    const needSync = this.checkPoint.sseq < sseq;
+    this.ctx.L.debug(
+      `[🚆] check if need sync (checkpoint.sseq:${this.checkPoint.sseq} vs sseq:${sseq}): ${needSync}`
+    );
+    return needSync;
+  }
+
   public notifyWireOnChangeState(): void {
     this.wire?.onChangeDatatypeState(this);
   }
@@ -100,7 +108,7 @@ abstract class WiredDatatype extends TransactionDatatype {
   }
 
   private checkPushPullPackOption(ppp: PushPullPack) {
-    const option = ppp.option;
+    const option = ppp.option ? ppp.option : PushPullOptions.normal;
     if (PPOptions.hasError(option)) {
       this.ctx.L.error('[🚆] receive error');
       if (ppp.opList.length > 0) {
@@ -112,7 +120,7 @@ abstract class WiredDatatype extends TransactionDatatype {
         this.resetDatatypeForSubscribe(ppp.duid);
       }
     }
-    this.state = this.evaluateStateForPushPullOption(ppp.option);
+    this.state = this.evaluateStateForPushPullOption(option);
   }
 
   evaluateStateForPushPullOption(option: number): StateOfDatatype {
@@ -192,9 +200,6 @@ abstract class WiredDatatype extends TransactionDatatype {
 
   public createPushPullPack(): PushPullPack | null {
     const operations = this.peekOperations(this.checkPoint.cseq);
-    if (operations.length === 0) {
-      return null;
-    }
     const cp = new CheckPoint(
       this.checkPoint.sseq,
       Uint64.add(this.checkPoint.cseq, operations.length)

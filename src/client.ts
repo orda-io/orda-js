@@ -34,6 +34,7 @@ class Client {
 
     this.ctx = new ClientContext(this.model, conf.loggerFactory);
     this.state = clientState.NOT_CONNECTED;
+    this.dataManager = new DataManager(this.ctx);
 
     if (wireManager) {
       this.wireManager = wireManager;
@@ -42,10 +43,9 @@ class Client {
         this.wireManager = new GrpcGatewayWireManager(conf, this.ctx);
       }
     }
-
-    this.dataManager = new DataManager(this.ctx, this.wireManager);
-    this.wireManager?.addDataManager(this.ctx, this.dataManager);
-    this.ctx.L.debug(`created Client '${alias}'`);
+    this.dataManager.addWireManager(this.wireManager);
+    this.wireManager?.addDataManager(this.dataManager);
+    this.ctx.L.debug(`[🧞👇] create Client '${alias}'`);
   }
 
   public async connect(): Promise<void> {
@@ -64,7 +64,7 @@ class Client {
 
   public close(): void {
     this.wireManager?.close();
-    this.ctx.L.debug(`closed client '${this.ctx.client.alias}'`);
+    this.ctx.L.debug(`[🧞👆] close client '${this.ctx.client.alias}'`);
   }
 
   private getName(): string {

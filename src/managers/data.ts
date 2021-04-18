@@ -6,9 +6,11 @@ import { PushPullPack } from '@ooo/types/pushpullpack';
 import { Mutex } from 'async-mutex';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { DatatypeHandlers } from '@ooo/handlers/handlers';
+import { Uint64 } from '@ooo/types/integer';
+import { NotifyReceiver } from '@ooo/managers/notify';
 
-export class DataManager {
-  private ctx: ClientContext;
+export class DataManager implements NotifyReceiver {
+  ctx: ClientContext;
   private wireManager?: WireManager;
   private dataMap: Map<string, Datatype>;
   private mutex: Mutex;
@@ -20,6 +22,10 @@ export class DataManager {
     this.mutex = new Mutex();
   }
 
+  addWireManager(wireManager?: WireManager): void {
+    this.wireManager = wireManager;
+  }
+
   syncAll(): Promise<void> {
     const pushPullPackList = new Array<PushPullPack>();
     this.dataMap.forEach((datatype) => {
@@ -29,9 +35,23 @@ export class DataManager {
       }
     });
     if (this.wireManager) {
-      return this.wireManager.exchangePushPull(...pushPullPackList);
+      return this.wireManager?.exchangePushPull(...pushPullPackList);
     }
     return Promise.resolve();
+  }
+
+  sync(key: string): void {
+    const datatype = this.dataMap.get(key);
+    if (datatype) {
+      this.syncDatatype(datatype);
+    }
+  }
+
+  private syncDatatype(datatype: Datatype): void {
+    const ppp = datatype.createPushPullPack();
+    if (ppp !== null) {
+      this.wireManager?.exchangePushPull(ppp);
+    }
   }
 
   subscribeOrCreateDatatype(
@@ -69,6 +89,18 @@ export class DataManager {
       if (datatype) {
         datatype.applyPushPullPack(ppp);
       }
+    }
+  }
+
+  onReceiveNotification(
+    cuid: string,
+    duid: string,
+    key: string,
+    sseq: Uint64
+  ): void {
+    const datatype = this.dataMap.get(key);
+    if (datatype && datatype.id === duid && datatype.syncIfNeeded(sseq)) {
+      this.syncDatatype(datatype);
     }
   }
 }
