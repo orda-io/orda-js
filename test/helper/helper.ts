@@ -56,6 +56,7 @@ const helper = {
   },
 
   sleep(sec: number): Promise<void> {
+    this.L.info(`sleep ${sec}s`);
     return new Promise((resolve) => setTimeout(resolve, sec * 1000));
   },
 
@@ -91,4 +92,12 @@ const helper = {
       'trace'
     );
   },
+};
+
+export const waiter = function (timeout: number): Promise<void> {
+  return new Promise(function (resolve, reject) {
+    setTimeout(() => {
+      reject();
+    }, timeout);
+  });
 };

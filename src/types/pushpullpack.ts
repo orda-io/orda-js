@@ -108,9 +108,13 @@ class PushPullPack {
     )} (${this.opList.length})[ `;
     for (const op of this.opList) {
       const opStr = op.toString();
-      ret = ret.concat(opStr);
+      ret = ret.concat(opStr).concat(' ');
     }
     return ret.concat('] }');
+  }
+
+  toJSON(): string {
+    return this.toString();
   }
 
   get operationOaList(): OperationOa[] {

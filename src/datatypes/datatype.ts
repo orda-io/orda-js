@@ -5,6 +5,7 @@ import { SnapshotOperation } from '@ooo/operations/meta';
 import { DatatypeHandlers } from '@ooo/handlers/handlers';
 import { OrtooError } from '@ooo/errors/error';
 import { encodeStateOfDatatype } from '@ooo/generated/proto.enum';
+import { Operation } from '@ooo/operations/operation';
 
 export { Datatype };
 export type { IDatatype };
@@ -64,6 +65,7 @@ abstract class Datatype extends WiredDatatype {
 
   subscribeOrCreate(): void {
     if (this.state === StateOfDatatype.DUE_TO_SUBSCRIBE) {
+      this.deliverTransaction(new Array<Operation>());
       return;
     }
     this.sentenceLocalInTx(

@@ -19,4 +19,9 @@ const ErrClient = {
       super(BaseErrorCode.Client + 2, `fail to subscribe: ${msg}`, logger);
     }
   },
+  Sync: class Sync extends OrtooError {
+    constructor(logger?: OrtooLogger, msg?: string) {
+      super(BaseErrorCode.Client + 3, `fail to sync: ${msg}`, logger);
+    }
+  },
 };

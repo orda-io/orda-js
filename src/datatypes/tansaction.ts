@@ -72,7 +72,6 @@ abstract class TransactionDatatype extends BaseDatatype {
       if (began) {
         this.endTransaction();
       }
-      this.trySync();
     }
     return true;
   }
@@ -94,8 +93,6 @@ abstract class TransactionDatatype extends BaseDatatype {
   }
 
   abstract deliverTransaction(opList: Operation[]): void;
-
-  abstract trySync(): void;
 
   private endTransaction(): void {
     try {

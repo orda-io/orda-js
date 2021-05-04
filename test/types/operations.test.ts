@@ -1,7 +1,7 @@
 import { OperationId } from '@ooo/types/operation';
 import { createNullUID, createUID, CUID, strcmp } from '@ooo/types/uid';
 import { expect } from 'chai';
-import { helper } from '@test/helper';
+import { helper } from '@test/helper/helper';
 
 describe('Test operation ID', () => {
   it('Can generate and compare IDs', () => {

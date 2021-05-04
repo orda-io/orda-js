@@ -1,4 +1,4 @@
-import { helper } from '@test/helper';
+import { helper } from '@test/helper/helper';
 import { expect } from 'chai';
 import { SyncType } from '@ooo/types/client';
 import { Client } from '@ooo/client';
@@ -15,7 +15,7 @@ describe('Test Clients', function (this: Suite): void {
     } catch (e) {}
     expect(client1.isConnected()).to.false;
 
-    const conf = await helper.createTestClientConfig(SyncType.NOTIFIABLE);
+    const conf = await helper.createTestClientConfig(SyncType.REALTIME);
     const client2: Client = new Client(conf, 'client2');
     try {
       await client2.connect();
@@ -24,8 +24,8 @@ describe('Test Clients', function (this: Suite): void {
     }
     expect(client2.isConnected()).to.true;
 
-    client1.close();
-    client2.close();
+    await client1.close();
+    await client2.close();
   });
 
   it('Can subscribe and create a counter', async () => {
@@ -41,7 +41,7 @@ describe('Test Clients', function (this: Suite): void {
     const counter1 = client1.subscribeOrCreateCounter(helper.dtName(this));
     counter1.increase(2);
     await client1.sync();
-    client1.close();
+    await client1.close();
 
     const client2: Client = new Client(conf1, 'client2');
     await client2.connect();
@@ -49,6 +49,6 @@ describe('Test Clients', function (this: Suite): void {
     const counter2 = client2.subscribeOrCreateCounter(helper.dtName(this));
     await client2.sync();
     expect(counter2.get()).to.equal(2);
-    client2.close();
+    await client2.close();
   });
 });

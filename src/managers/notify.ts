@@ -104,7 +104,7 @@ export class NotifyManager {
       );
   };
 
-  onMessageArrived: OnMessageHandler = (message: Message) => {
+  onMessageArrived: OnMessageHandler = async (message: Message) => {
     const notify = JSON.parse(message.payloadString);
     if (this.ctx.client.cuid === notify.CUID) {
       // drain
@@ -120,7 +120,7 @@ export class NotifyManager {
     const key = topics[1];
     const notification = `Notification{cuid:${notify.CUID}, key:${key}, duid:${notify.DUID}, sseq:${notify.sseq}}`;
     this.ctx.L.debug(`[🔔🔻] receive ${notification}`);
-    this.receiver?.onReceiveNotification(
+    await this.receiver?.onReceiveNotification(
       notify.CUID,
       notify.DUID,
       key,
