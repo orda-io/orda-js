@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -27,8 +28,8 @@ export interface OrtooClientMessage {
 }
 
 export enum OrtooClientType {
-  PERSISTENT = "PERSISTENT",
-  EPHEMERAL = "EPHEMERAL",
+  PERSISTENT = 'PERSISTENT',
+  EPHEMERAL = 'EPHEMERAL',
 }
 
 export interface OrtooCollectionMessage {
@@ -91,8 +92,8 @@ export interface OrtooPushPullPack {
 }
 
 export enum OrtooRequestType {
-  CLIENTS = "CLIENTS",
-  PUSHPULLS = "PUSHPULLS",
+  CLIENTS = 'CLIENTS',
+  PUSHPULLS = 'PUSHPULLS',
 }
 
 export interface OrtooSnapshotResponse {
@@ -101,26 +102,26 @@ export interface OrtooSnapshotResponse {
 }
 
 export enum OrtooStateOfDatatype {
-  DUE_TO_CREATE = "DUE_TO_CREATE",
-  DUE_TO_SUBSCRIBE = "DUE_TO_SUBSCRIBE",
-  DUE_TO_SUBSCRIBE_CREATE = "DUE_TO_SUBSCRIBE_CREATE",
-  SUBSCRIBED = "SUBSCRIBED",
-  DUE_TO_UNSUBSCRIBE = "DUE_TO_UNSUBSCRIBE",
-  UNSUBSCRIBED = "UNSUBSCRIBED",
-  DELETED = "DELETED",
+  DUE_TO_CREATE = 'DUE_TO_CREATE',
+  DUE_TO_SUBSCRIBE = 'DUE_TO_SUBSCRIBE',
+  DUE_TO_SUBSCRIBE_CREATE = 'DUE_TO_SUBSCRIBE_CREATE',
+  SUBSCRIBED = 'SUBSCRIBED',
+  DUE_TO_UNSUBSCRIBE = 'DUE_TO_UNSUBSCRIBE',
+  UNSUBSCRIBED = 'UNSUBSCRIBED',
+  DELETED = 'DELETED',
 }
 
 export enum OrtooSyncType {
-  LOCAL_ONLY = "LOCAL_ONLY",
-  MANUALLY = "MANUALLY",
-  NOTIFIABLE = "NOTIFIABLE",
+  LOCAL_ONLY = 'LOCAL_ONLY',
+  MANUALLY = 'MANUALLY',
+  REALTIME = 'REALTIME',
 }
 
 export enum OrtooTypeOfDatatype {
-  COUNTER = "COUNTER",
-  MAP = "MAP",
-  LIST = "LIST",
-  DOCUMENT = "DOCUMENT",
+  COUNTER = 'COUNTER',
+  MAP = 'MAP',
+  LIST = 'LIST',
+  DOCUMENT = 'DOCUMENT',
 }
 
 export enum OrtooTypeOfOperation {
@@ -157,9 +158,9 @@ export interface RpcStatus {
 }
 
 export type QueryParamsType = Record<string | number, any>;
-export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
+export type ResponseFormat = keyof Omit<Body, 'body' | 'bodyUsed'>;
 
-export interface FullRequestParams extends Omit<RequestInit, "body"> {
+export interface FullRequestParams extends Omit<RequestInit, 'body'> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -178,15 +179,22 @@ export interface FullRequestParams extends Omit<RequestInit, "body"> {
   cancelToken?: CancelToken;
 }
 
-export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">;
+export type RequestParams = Omit<
+  FullRequestParams,
+  'body' | 'method' | 'query' | 'path'
+>;
 
 export interface ApiConfig<SecurityDataType = unknown> {
   baseUrl?: string;
-  baseApiParams?: Omit<RequestParams, "baseUrl" | "cancelToken" | "signal">;
-  securityWorker?: (securityData: SecurityDataType | null) => Promise<RequestParams | void> | RequestParams | void;
+  baseApiParams?: Omit<RequestParams, 'baseUrl' | 'cancelToken' | 'signal'>;
+  securityWorker?: (
+    securityData: SecurityDataType | null
+  ) => Promise<RequestParams | void> | RequestParams | void;
+  customFetch?: typeof fetch;
 }
 
-export interface HttpResponse<D extends unknown, E extends unknown = unknown> extends Response {
+export interface HttpResponse<D extends unknown, E extends unknown = unknown>
+  extends Response {
   data: D;
   error: E;
 }
@@ -194,22 +202,24 @@ export interface HttpResponse<D extends unknown, E extends unknown = unknown> ex
 type CancelToken = Symbol | string | number;
 
 export enum ContentType {
-  Json = "application/json",
-  FormData = "multipart/form-data",
-  UrlEncoded = "application/x-www-form-urlencoded",
+  Json = 'application/json',
+  FormData = 'multipart/form-data',
+  UrlEncoded = 'application/x-www-form-urlencoded',
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = "";
+  public baseUrl: string = '';
   private securityData: SecurityDataType | null = null;
-  private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
+  private securityWorker?: ApiConfig<SecurityDataType>['securityWorker'];
   private abortControllers = new Map<CancelToken, AbortController>();
+  private customFetch = (...fetchParams: Parameters<typeof fetch>) =>
+    fetch(...fetchParams);
 
   private baseApiParams: RequestParams = {
-    credentials: "same-origin",
+    credentials: 'same-origin',
     headers: {},
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
   };
 
   constructor(apiConfig: ApiConfig<SecurityDataType> = {}) {
@@ -220,36 +230,46 @@ export class HttpClient<SecurityDataType = unknown> {
     this.securityData = data;
   };
 
-  private addQueryParam(query: QueryParamsType, key: string) {
-    const value = query[key];
+  private encodeQueryParam(key: string, value: any) {
+    const encodedKey = encodeURIComponent(key);
+    return `${encodedKey}=${encodeURIComponent(
+      typeof value === 'number' ? value : `${value}`
+    )}`;
+  }
 
-    return (
-      encodeURIComponent(key) +
-      "=" +
-      encodeURIComponent(Array.isArray(value) ? value.join(",") : typeof value === "number" ? value : `${value}`)
-    );
+  private addQueryParam(query: QueryParamsType, key: string) {
+    return this.encodeQueryParam(key, query[key]);
+  }
+
+  private addArrayQueryParam(query: QueryParamsType, key: string) {
+    const value = query[key];
+    return value.map((v: any) => this.encodeQueryParam(key, v)).join('&');
   }
 
   protected toQueryString(rawQuery?: QueryParamsType): string {
     const query = rawQuery || {};
-    const keys = Object.keys(query).filter((key) => "undefined" !== typeof query[key]);
+    const keys = Object.keys(query).filter(
+      (key) => 'undefined' !== typeof query[key]
+    );
     return keys
       .map((key) =>
-        typeof query[key] === "object" && !Array.isArray(query[key])
-          ? this.toQueryString(query[key] as QueryParamsType)
-          : this.addQueryParam(query, key),
+        Array.isArray(query[key])
+          ? this.addArrayQueryParam(query, key)
+          : this.addQueryParam(query, key)
       )
-      .join("&");
+      .join('&');
   }
 
   protected addQueryParams(rawQuery?: QueryParamsType): string {
     const queryString = this.toQueryString(rawQuery);
-    return queryString ? `?${queryString}` : "";
+    return queryString ? `?${queryString}` : '';
   }
 
   private contentFormatters: Record<ContentType, (input: any) => any> = {
     [ContentType.Json]: (input: any) =>
-      input !== null && (typeof input === "object" || typeof input === "string") ? JSON.stringify(input) : input,
+      input !== null && (typeof input === 'object' || typeof input === 'string')
+        ? JSON.stringify(input)
+        : input,
     [ContentType.FormData]: (input: any) =>
       Object.keys(input || {}).reduce((data, key) => {
         data.append(key, input[key]);
@@ -258,7 +278,10 @@ export class HttpClient<SecurityDataType = unknown> {
     [ContentType.UrlEncoded]: (input: any) => this.toQueryString(input),
   };
 
-  private mergeRequestParams(params1: RequestParams, params2?: RequestParams): RequestParams {
+  private mergeRequestParams(
+    params1: RequestParams,
+    params2?: RequestParams
+  ): RequestParams {
     return {
       ...this.baseApiParams,
       ...params1,
@@ -271,7 +294,9 @@ export class HttpClient<SecurityDataType = unknown> {
     };
   }
 
-  private createAbortSignal = (cancelToken: CancelToken): AbortSignal | undefined => {
+  private createAbortSignal = (
+    cancelToken: CancelToken
+  ): AbortSignal | undefined => {
     if (this.abortControllers.has(cancelToken)) {
       const abortController = this.abortControllers.get(cancelToken);
       if (abortController) {
@@ -300,46 +325,59 @@ export class HttpClient<SecurityDataType = unknown> {
     path,
     type,
     query,
-    format = "json",
+    format,
     baseUrl,
     cancelToken,
     ...params
   }: FullRequestParams): Promise<HttpResponse<T, E>> => {
     const secureParams =
-      ((typeof secure === "boolean" ? secure : this.baseApiParams.secure) &&
+      ((typeof secure === 'boolean' ? secure : this.baseApiParams.secure) &&
         this.securityWorker &&
         (await this.securityWorker(this.securityData))) ||
       {};
     const requestParams = this.mergeRequestParams(params, secureParams);
     const queryString = query && this.toQueryString(query);
     const payloadFormatter = this.contentFormatters[type || ContentType.Json];
+    const responseFormat = format || requestParams.format;
 
-    return fetch(`${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`, {
-      ...requestParams,
-      headers: {
-        ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
-        ...(requestParams.headers || {}),
-      },
-      signal: cancelToken ? this.createAbortSignal(cancelToken) : void 0,
-      body: typeof body === "undefined" || body === null ? null : payloadFormatter(body),
-    }).then(async (response) => {
+    return this.customFetch(
+      `${baseUrl || this.baseUrl || ''}${path}${
+        queryString ? `?${queryString}` : ''
+      }`,
+      {
+        ...requestParams,
+        headers: {
+          ...(type && type !== ContentType.FormData
+            ? { 'Content-Type': type }
+            : {}),
+          ...(requestParams.headers || {}),
+        },
+        signal: cancelToken ? this.createAbortSignal(cancelToken) : void 0,
+        body:
+          typeof body === 'undefined' || body === null
+            ? null
+            : payloadFormatter(body),
+      }
+    ).then(async (response) => {
       const r = response as HttpResponse<T, E>;
       r.data = (null as unknown) as T;
       r.error = (null as unknown) as E;
 
-      const data = await response[format]()
-        .then((data) => {
-          if (r.ok) {
-            r.data = data;
-          } else {
-            r.error = data;
-          }
-          return r;
-        })
-        .catch((e) => {
-          r.error = e;
-          return r;
-        });
+      const data = !responseFormat
+        ? r
+        : await response[responseFormat]()
+            .then((data) => {
+              if (r.ok) {
+                r.data = data;
+              } else {
+                r.error = data;
+              }
+              return r;
+            })
+            .catch((e) => {
+              r.error = e;
+              return r;
+            });
 
       if (cancelToken) {
         this.abortControllers.delete(cancelToken);
@@ -355,7 +393,9 @@ export class HttpClient<SecurityDataType = unknown> {
  * @title Ortoo gRPC gateway APIs
  * @version v1
  */
-export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+export class Api<
+  SecurityDataType extends unknown
+> extends HttpClient<SecurityDataType> {
   api = {
     /**
      * No description
@@ -364,11 +404,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name OrtooServiceCreateCollection
      * @request PUT:/api/v1/collections/{collection}
      */
-    ortooServiceCreateCollection: (collection: string, params: RequestParams = {}) =>
+    ortooServiceCreateCollection: (
+      collection: string,
+      params: RequestParams = {}
+    ) =>
       this.request<OrtooCollectionMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}`,
-        method: "PUT",
-        format: "json",
+        method: 'PUT',
+        format: 'json',
         ...params,
       }),
 
@@ -383,14 +426,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       collection: string,
       cuid: string,
       body: OrtooClientMessage,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<OrtooClientMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}/clients/${cuid}`,
-        method: "POST",
+        method: 'POST',
         body: body,
         type: ContentType.Json,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -405,13 +448,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       collection: string,
       key: string,
       query?: { duid?: string; sseq?: string },
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<OrtooSnapshotResponse, RpcStatus>({
         path: `/api/v1/collections/${collection}/datatypes/${key}`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -426,14 +469,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       collection: string,
       cuid: string,
       body: OrtooPushPullMessage,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<OrtooPushPullMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}/pushpulls/${cuid}`,
-        method: "POST",
+        method: 'POST',
         body: body,
         type: ContentType.Json,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -444,11 +487,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name OrtooServiceResetCollection
      * @request PUT:/api/v1/collections/{collection}/reset
      */
-    ortooServiceResetCollection: (collection: string, params: RequestParams = {}) =>
+    ortooServiceResetCollection: (
+      collection: string,
+      params: RequestParams = {}
+    ) =>
       this.request<OrtooCollectionMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}/reset`,
-        method: "PUT",
-        format: "json",
+        method: 'PUT',
+        format: 'json',
         ...params,
       }),
   };

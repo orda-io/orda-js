@@ -1,5 +1,5 @@
 import { Suite } from 'mocha';
-import { helper } from '@test/helper';
+import { helper } from '@test/helper/helper';
 import { int32, Int32 } from '@ooo/types/integer';
 
 describe('Test Counter', function (this: Suite): void {

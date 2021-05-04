@@ -1,5 +1,5 @@
 import { ErrDatatype } from '@ooo/errors/datatype';
-import { helper } from '@test/helper';
+import { helper } from '@test/helper/helper';
 import { should } from 'chai';
 
 describe('Test OrtooError', () => {

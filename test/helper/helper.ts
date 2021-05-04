@@ -16,7 +16,7 @@ const testLoggerFactory = new OrtooLoggerFactory('trace');
 const TestDB = 'ortoo-js-test';
 const helper = {
   loggerFactory: testLoggerFactory,
-
+  resetTestCollection: false,
   L: testLoggerFactory.getLogger('test'),
 
   getLocalClient(alias: string, wireManager?: WireManager): Client {
@@ -37,7 +37,7 @@ const helper = {
     return `client-${name}`;
   },
 
-  async resetCollection(conf: ClientConfig) {
+  async resetCollection(conf: ClientConfig): Promise<void> {
     const apiConfig: ApiConfig = {
       baseUrl: conf.serverAddr,
     };
@@ -46,19 +46,17 @@ const helper = {
       .ortooServiceResetCollection(conf.collectionName)
       .then((response) => {
         this.L.debug(
-          `Collection '${response.data.collection}' is successfully created`
+          `reset collection '${response.data.collection}' successfully`
         );
       })
       .catch((err) => {
+        this.L.error(err);
         Assert.fail(err);
-        // this.L.error(err);
-      })
-      .finally(() => {
-        this.L.debug('finished createCollection()');
       });
   },
 
   sleep(sec: number): Promise<void> {
+    this.L.info(`sleep ${sec}s`);
     return new Promise((resolve) => setTimeout(resolve, sec * 1000));
   },
 
@@ -72,8 +70,14 @@ const helper = {
     return new ClientContext(cm, testLoggerFactory);
   },
 
-  createTestClientConfig(syncType?: SyncType): ClientConfig {
-    return this.createClientConfig(TestDB, syncType);
+  async createTestClientConfig(syncType?: SyncType): Promise<ClientConfig> {
+    const conf = this.createClientConfig(TestDB, syncType);
+    if (!this.resetTestCollection) {
+      this.resetTestCollection = true;
+      this.L.debug(`RESET Test Collection: ${conf.collectionName}`);
+      await this.resetCollection(conf);
+    }
+    return conf;
   },
 
   createClientConfig(
@@ -88,4 +92,12 @@ const helper = {
       'trace'
     );
   },
+};
+
+export const waiter = function (timeout: number): Promise<void> {
+  return new Promise(function (resolve, reject) {
+    setTimeout(() => {
+      reject();
+    }, timeout);
+  });
 };

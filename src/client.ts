@@ -9,6 +9,7 @@ import { GrpcGatewayWireManager } from '@ooo/managers/grpc_gateway_wire';
 import { ClientModel, SyncType } from '@ooo/types/client';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { DatatypeHandlers } from '@ooo/handlers/handlers';
+import { ErrClient } from '@ooo/errors/client';
 
 export { Client };
 
@@ -34,6 +35,7 @@ class Client {
 
     this.ctx = new ClientContext(this.model, conf.loggerFactory);
     this.state = clientState.NOT_CONNECTED;
+    this.dataManager = new DataManager(this.ctx);
 
     if (wireManager) {
       this.wireManager = wireManager;
@@ -42,29 +44,38 @@ class Client {
         this.wireManager = new GrpcGatewayWireManager(conf, this.ctx);
       }
     }
-
-    this.dataManager = new DataManager(this.ctx, this.wireManager);
-    this.wireManager?.addDataManager(this.ctx, this.dataManager);
-    this.ctx.L.debug(`created Client '${alias}'`);
+    this.dataManager.addWireManager(this.wireManager);
+    this.wireManager?.addDataManager(this.dataManager);
+    this.ctx.L.debug(`[🧞👇] create Client '${alias}'`);
   }
 
   public async connect(): Promise<void> {
-    if (this.state === clientState.NOT_CONNECTED && this.wireManager) {
-      return this.wireManager
-        .exchangeClient()
-        .then(() => {
-          this.state = clientState.CONNECTED;
-        })
-        .catch(() => {
-          this.state = clientState.NOT_CONNECTED;
-        });
+    if (this.state === clientState.CONNECTED) {
+      this.ctx.L.debug('already connected');
+      return Promise.resolve();
+    }
+    if (this.wireManager) {
+      try {
+        await this.wireManager.exchangeClient();
+        this.state = clientState.CONNECTED;
+      } catch (e) {
+        this.state = clientState.NOT_CONNECTED;
+        return Promise.reject(e);
+      }
     }
     return Promise.resolve();
   }
 
-  public close(): void {
-    this.wireManager?.close();
-    this.ctx.L.debug(`closed client '${this.ctx.client.alias}'`);
+  public async close(): Promise<void> {
+    if (await this.ctx.doLock('close')) {
+      try {
+        this.wireManager?.close();
+        this.dataManager.close();
+        this.ctx.L.debug(`[🧞👆] close client '${this.ctx.client.alias}'`);
+      } finally {
+        this.ctx.doUnlock('close');
+      }
+    }
   }
 
   private getName(): string {
@@ -126,7 +137,10 @@ class Client {
     );
   }
 
-  public sync(): Promise<void> {
-    return this.dataManager.syncAll();
+  public async sync(): Promise<void> {
+    if (this.state === clientState.CONNECTED) {
+      return this.dataManager.syncAllWithLock();
+    }
+    return Promise.reject(new ErrClient.Sync(this.ctx.L, 'not connected'));
   }
 }

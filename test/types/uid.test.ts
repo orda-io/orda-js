@@ -1,4 +1,4 @@
-import { helper } from '@test/helper';
+import { helper } from '@test/helper/helper';
 import { createNullUID, createUID, strcmp } from '@ooo/types/uid';
 import { assert } from 'chai';
 

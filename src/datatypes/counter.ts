@@ -36,7 +36,7 @@ class _Counter extends Datatype implements Counter {
     wire?: Wire,
     handlers?: DatatypeHandlers
   ) {
-    super(ctx, key, TypeOfDatatype.COUNTER, state, wire);
+    super(ctx, key, TypeOfDatatype.COUNTER, state, wire, handlers);
     this.snap = new CounterSnapshot(this.ctx);
     this.resetRollbackContext();
   }

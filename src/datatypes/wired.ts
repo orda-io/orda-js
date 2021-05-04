@@ -10,7 +10,6 @@ import {
 } from '@ooo/types/pushpullpack';
 import { OperationId } from '@ooo/types/operation';
 import { TransactionDatatype } from '@ooo/datatypes/tansaction';
-import { Mutex } from 'async-mutex';
 import { DUID } from '@ooo/types/uid';
 import { ErrDatatype } from '@ooo/errors/datatype';
 import { SyncType } from '@ooo/types/client';
@@ -21,15 +20,13 @@ export type { Wire };
 interface Wire {
   deliverTransaction(wired: WiredDatatype): void;
 
-  OnChangeDatatypeState(): void;
+  onChangeDatatypeState(wired: WiredDatatype): void;
 }
 
 abstract class WiredDatatype extends TransactionDatatype {
   private checkPoint: CheckPoint;
   private opBuffer: Operation[];
   private wire?: Wire;
-  private promiseSync: boolean;
-  private mutexWire: Mutex;
 
   protected constructor(
     ctx: ClientContext,
@@ -42,8 +39,6 @@ abstract class WiredDatatype extends TransactionDatatype {
     this.checkPoint = new CheckPoint();
     this.opBuffer = Array<Operation>();
     this.wire = wire;
-    this.promiseSync = false;
-    this.mutexWire = new Mutex();
   }
 
   public applyPushPullPack(ppp: PushPullPack): void {
@@ -56,11 +51,32 @@ abstract class WiredDatatype extends TransactionDatatype {
         this.sentenceRemoteInTx(...ppp.opList);
       }
     } catch (e) {
-      // TODO:
+      // TODO: call event handler after applyPushPull
       throw e;
     } finally {
       this.ctx.L.debug('[🚆🔺] END applyPushPull');
     }
+  }
+
+  public needPush(): boolean {
+    return this.checkPoint.cseq.compare(this.opId.seq) < 0;
+  }
+
+  public unsubscribe(): void {
+    this.wire = undefined;
+    this.state = StateOfDatatype.UNSUBSCRIBED;
+  }
+
+  public needPull(sseq: Uint64): boolean {
+    const needPull = this.checkPoint.sseq.compare(sseq) < 0;
+    this.ctx.L.debug(
+      `[🚆] need pull? ${needPull}: (checkpoint.sseq:${this.checkPoint.sseq} vs sseq:${sseq} at server)`
+    );
+    return needPull;
+  }
+
+  public notifyWireOnChangeState(): void {
+    this.wire?.onChangeDatatypeState(this);
   }
 
   abstract callOnRemoteOperations(opList: unknown[]): void;
@@ -96,7 +112,7 @@ abstract class WiredDatatype extends TransactionDatatype {
   }
 
   private checkPushPullPackOption(ppp: PushPullPack) {
-    const option = ppp.option;
+    const option = ppp.option ? ppp.option : PushPullOptions.normal;
     if (PPOptions.hasError(option)) {
       this.ctx.L.error('[🚆] receive error');
       if (ppp.opList.length > 0) {
@@ -108,7 +124,7 @@ abstract class WiredDatatype extends TransactionDatatype {
         this.resetDatatypeForSubscribe(ppp.duid);
       }
     }
-    this.state = this.evaluateStateForPushPullOption(ppp.option);
+    this.state = this.evaluateStateForPushPullOption(option);
   }
 
   evaluateStateForPushPullOption(option: number): StateOfDatatype {
@@ -161,36 +177,8 @@ abstract class WiredDatatype extends TransactionDatatype {
     this.ctx.L.debug(`[🚆] ready to subscribe:${this.checkPoint}`);
   }
 
-  private updateState(ppp: PushPullPack): StateOfDatatype {
-    const oldState = this.state;
-    switch (this.state) {
-      case StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE:
-      // if (PushPullOptions.hasSubscribe(ppp.option)) {
-      // this.opBuffer = new Array<Operation>();
-      // this.opId = new OperationId(this.opId.cuid, 0);
-      // }
-      case StateOfDatatype.DUE_TO_CREATE:
-      case StateOfDatatype.DUE_TO_SUBSCRIBE:
-        this.state = StateOfDatatype.SUBSCRIBED;
-        this.id = ppp.duid;
-        break;
-      case StateOfDatatype.SUBSCRIBED:
-        break;
-      case StateOfDatatype.DUE_TO_UNSUBSCRIBE:
-        break;
-      case StateOfDatatype.UNSUBSCRIBED:
-        break;
-      case StateOfDatatype.DELETED:
-        break;
-    }
-    return oldState;
-  }
-
-  public createPushPullPack(): PushPullPack | null {
+  public createPushPullPack(): PushPullPack {
     const operations = this.peekOperations(this.checkPoint.cseq);
-    if (operations.length === 0) {
-      return null;
-    }
     const cp = new CheckPoint(
       this.checkPoint.sseq,
       Uint64.add(this.checkPoint.cseq, operations.length)
@@ -223,31 +211,14 @@ abstract class WiredDatatype extends TransactionDatatype {
   deliverTransaction(transaction: Operation[]): void {
     if (transaction.length > 0) {
       this.opBuffer.push(...transaction);
-      if (this.ctx.client.syncType === SyncType.NOTIFIABLE) {
-        this.promiseSync = true;
-      }
     }
-  }
-
-  trySync(): void {
-    if (this.promiseSync) {
-      this.sync();
-      this.promiseSync = false;
-    }
-  }
-
-  private async asyncSync() {
-    const release = await this.mutexWire.acquire();
-    try {
-      this.ctx.L.debug(`[🦅🔻] BEGIN sync: (${this.opId.toString()})`);
+    if (this.ctx.client.syncType === SyncType.REALTIME) {
       this.wire?.deliverTransaction(this);
-    } finally {
-      release();
-      this.ctx.L.debug(`[🦅🔺] END sync: (${this.opId.toString()})`);
     }
   }
 
   sync(): Promise<void> {
-    return this.asyncSync();
+    this.wire?.deliverTransaction(this);
+    return Promise.resolve();
   }
 }

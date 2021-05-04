@@ -1,19 +1,19 @@
 export enum SyncType {
   LOCAL_ONLY = 'LOCAL_ONLY',
   MANUALLY = 'MANUALLY',
-  NOTIFIABLE = 'NOTIFIABLE',
+  REALTIME = 'REALTIME',
 }
 
 export const encodeSyncType: { [key: string]: number } = {
   LOCAL_ONLY: 0,
   MANUALLY: 1,
-  NOTIFIABLE: 2,
+  REALTIME: 2,
 };
 
 export const decodeSyncType: { [key: number]: SyncType } = {
   0: SyncType.LOCAL_ONLY,
   1: SyncType.MANUALLY,
-  2: SyncType.NOTIFIABLE,
+  2: SyncType.REALTIME,
 };
 
 export enum ClientType {
@@ -619,18 +619,18 @@ function writeVarint64(bb: ByteBuffer, value: Long): void {
             ? 1
             : 2
           : part0 < 1 << 21
-          ? 3
-          : 4
+            ? 3
+            : 4
         : part1 < 1 << 14
-        ? part1 < 1 << 7
-          ? 5
-          : 6
-        : part1 < 1 << 21
-        ? 7
-        : 8
+          ? part1 < 1 << 7
+            ? 5
+            : 6
+          : part1 < 1 << 21
+            ? 7
+            : 8
       : part2 < 1 << 7
-      ? 9
-      : 10;
+        ? 9
+        : 10;
 
   const offset = grow(bb, size);
   const bytes = bb.bytes;
