@@ -1,5 +1,5 @@
 import { ortooLogger } from '@ooo/utils/ortoo_logger';
-import { Operation } from '@ooo/operations/operation';
+import { Op } from '@ooo/operations/operation';
 import { BaseDatatype } from '@ooo/datatypes/base';
 
 export { logNew, logOp };
@@ -32,7 +32,7 @@ function logOp() {
       msg = msg.concat(datatype.opId.toString());
 
       for (const arg of args) {
-        if (arg instanceof Operation) {
+        if (arg instanceof Op) {
           msg = msg.concat(`) ${arg.toString()} `);
         }
       }

@@ -73,26 +73,6 @@ describe('Test Synchronization', function (this: Suite): void {
       await helper.sleep(1);
 
       expect(counter1.get()).to.equal(counter2.get());
-      // helper.L.info('client2 subscribeOrCreate');
-      // const latch2 = new CountDownLatch(1);
-      // const counter2 = client2.subscribeOrCreateCounter(
-      //   helper.dtName(this),
-      //   new DatatypeHandlers((dt, oldState, newState) => {
-      //     helper.L.info(`counter2: ${oldState} => ${newState}`);
-      //     latch2.countDown();
-      //   })
-      // );
-      //
-      // counter2.increase(2);
-      // await latch2.wait();
-      // expect(counter1.get()).to.eq(counter2.get()).to.eq(0);
-      //
-      // helper.L.info('client2 duplicate sync');
-      // client2.sync().then();
-      // counter2.increase(3);
-      //
-      // await helper.sleep(0.5);
-      // expect(counter1.get()).to.eq(counter2.get()).to.eq(3);
     } finally {
       await client1.close();
       await client2.close();

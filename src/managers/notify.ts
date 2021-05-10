@@ -7,6 +7,7 @@ import Paho, {
   MQTTError,
   OnFailureCallback,
   OnSuccessCallback,
+  WithInvocationContext,
 } from 'paho-mqtt';
 import { uint64, Uint64 } from '@ooo/types/integer';
 import { ErrClient } from '@ooo/errors/client';
@@ -75,8 +76,18 @@ export class NotifyManager {
 
   public subscribeDatatype(key: string): void {
     const topic = `${this.ctx.client.collection}/${key}`;
+    this.ctx.L.debug(`[🔔] subscribe ${topic}`);
     this.client.subscribe(topic, {
       qos: 0,
+      onFailure: this.onFailureSubscribe,
+    });
+  }
+
+  public unsubscribeDatatype(key: string): void {
+    const topic = `${this.ctx.client.collection}/${key}`;
+    this.ctx.L.debug(`[🔔] unsubscribe ${topic}`);
+    this.client.unsubscribe(topic, {
+      onSuccess: this.onUnsubscribeSuccess,
       onFailure: this.onFailureSubscribe,
     });
   }
@@ -84,6 +95,8 @@ export class NotifyManager {
   onFailureSubscribe: OnFailureCallback = (e: ErrorWithInvocationContext) => {
     throw new ErrClient.Subscribe(this.ctx.L, e.errorMessage);
   };
+
+  onUnsubscribeSuccess: OnSuccessCallback = (o: WithInvocationContext) => {};
 
   public onConnect: OnSuccessCallback = (o) => {
     if (this.states === STATES.CLOSED) {

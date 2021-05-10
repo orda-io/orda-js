@@ -8,7 +8,7 @@ import {
   PushPullPack,
 } from '@ooo/types/pushpullpack';
 import { uint64 } from '@ooo/types/integer';
-import { Operation } from '@ooo/operations/operation';
+import { Op } from '@ooo/operations/operation';
 import { OrtooLogger } from '@ooo/utils/ortoo_logger';
 import { OooMap } from '@ooo/utils/map';
 import { CheckPoint } from '@ooo/types/checkpoint';
@@ -19,14 +19,14 @@ class InternalWireManager implements WireManager {
   private dataManagers: OooMap<CUID, DataManager>; // client -> dataManager
   private loggerMap: OooMap<CUID, OrtooLogger>; // client -> logger
   private checkPointMap: OooMap<CUID, OooMap<string, CheckPoint>>; // client -> data -> checkpoint
-  private historyMap: OooMap<string, Array<Operation>>; // data -> history
+  private historyMap: OooMap<string, Array<Op>>; // data -> history
   private duidMap: OooMap<string, DUID>; // data -> duid
 
   constructor() {
     this.dataManagers = new OooMap<CUID, DataManager>();
     this.loggerMap = new OooMap<CUID, OrtooLogger>();
     this.checkPointMap = new OooMap<CUID, OooMap<string, CheckPoint>>();
-    this.historyMap = new OooMap<string, Array<Operation>>();
+    this.historyMap = new OooMap<string, Array<Op>>();
     this.duidMap = new OooMap<string, DUID>();
   }
 
@@ -57,14 +57,11 @@ class InternalWireManager implements WireManager {
   }
 
   private makePushPullPack(cuid: CUID, ppp: PushPullPack): PushPullPack {
-    const history = this.historyMap.getOrElseSet(
-      ppp.key,
-      new Array<Operation>()
-    );
+    const history = this.historyMap.getOrElseSet(ppp.key, new Array<Op>());
 
     const checkPoint = this.getCheckPoint(cuid, ppp.key);
 
-    const opList = new Array<Operation>();
+    const opList = new Array<Op>();
     const startSseq = checkPoint.sseq.asNumber();
     checkPoint.setSseq(history.length);
     if (startSseq < history.length) {
@@ -86,13 +83,10 @@ class InternalWireManager implements WireManager {
     const ownerLogger = this.loggerMap.get(ownerCuid);
     ownerLogger?.debug(`[🦅] SEND ${ppp.toString()}`);
     const dataManager = this.dataManagers.get(ownerCuid);
-    const history = this.historyMap.getOrElseSet(
-      ppp.key,
-      new Array<Operation>()
-    );
+    const history = this.historyMap.getOrElseSet(ppp.key, new Array<Op>());
 
     const firstCreated = history.length === 0;
-    const opArray = new Array<Operation>();
+    const opArray = new Array<Op>();
 
     let option = PushPullOptions.normal;
     if (PPOptions.hasSubscribe(ppp.option) || PPOptions.hasCreate(ppp.option)) {
@@ -101,7 +95,7 @@ class InternalWireManager implements WireManager {
         option = PushPullOptions.create;
         this.duidMap.set(ppp.key, ppp.duid);
       } else if (!firstCreated && PPOptions.hasCreate(ppp.option)) {
-        ppp.opList = new Array<Operation>();
+        ppp.opList = new Array<Op>();
         ppp.checkPoint.cseq = uint64(0);
         const duid = this.duidMap.get(ppp.key);
         if (duid) {
@@ -138,7 +132,7 @@ class InternalWireManager implements WireManager {
 
   deliverTransaction(datatype: WiredDatatype): void {
     const pushPullPack = datatype.createPushPullPack();
-    if (pushPullPack === null) {
+    if (!pushPullPack) {
       return;
     }
     this.exchangePushPull(pushPullPack);

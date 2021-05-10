@@ -1,6 +1,6 @@
 import { CheckPoint } from '@ooo/types/checkpoint';
 import { uint32, Uint32 } from '@ooo/types/integer';
-import { Operation, OperationOa } from '@ooo/operations/operation';
+import { Op, OperationOa } from '@ooo/operations/operation';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { OrtooPushPullPack } from '@ooo/generated/openapi';
 import { OrtooLogger } from '@ooo/utils/ortoo_logger';
@@ -80,7 +80,7 @@ class PushPullPack {
   checkPoint: CheckPoint;
   option: number;
   era: Uint32;
-  opList: Operation[];
+  opList: Op[];
 
   constructor(
     duid: string,
@@ -89,7 +89,7 @@ class PushPullPack {
     checkPoint: CheckPoint,
     era: Uint32,
     option: number,
-    opList: Operation[]
+    opList: Op[]
   ) {
     this.duid = duid;
     this.key = key;
@@ -139,7 +139,7 @@ class PushPullPack {
     ppp: OrtooPushPullPack,
     logger?: OrtooLogger
   ): PushPullPack {
-    const opList: Operation[] = new Array<Operation>();
+    const opList: Op[] = new Array<Op>();
     if (ppp.operations) {
       for (const oop of ppp.operations) {
         opList.push(convertOpenApiOperation(oop, logger));

@@ -3,9 +3,9 @@ import { ClientContext } from '@ooo/context';
 import { Wire, WiredDatatype } from '@ooo/datatypes/wired';
 import { SnapshotOperation } from '@ooo/operations/meta';
 import { DatatypeHandlers } from '@ooo/handlers/handlers';
-import { OrtooError } from '@ooo/errors/error';
 import { encodeStateOfDatatype } from '@ooo/generated/proto.enum';
-import { Operation } from '@ooo/operations/operation';
+import { Op, Operation } from '@ooo/operations/operation';
+import { DatatypeError } from '@ooo/errors/for_handlers';
 
 export { Datatype };
 export type { IDatatype };
@@ -35,13 +35,13 @@ abstract class Datatype extends WiredDatatype {
     this.handlers = handlers;
   }
 
-  async callOnStateChange(
+  callOnStateChange(
     oldState: StateOfDatatype,
     newState: StateOfDatatype
-  ): Promise<void> {
+  ): void {
     if (
       newState === StateOfDatatype.SUBSCRIBED ||
-      newState === StateOfDatatype.UNSUBSCRIBED ||
+      newState === StateOfDatatype.CLOSED ||
       newState === StateOfDatatype.DELETED
     ) {
       this.notifyWireOnChangeState();
@@ -51,13 +51,13 @@ abstract class Datatype extends WiredDatatype {
     }
   }
 
-  async callOnRemoteOperations(opList: unknown[]): Promise<void> {
+  callOnRemoteOperations(opList: Operation[]): void {
     if (this.handlers && this.handlers.onRemoteOperations) {
       this.handlers.onRemoteOperations(this, opList);
     }
   }
 
-  async callOnErrors(...errs: OrtooError[]): Promise<void> {
+  callOnErrors(...errs: DatatypeError[]): void {
     if (this.handlers && this.handlers.onErrors) {
       this.handlers.onErrors(this, ...errs);
     }
@@ -65,7 +65,7 @@ abstract class Datatype extends WiredDatatype {
 
   subscribeOrCreate(): void {
     if (this.state === StateOfDatatype.DUE_TO_SUBSCRIBE) {
-      this.deliverTransaction(new Array<Operation>());
+      this.deliverTransaction([]).then();
       return;
     }
     this.sentenceLocalInTx(

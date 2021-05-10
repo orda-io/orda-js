@@ -4,6 +4,7 @@ export const BaseErrorCode = {
   Common: 0,
   Datatype: 100,
   Client: 200,
+  PushPull: 300,
 };
 
 export class OrtooError extends Error {
@@ -16,7 +17,7 @@ export class OrtooError extends Error {
     e?: Error,
     ...args: string[]
   ) {
-    super(`[${code}] ${msg} ${e?.message}`);
+    super(`[${code}] ${msg} ${e ? e.message : ''}`);
     this.code = code;
     if (e) {
       this.stack = e.stack;

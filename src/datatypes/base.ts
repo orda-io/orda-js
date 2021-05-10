@@ -1,7 +1,7 @@
 import { createUID, DUID } from '@ooo/types/uid';
 import { OperationId } from '@ooo/types/operation';
 import { ClientContext, DatatypeContext } from '@ooo/context';
-import { Operation } from '@ooo/operations/operation';
+import { Op, Operation } from '@ooo/operations/operation';
 import { Snapshot } from '@ooo/datatypes/snapshot';
 import { logOp } from '@ooo/decorators/decorators';
 import {
@@ -10,6 +10,7 @@ import {
   TypeOfDatatype,
 } from '@ooo/types/datatype';
 import { OrtooError } from '@ooo/errors/error';
+import { DatatypeError } from '@ooo/errors/for_handlers';
 
 export { BaseDatatype };
 
@@ -64,18 +65,18 @@ abstract class BaseDatatype {
     newState: StateOfDatatype
   ): void;
 
-  abstract callOnErrors(...errs: OrtooError[]): void;
+  abstract callOnErrors(...errs: DatatypeError[]): void;
 
-  abstract executeLocalOp(op: Operation): unknown;
+  abstract executeLocalOp(op: Op): unknown;
 
-  abstract executeRemoteOp(op: Operation): unknown;
+  abstract executeRemoteOp(op: Op): unknown;
 
   abstract getSnapshot(): Snapshot;
 
   abstract setSnapshot(snap: string): void;
 
   @logOp()
-  protected sentenceLocal(op: Operation): unknown {
+  protected sentenceLocal(op: Op): unknown {
     op.id = this.opId.next();
     try {
       return this.executeLocalOp(op);
@@ -86,12 +87,13 @@ abstract class BaseDatatype {
   }
 
   @logOp()
-  protected sentenceRemote(op: Operation): unknown {
+  protected sentenceRemote(op: Op): Operation {
     this.opId.sync(op.id);
-    return this.executeRemoteOp(op);
+    this.executeRemoteOp(op);
+    return op.toOperation();
   }
 
-  protected replay(op: Operation): void {
+  protected replay(op: Op): void {
     if (this.opId.cuid === op.id.cuid) {
       this.sentenceLocal(op);
     } else {
