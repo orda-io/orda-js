@@ -2,7 +2,7 @@ import { Datatype, IDatatype } from '@ooo/datatypes/datatype';
 import { int32, Int32 } from '@ooo/types/integer';
 import { IncreaseOperation } from '@ooo/operations/counter';
 import { ClientContext, DatatypeContext } from '@ooo/context';
-import { Operation } from '@ooo/operations/operation';
+import { Op } from '@ooo/operations/operation';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { TypeOfOperation } from '@ooo/types/operation';
 import { TransactionContext } from '@ooo/datatypes/tansaction';
@@ -66,15 +66,15 @@ class _Counter extends Datatype implements Counter {
     }
   }
 
-  executeLocalOp(op: Operation): unknown {
+  executeLocalOp(op: Op): unknown {
     return this.executeCommon(op);
   }
 
-  executeRemoteOp(op: Operation): unknown {
+  executeRemoteOp(op: Op): unknown {
     return this.executeCommon(op);
   }
 
-  private executeCommon(op: Operation): unknown {
+  private executeCommon(op: Op): unknown {
     switch (op.getType()) {
       case TypeOfOperation.SNAPSHOT:
         const sop = op as SnapshotOperation;
@@ -82,7 +82,7 @@ class _Counter extends Datatype implements Counter {
         return;
       case TypeOfOperation.COUNTER_INCREASE:
         const iop = op as IncreaseOperation;
-        return this.snap.increaseCommon(iop.c.delta);
+        return this.snap.increaseCommon(iop.body.delta);
     }
   }
 

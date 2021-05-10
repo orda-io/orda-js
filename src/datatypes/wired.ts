@@ -1,5 +1,5 @@
 import { CheckPoint } from '@ooo/types/checkpoint';
-import { Operation } from '@ooo/operations/operation';
+import { Op, Operation } from '@ooo/operations/operation';
 import { ClientContext } from '@ooo/context';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { Uint64 } from '@ooo/types/integer';
@@ -13,6 +13,8 @@ import { TransactionDatatype } from '@ooo/datatypes/tansaction';
 import { DUID } from '@ooo/types/uid';
 import { ErrDatatype } from '@ooo/errors/datatype';
 import { SyncType } from '@ooo/types/client';
+import { ErrorOperation } from '@ooo/operations/meta';
+import { DatatypeErrCodes, DatatypeError } from '@ooo/errors/for_handlers';
 
 export { WiredDatatype };
 export type { Wire };
@@ -25,7 +27,7 @@ interface Wire {
 
 abstract class WiredDatatype extends TransactionDatatype {
   private checkPoint: CheckPoint;
-  private opBuffer: Operation[];
+  private opBuffer: Op[];
   private wire?: Wire;
 
   protected constructor(
@@ -37,37 +39,67 @@ abstract class WiredDatatype extends TransactionDatatype {
   ) {
     super(ctx, key, type, state);
     this.checkPoint = new CheckPoint();
-    this.opBuffer = Array<Operation>();
+    this.opBuffer = Array<Op>();
     this.wire = wire;
   }
 
   public applyPushPullPack(ppp: PushPullPack): void {
     this.ctx.L.debug(`[🚆🔻] BEGIN applyPushPull:${ppp.toString()}`);
-    try {
-      this.checkPushPullPackOption(ppp);
+    const errs: DatatypeError[] = new Array<DatatypeError>();
+    const opList: Operation[] = new Array<Operation>();
+    let newState: StateOfDatatype = this.state;
+    const err = this.checkOptionAndError(ppp);
+    if (!err) {
       this.excludeDuplicateOperations(ppp);
       this.syncCheckPoint(ppp.checkPoint);
+      newState = this.evaluateStateForPushPullOption(ppp);
+      this.state = newState;
       if (ppp.opList.length > 0) {
-        this.sentenceRemoteInTx(...ppp.opList);
+        opList.push(...this.sentenceRemoteInTx(...ppp.opList));
       }
-    } catch (e) {
-      // TODO: call event handler after applyPushPull
-      throw e;
-    } finally {
-      this.ctx.L.debug('[🚆🔺] END applyPushPull');
+    } else {
+      errs.push(err);
+    }
+
+    // } finally {
+    this.ctx.L.debug('[🚆🔺] END applyPushPull');
+    this.callHandlers(errs, opList).then();
+    // }
+  }
+
+  private async callHandlers(
+    errs: DatatypeError[],
+    opList: Operation[]
+  ): Promise<void> {
+    if (errs.length > 0) {
+      this.callOnErrors(...errs);
+    }
+
+    if (opList.length > 0) {
+      this.callOnRemoteOperations(opList);
     }
   }
 
   public needPush(): boolean {
-    return this.checkPoint.cseq.compare(this.opId.seq) < 0;
+    if (!this.isSyncState()) {
+      return false;
+    }
+    const needPush = this.checkPoint.cseq.compare(this.opId.seq) < 0;
+    this.ctx.L.debug(
+      `[🚆] need push? ${needPush}: (checkpoint.cseq:${this.checkPoint.cseq} vs opId.cseq:${this.opId.seq})`
+    );
+    return needPush;
   }
 
   public unsubscribe(): void {
     this.wire = undefined;
-    this.state = StateOfDatatype.UNSUBSCRIBED;
+    this.state = StateOfDatatype.CLOSED;
   }
 
   public needPull(sseq: Uint64): boolean {
+    if (!this.isSyncState()) {
+      return false;
+    }
     const needPull = this.checkPoint.sseq.compare(sseq) < 0;
     this.ctx.L.debug(
       `[🚆] need pull? ${needPull}: (checkpoint.sseq:${this.checkPoint.sseq} vs sseq:${sseq} at server)`
@@ -111,12 +143,24 @@ abstract class WiredDatatype extends TransactionDatatype {
     );
   }
 
-  private checkPushPullPackOption(ppp: PushPullPack) {
+  private checkOptionAndError(ppp: PushPullPack): DatatypeError | undefined {
     const option = ppp.option ? ppp.option : PushPullOptions.normal;
     if (PPOptions.hasError(option)) {
-      this.ctx.L.error('[🚆] receive error');
       if (ppp.opList.length > 0) {
-        // const errOp = pushPullPack.opList[0];
+        const errOp = ppp.opList[0] as ErrorOperation;
+        this.ctx.L.error(`[🚆] receive error: ${errOp.toString()}`);
+        const datatypeError = errOp.getDatatypeError();
+        switch (datatypeError.code) {
+          case DatatypeErrCodes.UNKNOWN:
+            break;
+          case DatatypeErrCodes.DUPLICATED_KEY:
+            this.state = StateOfDatatype.CLOSED;
+            break;
+          case DatatypeErrCodes.NO_DATATYPE_TO_SUBSCRIBE:
+            this.state = StateOfDatatype.CLOSED;
+            break;
+        }
+        return errOp.getDatatypeError();
       }
     }
     if (PPOptions.hasSubscribe(option)) {
@@ -124,10 +168,12 @@ abstract class WiredDatatype extends TransactionDatatype {
         this.resetDatatypeForSubscribe(ppp.duid);
       }
     }
-    this.state = this.evaluateStateForPushPullOption(option);
+
+    return undefined;
   }
 
-  evaluateStateForPushPullOption(option: number): StateOfDatatype {
+  evaluateStateForPushPullOption(ppp: PushPullPack): StateOfDatatype {
+    const option = ppp.option ? ppp.option : PushPullOptions.normal;
     switch (this.state) {
       case StateOfDatatype.DUE_TO_CREATE:
         if (option & PushPullOptions.create) {
@@ -154,11 +200,13 @@ abstract class WiredDatatype extends TransactionDatatype {
         break;
       case StateOfDatatype.DUE_TO_UNSUBSCRIBE:
         if (option & PushPullOptions.unsubscribe) {
-          return StateOfDatatype.UNSUBSCRIBED;
+          return StateOfDatatype.CLOSED;
         }
         break;
-      case StateOfDatatype.UNSUBSCRIBED:
+      case StateOfDatatype.CLOSED:
+        return StateOfDatatype.CLOSED;
       case StateOfDatatype.DELETED:
+        return StateOfDatatype.DELETED;
       default:
         break;
     }
@@ -171,13 +219,26 @@ abstract class WiredDatatype extends TransactionDatatype {
 
   private resetDatatypeForSubscribe(duid: DUID) {
     this.checkPoint = new CheckPoint(0, 0);
-    this.opBuffer = new Array<Operation>();
+    this.opBuffer = new Array<Op>();
     this.id = duid;
     this.opId = new OperationId(this.ctx.cuid);
     this.ctx.L.debug(`[🚆] ready to subscribe:${this.checkPoint}`);
   }
 
-  public createPushPullPack(): PushPullPack {
+  isSyncState(): boolean {
+    if (
+      this.state === StateOfDatatype.CLOSED ||
+      this.state === StateOfDatatype.DELETED
+    ) {
+      return false;
+    }
+    return true;
+  }
+
+  public createPushPullPack(): PushPullPack | undefined {
+    if (!this.isSyncState()) {
+      return;
+    }
     const operations = this.peekOperations(this.checkPoint.cseq);
     const cp = new CheckPoint(
       this.checkPoint.sseq,
@@ -195,9 +256,9 @@ abstract class WiredDatatype extends TransactionDatatype {
     );
   }
 
-  private peekOperations(recvCseq: Uint64): Operation[] {
+  private peekOperations(recvCseq: Uint64): Op[] {
     if (this.opBuffer.length === 0) {
-      return new Array<Operation>();
+      return new Array<Op>();
     }
     const firstOp = this.opBuffer[0];
     const startCseq = firstOp.id.seq.asNumber();
@@ -205,20 +266,29 @@ abstract class WiredDatatype extends TransactionDatatype {
     if (0 <= start && start < this.opBuffer.length) {
       return this.opBuffer.slice(start);
     }
-    return new Array<Operation>();
+    return new Array<Op>();
   }
 
-  deliverTransaction(transaction: Operation[]): void {
+  async deliverTransaction(
+    transaction: Op[],
+    manually?: boolean
+  ): Promise<void> {
+    if (
+      this.state === StateOfDatatype.CLOSED ||
+      this.state === StateOfDatatype.DELETED
+    ) {
+      return Promise.resolve();
+    }
     if (transaction.length > 0) {
       this.opBuffer.push(...transaction);
     }
-    if (this.ctx.client.syncType === SyncType.REALTIME) {
-      this.wire?.deliverTransaction(this);
+    if (manually || this.ctx.client.syncType === SyncType.REALTIME) {
+      return this.wire?.deliverTransaction(this);
     }
+    return Promise.resolve();
   }
 
-  sync(): Promise<void> {
-    this.wire?.deliverTransaction(this);
-    return Promise.resolve();
+  async sync(): Promise<void> {
+    return this.deliverTransaction([], true);
   }
 }

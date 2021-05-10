@@ -3,28 +3,32 @@ import {
   OrtooTypeOfOperation as OpType,
 } from '@ooo/generated/openapi';
 import { OrtooLogger } from '@ooo/utils/ortoo_logger';
-import { SnapshotOperation } from '@ooo/operations/meta';
+import {
+  ErrorOperation,
+  SnapshotOperation,
+  TransactionOperation,
+} from '@ooo/operations/meta';
 import { IncreaseOperation } from '@ooo/operations/counter';
 import { OperationId } from '@ooo/types/operation';
 import { ErrDatatype } from '@ooo/errors/datatype';
-import { Operation } from '@ooo/operations/operation';
+import { Op } from '@ooo/operations/operation';
 
 export function convertOpenApiOperation(
   opa: OperationOa,
   logger?: OrtooLogger
-): Operation {
-  let op: Operation | undefined;
+): Op {
+  let op: Op | undefined;
   const decodedBody = Buffer.from(opa.body!, 'base64').toString('ascii');
 
   switch (opa?.opType) {
     case OpType.SNAPSHOT:
       op = SnapshotOperation.fromOpenApi(decodedBody, logger);
       break;
-    case OpType.DELETE:
-      break;
     case OpType.ERROR:
+      op = ErrorOperation.fromOpenApi(decodedBody, logger);
       break;
     case OpType.TRANSACTION:
+      op = TransactionOperation.fromOpenApi(decodedBody, logger);
       break;
     case OpType.COUNTER_INCREASE:
       op = IncreaseOperation.fromOpenApi(decodedBody, logger);

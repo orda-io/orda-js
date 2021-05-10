@@ -1,4 +1,4 @@
-import { Operation } from '@ooo/operations/operation';
+import { Op, Operation } from '@ooo/operations/operation';
 import { TransactionOperation } from '@ooo/operations/meta';
 import { ClientContext } from '@ooo/context';
 import {
@@ -29,15 +29,15 @@ abstract class TransactionDatatype extends BaseDatatype {
     this.txCtxInProgress = null;
   }
 
-  sentenceLocalInTx(...opArray: Operation[]): unknown[] {
+  sentenceLocalInTx(...opArray: Op[]): unknown[] {
     return this.sentenceInTx(true, ...opArray);
   }
 
-  sentenceRemoteInTx(...opArray: Operation[]): unknown[] {
-    return this.sentenceInTx(false, ...opArray);
+  sentenceRemoteInTx(...opArray: Op[]): Operation[] {
+    return this.sentenceInTx(false, ...opArray) as Operation[];
   }
 
-  private sentenceInTx(isLocal: boolean, ...opArray: Operation[]): unknown[] {
+  private sentenceInTx(isLocal: boolean, ...opArray: Op[]): unknown[] {
     const ret = new Array<unknown>();
     this.doTransaction(isLocal ? LOCAL_TX_TAG : REMOTE_TX_TAG, (txCtx) => {
       opArray.forEach((op) => {
@@ -92,7 +92,7 @@ abstract class TransactionDatatype extends BaseDatatype {
     return true;
   }
 
-  abstract deliverTransaction(opList: Operation[]): void;
+  abstract deliverTransaction(opList: Op[], manually?: boolean): void;
 
   private endTransaction(): void {
     try {
@@ -155,16 +155,16 @@ abstract class TransactionDatatype extends BaseDatatype {
 
 class TransactionContext {
   tag: string;
-  opBuffer: Operation[];
+  opBuffer: Op[];
   success: boolean;
 
   constructor(tag: string) {
     this.tag = tag;
     this.success = false;
-    this.opBuffer = new Array<Operation>();
+    this.opBuffer = new Array<Op>();
   }
 
-  push(op: Operation): void {
+  push(op: Op): void {
     this.opBuffer.push(op);
   }
 }
@@ -172,15 +172,15 @@ class TransactionContext {
 class RollbackContext {
   meta: DatatypeMeta;
   snap: string;
-  opBuffer: Operation[];
+  opBuffer: Op[];
 
   constructor(meta: DatatypeMeta, snapshot: string) {
     this.meta = meta;
     this.snap = snapshot;
-    this.opBuffer = new Array<Operation>();
+    this.opBuffer = new Array<Op>();
   }
 
-  push(ops: Operation[]): void {
+  push(ops: Op[]): void {
     this.opBuffer.push(...ops);
   }
 }

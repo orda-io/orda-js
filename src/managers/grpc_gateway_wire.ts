@@ -5,7 +5,7 @@ import { ClientConfig } from '@ooo/config';
 import { DataManager } from '@ooo/managers/data';
 import { WiredDatatype } from '@ooo/datatypes/wired';
 import { PushPullPack } from '@ooo/types/pushpullpack';
-import { Api, ApiConfig } from '@ooo/generated/openapi';
+import { Api, ApiConfig, OrtooSyncType } from '@ooo/generated/openapi';
 import { ErrClient } from '@ooo/errors/client';
 import { NotifyManager } from '@ooo/managers/notify';
 import { StateOfDatatype } from '@ooo/generated/proto.enum';
@@ -18,7 +18,7 @@ class GrpcGatewayWireManager implements WireManager {
   private dataManager?: DataManager;
   private openApi: Api<any>;
   private ctx: ClientContext;
-  private notifyManager: NotifyManager;
+  private notifyManager?: NotifyManager;
 
   constructor(conf: ClientConfig, ctx: ClientContext) {
     this.ctx = ctx;
@@ -27,12 +27,14 @@ class GrpcGatewayWireManager implements WireManager {
       baseUrl: conf.serverAddr,
     };
     this.openApi = new Api(apiConfig);
-    this.notifyManager = new NotifyManager(conf, ctx);
+    if (this.ctx.client.syncType === OrtooSyncType.REALTIME) {
+      this.notifyManager = new NotifyManager(conf, ctx);
+    }
   }
 
   addDataManager(dataManager: DataManager): void {
     this.dataManager = dataManager;
-    this.notifyManager.addNotifyReceiver(dataManager);
+    this.notifyManager?.addNotifyReceiver(dataManager);
   }
 
   public async exchangeClient(): Promise<void> {
@@ -50,7 +52,7 @@ class GrpcGatewayWireManager implements WireManager {
       this.ctx.L.debug(
         `[🚀] received ClientMessage '${clientMsg.clientAlias}'(${clientMsg.cuid}) in collection '${clientMsg.collection}'.`
       );
-      this.notifyManager.connect();
+      this.notifyManager?.connect();
     } catch (e) {
       const err = new ErrClient.Connect(this.ctx.L, e.error.message);
       return Promise.reject(err);
@@ -91,19 +93,34 @@ class GrpcGatewayWireManager implements WireManager {
     return Promise.resolve();
   }
 
-  deliverTransaction(wired: WiredDatatype): void {
+  async deliverTransaction(wired: WiredDatatype): Promise<void> {
     this.ctx.L.info('[🚀] deliverTransaction');
-    this.dataManager?.trySyncDatatype(wired);
+    await this.dataManager?.trySyncDatatype(wired);
+    return Promise.resolve();
   }
 
   onChangeDatatypeState(wired: WiredDatatype): void {
-    if (wired.state === StateOfDatatype.SUBSCRIBED) {
-      this.notifyManager.subscribeDatatype(wired.key);
+    switch (wired.state) {
+      case StateOfDatatype.DUE_TO_CREATE:
+        break;
+      case StateOfDatatype.DUE_TO_SUBSCRIBE:
+        break;
+      case StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE:
+        break;
+      case StateOfDatatype.SUBSCRIBED:
+        this.notifyManager?.subscribeDatatype(wired.key);
+        break;
+      case StateOfDatatype.DUE_TO_UNSUBSCRIBE:
+      case StateOfDatatype.CLOSED:
+      case StateOfDatatype.DELETED:
+        this.dataManager?.closeDatatype(wired.key);
+        this.notifyManager?.unsubscribeDatatype(wired.key);
+        break;
     }
   }
 
   close(): void {
-    this.notifyManager.disconnect();
+    this.notifyManager?.disconnect();
     this.ctx.L.debug(`[🚀👆] closed grpc_gateway_wire`);
   }
 }

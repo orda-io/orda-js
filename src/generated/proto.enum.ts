@@ -34,7 +34,6 @@ export const decodeClientType: { [key: number]: ClientType } = {
 export enum TypeOfOperation {
   NO_OP = 'NO_OP',
   SNAPSHOT = 'SNAPSHOT',
-  DELETE = 'DELETE',
   ERROR = 'ERROR',
   TRANSACTION = 'TRANSACTION',
   COUNTER_INCREASE = 'COUNTER_INCREASE',
@@ -53,9 +52,8 @@ export enum TypeOfOperation {
 export const encodeTypeOfOperation: { [key: string]: number } = {
   NO_OP: 0,
   SNAPSHOT: 1,
-  DELETE: 2,
-  ERROR: 3,
-  TRANSACTION: 5,
+  ERROR: 2,
+  TRANSACTION: 3,
   COUNTER_INCREASE: 11,
   MAP_PUT: 21,
   MAP_REMOVE: 22,
@@ -72,9 +70,8 @@ export const encodeTypeOfOperation: { [key: string]: number } = {
 export const decodeTypeOfOperation: { [key: number]: TypeOfOperation } = {
   0: TypeOfOperation.NO_OP,
   1: TypeOfOperation.SNAPSHOT,
-  2: TypeOfOperation.DELETE,
-  3: TypeOfOperation.ERROR,
-  5: TypeOfOperation.TRANSACTION,
+  2: TypeOfOperation.ERROR,
+  3: TypeOfOperation.TRANSACTION,
   11: TypeOfOperation.COUNTER_INCREASE,
   21: TypeOfOperation.MAP_PUT,
   22: TypeOfOperation.MAP_REMOVE,
@@ -94,7 +91,7 @@ export enum StateOfDatatype {
   DUE_TO_SUBSCRIBE_CREATE = 'DUE_TO_SUBSCRIBE_CREATE',
   SUBSCRIBED = 'SUBSCRIBED',
   DUE_TO_UNSUBSCRIBE = 'DUE_TO_UNSUBSCRIBE',
-  UNSUBSCRIBED = 'UNSUBSCRIBED',
+  CLOSED = 'CLOSED',
   DELETED = 'DELETED',
 }
 
@@ -104,7 +101,7 @@ export const encodeStateOfDatatype: { [key: string]: number } = {
   DUE_TO_SUBSCRIBE_CREATE: 2,
   SUBSCRIBED: 3,
   DUE_TO_UNSUBSCRIBE: 4,
-  UNSUBSCRIBED: 5,
+  CLOSED: 5,
   DELETED: 6,
 };
 
@@ -114,7 +111,7 @@ export const decodeStateOfDatatype: { [key: number]: StateOfDatatype } = {
   2: StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE,
   3: StateOfDatatype.SUBSCRIBED,
   4: StateOfDatatype.DUE_TO_UNSUBSCRIBE,
-  5: StateOfDatatype.UNSUBSCRIBED,
+  5: StateOfDatatype.CLOSED,
   6: StateOfDatatype.DELETED,
 };
 

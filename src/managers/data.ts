@@ -32,7 +32,7 @@ export class DataManager implements NotifyReceiver {
       const pushPullPackList = new Array<PushPullPack>();
       this.dataMap.forEach((datatype) => {
         const ppp = datatype.createPushPullPack();
-        if (ppp !== null) {
+        if (ppp) {
           pushPullPackList.push(ppp);
         }
       });
@@ -43,6 +43,10 @@ export class DataManager implements NotifyReceiver {
     } finally {
       this.ctx.L.info('[💾🔺] end syncAll');
     }
+  }
+
+  closeDatatype(key: string) {
+    this.dataMap.delete(key);
   }
 
   async trySyncAll(): Promise<boolean> {
@@ -75,7 +79,9 @@ export class DataManager implements NotifyReceiver {
     try {
       this.ctx.L.info(`[💾🔻] BEGIN syncDatatype: ${datatype.key}`);
       const ppp = datatype.createPushPullPack();
-      await this.wireManager?.exchangePushPull(ppp);
+      if (ppp) {
+        await this.wireManager?.exchangePushPull(ppp);
+      }
       return Promise.resolve(true);
     } finally {
       this.ctx.doUnlock(`syncDatatype: ${datatype.key}`);

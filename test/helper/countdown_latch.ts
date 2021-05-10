@@ -7,7 +7,10 @@ export class CountDownLatch {
   private readonly _onZeroPromise: Promise<void>;
   private _reachedZero: waitType;
 
-  constructor(count: number) {
+  constructor(count?: number) {
+    if (!count) {
+      count = 1;
+    }
     if (count < 0) {
       throw new Error('count cannot be negative');
     }
