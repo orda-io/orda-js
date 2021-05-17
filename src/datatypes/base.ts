@@ -1,5 +1,5 @@
 import { createUID, DUID } from '@ooo/types/uid';
-import { OperationId } from '@ooo/types/operation';
+import { OperationId, TypeOfOperation } from '@ooo/types/operation';
 import { ClientContext, DatatypeContext } from '@ooo/context';
 import { Op, Operation } from '@ooo/operations/operation';
 import { Snapshot } from '@ooo/datatypes/snapshot';
@@ -9,7 +9,6 @@ import {
   StateOfDatatype,
   TypeOfDatatype,
 } from '@ooo/types/datatype';
-import { OrtooError } from '@ooo/errors/error';
 import { DatatypeError } from '@ooo/errors/for_handlers';
 
 export { BaseDatatype };
@@ -79,7 +78,12 @@ abstract class BaseDatatype {
   protected sentenceLocal(op: Op): unknown {
     op.id = this.opId.next();
     try {
-      return this.executeLocalOp(op);
+      if (
+        op.type !== TypeOfOperation.TRANSACTION &&
+        op.type !== TypeOfOperation.SNAPSHOT
+      ) {
+        return this.executeLocalOp(op);
+      }
     } catch (e) {
       this.opId.rollback();
       throw e;

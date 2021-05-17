@@ -10,6 +10,7 @@ import { ClientModel, SyncType } from '@ooo/types/client';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { DatatypeHandlers } from '@ooo/handlers/handlers';
 import { ErrClient } from '@ooo/errors/client';
+import { OooMap } from '@ooo/datatypes/map';
 
 export { Client };
 
@@ -135,6 +136,43 @@ class Client {
       state,
       handlers
     );
+  }
+
+  public createMap(key: string, handlers?: DatatypeHandlers): OooMap {
+    return this.subscribeOrCreateDatatype(
+      key,
+      TypeOfDatatype.MAP,
+      StateOfDatatype.DUE_TO_CREATE,
+      handlers
+    ) as OooMap;
+  }
+
+  public subscribeMap(key: string, handlers?: DatatypeHandlers): OooMap {
+    return this.subscribeOrCreateDatatype(
+      key,
+      TypeOfDatatype.MAP,
+      StateOfDatatype.DUE_TO_SUBSCRIBE,
+      handlers
+    ) as OooMap;
+  }
+
+  /**
+   * subscribe Map with the given key if it exists in the ortoo server;
+   * otherwise, the Ortoo server is going to create and subscribe a new Map of the given key.
+   * @param {string} key
+   * @param {DatatypeHandlers} handlers
+   * @returns {Counter}
+   */
+  public subscribeOrCreateMap(
+    key: string,
+    handlers?: DatatypeHandlers
+  ): OooMap {
+    return this.subscribeOrCreateDatatype(
+      key,
+      TypeOfDatatype.MAP,
+      StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE,
+      handlers
+    ) as OooMap;
   }
 
   public async sync(): Promise<void> {

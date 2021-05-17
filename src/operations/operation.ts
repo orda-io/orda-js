@@ -1,13 +1,14 @@
 import { OperationId, TypeOfOperation } from '@ooo/types/operation';
 import { OrtooOperation as OperationOa } from '@ooo/generated/openapi';
 import { Uint32 } from '@ooo/types/integer';
+import { Timestamp } from '@ooo/types/timestamp';
 
 export type { OperationOa };
 export { Op };
 
 abstract class Op {
   id: OperationId;
-  type: TypeOfOperation;
+  readonly type: TypeOfOperation;
 
   protected constructor(type: TypeOfOperation) {
     this.type = type;
@@ -16,10 +17,12 @@ abstract class Op {
 
   abstract get body(): unknown;
 
-  abstract getBody(): string;
+  getBody(): string {
+    return JSON.stringify(this.body);
+  }
 
-  getType(): TypeOfOperation {
-    return this.type;
+  get timestamp(): Timestamp {
+    return this.id.timestamp;
   }
 
   toOpenApi(): OperationOa {
@@ -37,7 +40,7 @@ abstract class Op {
   }
 
   toOperation(): Operation {
-    return new Operation(this.id, this.type, this.body);
+    return new Operation(this.id, this.type, this.getBody());
   }
 }
 

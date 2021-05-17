@@ -3,7 +3,7 @@ import { helper } from '@test/helper/helper';
 import { SyncType } from '@ooo/types/client';
 import { Client } from '@ooo/client';
 import { DatatypeErrCodes } from '@ooo/errors/for_handlers';
-import { TestDatatypeHandlers } from '@test/sync/test_datatype_handlers';
+import { TestDatatypeHandlers } from '@test/integration/test_datatype_handlers';
 import { expect } from 'chai';
 import { StateOfDatatype } from '@ooo/generated/proto.enum';
 

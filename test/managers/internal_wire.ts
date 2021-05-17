@@ -10,24 +10,24 @@ import {
 import { uint64 } from '@ooo/types/integer';
 import { Op } from '@ooo/operations/operation';
 import { OrtooLogger } from '@ooo/utils/ortoo_logger';
-import { OooMap } from '@ooo/utils/map';
+import { ExtMap } from '@ooo/utils/map';
 import { CheckPoint } from '@ooo/types/checkpoint';
 
 export { InternalWireManager };
 
 class InternalWireManager implements WireManager {
-  private dataManagers: OooMap<CUID, DataManager>; // client -> dataManager
-  private loggerMap: OooMap<CUID, OrtooLogger>; // client -> logger
-  private checkPointMap: OooMap<CUID, OooMap<string, CheckPoint>>; // client -> data -> checkpoint
-  private historyMap: OooMap<string, Array<Op>>; // data -> history
-  private duidMap: OooMap<string, DUID>; // data -> duid
+  private dataManagers: ExtMap<CUID, DataManager>; // client -> dataManager
+  private loggerMap: ExtMap<CUID, OrtooLogger>; // client -> logger
+  private checkPointMap: ExtMap<CUID, ExtMap<string, CheckPoint>>; // client -> data -> checkpoint
+  private historyMap: ExtMap<string, Array<Op>>; // data -> history
+  private duidMap: ExtMap<string, DUID>; // data -> duid
 
   constructor() {
-    this.dataManagers = new OooMap<CUID, DataManager>();
-    this.loggerMap = new OooMap<CUID, OrtooLogger>();
-    this.checkPointMap = new OooMap<CUID, OooMap<string, CheckPoint>>();
-    this.historyMap = new OooMap<string, Array<Op>>();
-    this.duidMap = new OooMap<string, DUID>();
+    this.dataManagers = new ExtMap<CUID, DataManager>();
+    this.loggerMap = new ExtMap<CUID, OrtooLogger>();
+    this.checkPointMap = new ExtMap<CUID, ExtMap<string, CheckPoint>>();
+    this.historyMap = new ExtMap<string, Array<Op>>();
+    this.duidMap = new ExtMap<string, DUID>();
   }
 
   exchangePushPull(...pushPullList: PushPullPack[]): Promise<void> {
@@ -51,7 +51,7 @@ class InternalWireManager implements WireManager {
   private getCheckPoint(cuid: CUID, key: string): CheckPoint {
     const map = this.checkPointMap.getOrElseSet(
       cuid,
-      new OooMap<string, CheckPoint>()
+      new ExtMap<string, CheckPoint>()
     );
     return map.getOrElseSet(key, new CheckPoint());
   }

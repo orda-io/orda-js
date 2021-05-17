@@ -8,11 +8,9 @@ import { DatatypeErrCodes, DatatypeError } from '@ooo/errors/for_handlers';
 export { TransactionOperation, SnapshotOperation, ErrorOperation };
 
 class snapshotBody {
-  State: number;
   Snapshot: string;
 
-  constructor(state: number, snapshot: string) {
-    this.State = state;
+  constructor(snapshot: string) {
     this.Snapshot = snapshot;
   }
 }
@@ -20,19 +18,15 @@ class snapshotBody {
 class SnapshotOperation extends Op {
   body: snapshotBody;
 
-  constructor(state: number, snapshot: string) {
+  constructor(snapshot: string) {
     super(TypeOfOperation.SNAPSHOT);
-    this.body = new snapshotBody(state, snapshot);
-  }
-
-  getBody(): string {
-    return JSON.stringify(this.body);
+    this.body = new snapshotBody(snapshot);
   }
 
   static fromOpenApi(body: string, logger?: OrtooLogger): SnapshotOperation {
     try {
       const bodySnapshot: snapshotBody = JSON.parse(body);
-      return new SnapshotOperation(bodySnapshot.State, bodySnapshot.Snapshot);
+      return new SnapshotOperation(bodySnapshot.Snapshot);
     } catch (e) {
       throw new ErrDatatype.Marshal(logger, e);
     }
@@ -55,10 +49,6 @@ class TransactionOperation extends Op {
   constructor(tag: string, numOfOps?: number) {
     super(TypeOfOperation.TRANSACTION);
     this.body = new transactionBody(tag, numOfOps ? numOfOps : 0);
-  }
-
-  getBody(): string {
-    return JSON.stringify(this.body);
   }
 
   static fromOpenApi(body: string, logger?: OrtooLogger): TransactionOperation {
@@ -90,10 +80,6 @@ class ErrorOperation extends Op {
   constructor(body: errorBody) {
     super(TypeOfOperation.ERROR);
     this.body = body;
-  }
-
-  getBody(): string {
-    return JSON.stringify(this.body);
   }
 
   static fromOpenApi(body: string, logger?: OrtooLogger): ErrorOperation {

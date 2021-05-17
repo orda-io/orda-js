@@ -1,6 +1,6 @@
-export { OooMap };
+export { ExtMap };
 
-class OooMap<K, V> extends Map<K, V> {
+class ExtMap<K, V> extends Map<K, V> {
   getOrElseSet(k: K, v: V): V {
     const existing = this.get(k);
     if (existing) {

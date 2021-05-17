@@ -12,6 +12,7 @@ import { IncreaseOperation } from '@ooo/operations/counter';
 import { OperationId } from '@ooo/types/operation';
 import { ErrDatatype } from '@ooo/errors/datatype';
 import { Op } from '@ooo/operations/operation';
+import { PutOperation, RemoveOperation } from '@ooo/operations/map';
 
 export function convertOpenApiOperation(
   opa: OperationOa,
@@ -34,8 +35,10 @@ export function convertOpenApiOperation(
       op = IncreaseOperation.fromOpenApi(decodedBody, logger);
       break;
     case OpType.MAP_PUT:
+      op = PutOperation.fromOpenApi(decodedBody, logger);
       break;
     case OpType.MAP_REMOVE:
+      op = RemoveOperation.fromOpenApi(decodedBody, logger);
       break;
     case OpType.LIST_INSERT:
       break;

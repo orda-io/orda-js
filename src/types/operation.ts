@@ -10,6 +10,7 @@ import {
   OrtooOperationID as OperationIdOa,
   OrtooTypeOfOperation as TypeOfOperation,
 } from '@ooo/generated/openapi';
+import { Timestamp } from '@ooo/types/timestamp';
 
 export { TypeOfOperation };
 
@@ -44,6 +45,10 @@ export class OperationId {
     );
   }
 
+  get timestamp(): Timestamp {
+    return new Timestamp(this.era, this.lamport, this.cuid, uint32(0));
+  }
+
   next(): OperationId {
     this.lamport.add();
     this.seq.add();
@@ -73,17 +78,13 @@ export class OperationId {
   }
 
   compare(other: OperationId): number {
-    const diffErr = this.era.asNumber() - other.era.asNumber();
-    if (diffErr > 0) {
-      return 1;
-    } else if (diffErr < 0) {
-      return -1;
+    const diffEra = this.era.compare(other.era);
+    if (diffEra !== 0) {
+      return diffEra;
     }
-    const diffLamport = this.lamport.asNumber() - other.lamport.asNumber();
-    if (diffLamport > 0) {
-      return 1;
-    } else if (diffLamport < 0) {
-      return -1;
+    const diffLamport = this.lamport.compare(other.lamport);
+    if (diffLamport !== 0) {
+      return diffLamport;
     }
     return strcmp(this.cuid, other.cuid);
   }

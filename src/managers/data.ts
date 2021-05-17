@@ -8,6 +8,7 @@ import { DatatypeHandlers } from '@ooo/handlers/handlers';
 import { Uint64 } from '@ooo/types/integer';
 import { NotifyReceiver } from '@ooo/managers/notify';
 import { WiredDatatype } from '@ooo/datatypes/wired';
+import { _OooMap } from '@ooo/datatypes/map';
 
 export class DataManager implements NotifyReceiver {
   ctx: ClientContext;
@@ -119,14 +120,16 @@ export class DataManager implements NotifyReceiver {
     switch (type) {
       case TypeOfDatatype.COUNTER:
         data = new _Counter(this.ctx, key, state, this.wireManager, handlers);
-        this.dataMap.set(key, data);
         break;
       case TypeOfDatatype.MAP:
+        data = new _OooMap(this.ctx, key, state, this.wireManager, handlers);
+        break;
       case TypeOfDatatype.LIST:
       case TypeOfDatatype.DOCUMENT:
       default:
     }
     if (data) {
+      this.dataMap.set(key, data);
       data.subscribeOrCreate();
       return data;
     }
