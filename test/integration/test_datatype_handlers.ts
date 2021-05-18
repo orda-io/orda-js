@@ -4,19 +4,19 @@ import { DatatypeErrCodes, DatatypeError } from '@ooo/errors/for_handlers';
 import { StateOfDatatype } from '@ooo/generated/proto.enum';
 import { Operation } from '@ooo/operations/operation';
 import { CountDownLatch } from '@test/helper/countdown_latch';
-import { OooMap } from '@ooo/utils/map';
+import { ExtMap } from '@ooo/utils/map';
 import { helper } from '@test/helper/helper';
 
 export class TestDatatypeHandlers extends DatatypeHandlers {
-  errLatchMap: OooMap<DatatypeErrCodes, CountDownLatch>;
-  stateLatchMap: OooMap<StateOfDatatype, CountDownLatch>;
+  errLatchMap: ExtMap<DatatypeErrCodes, CountDownLatch>;
+  stateLatchMap: ExtMap<StateOfDatatype, CountDownLatch>;
   remoteLatch?: CountDownLatch;
   success: boolean;
 
   constructor() {
     super();
-    this.errLatchMap = new OooMap<DatatypeErrCodes, CountDownLatch>();
-    this.stateLatchMap = new OooMap<StateOfDatatype, CountDownLatch>();
+    this.errLatchMap = new ExtMap<DatatypeErrCodes, CountDownLatch>();
+    this.stateLatchMap = new ExtMap<StateOfDatatype, CountDownLatch>();
 
     this.onErrors = this.thisOnErrors;
     this.onStateChange = this.thisOnStateChange;

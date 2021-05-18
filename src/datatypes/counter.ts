@@ -55,7 +55,7 @@ class _Counter extends Datatype implements Counter {
 
   increase(delta = 1): number {
     try {
-      const op = new IncreaseOperation(delta);
+      const op = new IncreaseOperation(int32(delta));
       const ret: unknown[] = this.sentenceLocalInTx(op);
       return (ret[0] as Int32).asNumber();
     } catch (e) {
@@ -75,7 +75,7 @@ class _Counter extends Datatype implements Counter {
   }
 
   private executeCommon(op: Op): unknown {
-    switch (op.getType()) {
+    switch (op.type) {
       case TypeOfOperation.SNAPSHOT:
         const sop = op as SnapshotOperation;
         this.snap.fromJSON(sop.getBody());
@@ -84,10 +84,15 @@ class _Counter extends Datatype implements Counter {
         const iop = op as IncreaseOperation;
         return this.snap.increaseCommon(iop.body.delta);
     }
+    throw new ErrDatatype.IllegalOperation(
+      this.ctx.L,
+      this.type,
+      op.toString()
+    );
   }
 
   transaction(tag: string, txFunc: (counter: CounterTx) => boolean): boolean {
-    return this.doTransaction(tag, (twxCtx: TransactionContext): boolean => {
+    return this.doTransaction(tag, (txCtx: TransactionContext): boolean => {
       return txFunc(this);
     });
   }

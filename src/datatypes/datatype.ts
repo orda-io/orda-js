@@ -63,16 +63,15 @@ abstract class Datatype extends WiredDatatype {
     }
   }
 
+  getSnapshotOperation(): SnapshotOperation {
+    return new SnapshotOperation(this.getSnapshot().toJSONString());
+  }
+
   subscribeOrCreate(): void {
     if (this.state === StateOfDatatype.DUE_TO_SUBSCRIBE) {
       this.deliverTransaction([]).then();
       return;
     }
-    this.sentenceLocalInTx(
-      new SnapshotOperation(
-        encodeStateOfDatatype[this.state],
-        this.getSnapshot().toJSONString()
-      )
-    );
+    this.sentenceLocalInTx(this.getSnapshotOperation());
   }
 }

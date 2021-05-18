@@ -102,7 +102,12 @@ abstract class Int {
 
   public compare(other: this): number {
     const diff = BigInt(this.num) - BigInt(other.num);
-    return Number(diff);
+    if (diff > 0n) {
+      return 1; // < 0
+    } else if (diff < 0n) {
+      return -1;
+    }
+    return 0;
   }
 
   public get(): BigInt {
@@ -115,6 +120,19 @@ abstract class Int {
 
   public asNumber(): number {
     return Number(this.num);
+  }
+
+  public isZero(): boolean {
+    return this.num === 0n;
+  }
+
+  public compareToZero(): number {
+    if (this.num > 0n) {
+      return 1;
+    } else if (this.num < 0n) {
+      return -1;
+    }
+    return 0;
   }
 
   toJSON(): number {
