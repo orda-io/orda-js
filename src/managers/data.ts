@@ -9,6 +9,8 @@ import { Uint64 } from '@ooo/types/integer';
 import { NotifyReceiver } from '@ooo/managers/notify';
 import { WiredDatatype } from '@ooo/datatypes/wired';
 import { _OooMap } from '@ooo/datatypes/map';
+import { _List } from '@ooo/datatypes/list';
+import { _Document } from '@ooo/datatypes/document';
 
 export class DataManager implements NotifyReceiver {
   ctx: ClientContext;
@@ -38,7 +40,7 @@ export class DataManager implements NotifyReceiver {
         }
       });
       if (this.wireManager) {
-        return await this.wireManager?.exchangePushPull(...pushPullPackList);
+        return await this.wireManager?.exchangePushPull(this.ctx.cuid, ...pushPullPackList);
       }
       return Promise.resolve();
     } finally {
@@ -81,7 +83,7 @@ export class DataManager implements NotifyReceiver {
       this.ctx.L.info(`[💾🔻] BEGIN syncDatatype: ${datatype.key}`);
       const ppp = datatype.createPushPullPack();
       if (ppp) {
-        await this.wireManager?.exchangePushPull(ppp);
+        await this.wireManager?.exchangePushPull(this.ctx.cuid, ppp);
       }
       return Promise.resolve(true);
     } finally {
@@ -125,7 +127,11 @@ export class DataManager implements NotifyReceiver {
         data = new _OooMap(this.ctx, key, state, this.wireManager, handlers);
         break;
       case TypeOfDatatype.LIST:
+        data = new _List(this.ctx, key, state, this.wireManager, handlers);
+        break;
       case TypeOfDatatype.DOCUMENT:
+        data = new _Document(this.ctx, key, state, this.wireManager, handlers);
+        break;
       default:
     }
     if (data) {
@@ -145,12 +151,7 @@ export class DataManager implements NotifyReceiver {
     }
   }
 
-  async onReceiveNotification(
-    cuid: string,
-    duid: string,
-    key: string,
-    sseq: Uint64
-  ): Promise<void> {
+  async onReceiveNotification(cuid: string, duid: string, key: string, sseq: Uint64): Promise<void> {
     const datatype = this.dataMap.get(key);
     if (datatype && datatype.id === duid && datatype.needPull(sseq)) {
       if (await this.trySyncDatatype(datatype)) {

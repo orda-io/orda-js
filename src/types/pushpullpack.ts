@@ -4,7 +4,7 @@ import { Op, OperationOa } from '@ooo/operations/operation';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { OrtooPushPullPack } from '@ooo/generated/openapi';
 import { OrtooLogger } from '@ooo/utils/ortoo_logger';
-import { convertOpenApiOperation } from '@ooo/operations/converter';
+import { convertFromOpenApiOperation } from '@ooo/operations/converter';
 
 export { PushPullPack, PushPullOptions, PPOptions };
 
@@ -142,7 +142,7 @@ class PushPullPack {
     const opList: Op[] = new Array<Op>();
     if (ppp.operations) {
       for (const oop of ppp.operations) {
-        opList.push(convertOpenApiOperation(oop, logger));
+        opList.push(convertFromOpenApiOperation(oop, logger));
       }
     }
 

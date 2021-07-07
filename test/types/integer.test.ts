@@ -1,12 +1,4 @@
-import {
-  Int32,
-  int32,
-  Int64,
-  Uint32,
-  uint32,
-  Uint64,
-  uint64,
-} from '@ooo/types/integer';
+import { Int32, int32, Int64, Uint32, uint32, Uint64, uint64 } from '@ooo/types/integer';
 
 import { expect } from 'chai';
 
@@ -88,23 +80,13 @@ describe('Test Uint types', () => {
   });
 
   it('Can multiply/divide two uints', () => {
-    expect(uint32(Uint32.MAX_VALUE).div(2).mul(2).get()).to.equal(
-      BigInt(Uint32.MAX_VALUE) - 1n
-    );
+    expect(uint32(Uint32.MAX_VALUE).div(2).mul(2).get()).to.equal(BigInt(Uint32.MAX_VALUE) - 1n);
 
-    expect(uint32(Uint32.MAX_VALUE).div(2n).mul(2n).get()).to.equal(
-      BigInt(Uint32.MAX_VALUE) - 1n
-    );
+    expect(uint32(Uint32.MAX_VALUE).div(2n).mul(2n).get()).to.equal(BigInt(Uint32.MAX_VALUE) - 1n);
 
-    expect(uint32(Uint32.MAX_VALUE).div('2').mul('2').get()).to.equal(
-      BigInt(Uint32.MAX_VALUE) - 1n
-    );
-    expect(
-      uint32(Uint32.MAX_VALUE).div(uint32(2)).mul(uint32(2)).get()
-    ).to.equal(BigInt(Uint32.MAX_VALUE) - 1n);
-    expect(
-      uint32(Uint32.MAX_VALUE).div(uint64(2)).mul(uint64(2)).get()
-    ).to.equal(BigInt(Uint32.MAX_VALUE) - 1n);
+    expect(uint32(Uint32.MAX_VALUE).div('2').mul('2').get()).to.equal(BigInt(Uint32.MAX_VALUE) - 1n);
+    expect(uint32(Uint32.MAX_VALUE).div(uint32(2)).mul(uint32(2)).get()).to.equal(BigInt(Uint32.MAX_VALUE) - 1n);
+    expect(uint32(Uint32.MAX_VALUE).div(uint64(2)).mul(uint64(2)).get()).to.equal(BigInt(Uint32.MAX_VALUE) - 1n);
 
     Uint32.enableRangeError = true;
     expect(() => {

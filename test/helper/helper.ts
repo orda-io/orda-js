@@ -1,5 +1,5 @@
 import { OrtooLoggerFactory } from '@ooo/utils/ortoo_logger';
-import { ClientContext } from '@ooo/context';
+import { ClientContext, DatatypeContext } from '@ooo/context';
 import { ClientModel, SyncType } from '@ooo/types/client';
 import { createUID } from '@ooo/types/uid';
 import { Suite } from 'mocha';
@@ -7,8 +7,15 @@ import { Client } from '@ooo/client';
 import { ClientConfig } from '@ooo/config';
 import { WireManager } from '@ooo/managers/wire';
 import { MD5 } from 'crypto-js';
-import { Api, ApiConfig } from '@ooo/generated/openapi';
+import {
+  Api,
+  ApiConfig,
+  OrtooOperation,
+  OrtooTypeOfOperation,
+} from '@ooo/generated/openapi';
 import * as Assert from 'assert';
+import { Operation } from '@ooo/operations/operation';
+import { BaseDatatype } from '@ooo/datatypes/base';
 
 export { helper };
 
@@ -58,6 +65,10 @@ const helper = {
   sleep(sec: number): Promise<void> {
     this.L.info(`sleep ${sec}s`);
     return new Promise((resolve) => setTimeout(resolve, sec * 1000));
+  },
+
+  createDatatypeContext(s: Suite): DatatypeContext {
+    return new DatatypeContext(this.createClientContext(s));
   },
 
   createClientContext(s: Suite): ClientContext {

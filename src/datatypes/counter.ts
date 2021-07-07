@@ -27,15 +27,9 @@ interface Counter extends CounterTx {
 }
 
 class _Counter extends Datatype implements Counter {
-  private snap: CounterSnapshot;
+  private readonly snap: CounterSnapshot;
 
-  constructor(
-    ctx: ClientContext,
-    key: string,
-    state: StateOfDatatype,
-    wire?: Wire,
-    handlers?: DatatypeHandlers
-  ) {
+  constructor(ctx: ClientContext, key: string, state: StateOfDatatype, wire?: Wire, handlers?: DatatypeHandlers) {
     super(ctx, key, TypeOfDatatype.COUNTER, state, wire, handlers);
     this.snap = new CounterSnapshot(this.ctx);
     this.resetRollbackContext();
@@ -55,9 +49,8 @@ class _Counter extends Datatype implements Counter {
 
   increase(delta = 1): number {
     try {
-      const op = new IncreaseOperation(int32(delta));
-      const ret: unknown[] = this.sentenceLocalInTx(op);
-      return (ret[0] as Int32).asNumber();
+      const ret = this.sentenceLocalInTx(new IncreaseOperation(int32(delta))) as Int32;
+      return ret.asNumber();
     } catch (e) {
       if (e instanceof OrtooError) {
         throw e;
@@ -78,17 +71,12 @@ class _Counter extends Datatype implements Counter {
     switch (op.type) {
       case TypeOfOperation.SNAPSHOT:
         const sop = op as SnapshotOperation;
-        this.snap.fromJSON(sop.getBody());
+        this.snap.fromJSON(sop.getStringBody());
         return;
       case TypeOfOperation.COUNTER_INCREASE:
-        const iop = op as IncreaseOperation;
-        return this.snap.increaseCommon(iop.body.delta);
+        return this.snap.increaseCommon(<IncreaseOperation>op);
     }
-    throw new ErrDatatype.IllegalOperation(
-      this.ctx.L,
-      this.type,
-      op.toString()
-    );
+    throw new ErrDatatype.IllegalOperation(this.ctx.L, this.type, op.toString());
   }
 
   transaction(tag: string, txFunc: (counter: CounterTx) => boolean): boolean {
@@ -96,10 +84,14 @@ class _Counter extends Datatype implements Counter {
       return txFunc(this);
     });
   }
+
+  toJSON(): unknown {
+    return this.snap.toNoMetaJSON();
+  }
 }
 
 interface ICounterSnapshot {
-  value: number;
+  Counter: number;
 }
 
 class CounterSnapshot implements Snapshot {
@@ -111,10 +103,10 @@ class CounterSnapshot implements Snapshot {
     this.value = int32();
   }
 
-  increaseCommon(delta: Int32): Int32 {
-    this.ctx.L.debug(`[COUNTER] add ${delta} to ${this.value.get()}`);
+  increaseCommon(op: IncreaseOperation): Int32 {
+    this.ctx.L.debug(`[COUNTER] add ${op.body.Delta} to ${this.value.get()}`);
     try {
-      return this.value.add(delta) as Int32;
+      return this.value.add(op.body.Delta) as Int32;
     } catch (e) {
       throw new ErrDatatype.OutOfBound(this.ctx.L, e);
     }
@@ -122,16 +114,16 @@ class CounterSnapshot implements Snapshot {
 
   toJSON(): ICounterSnapshot {
     return {
-      value: this.value.asNumber(),
+      Counter: this.value.asNumber(),
     };
-  }
-
-  toJSONString(): string {
-    return JSON.stringify(this.toJSON());
   }
 
   fromJSON(json: string): void {
     const parsed: ICounterSnapshot = JSON.parse(json);
-    this.value = int32(parsed.value);
+    this.value = int32(parsed.Counter);
+  }
+
+  toNoMetaJSON(): unknown {
+    return this.value.asNumber();
   }
 }

@@ -23,7 +23,7 @@ class CheckPoint {
   }
 
   public clone(): CheckPoint {
-    return new CheckPoint(this.cseq, this.sseq);
+    return new CheckPoint(this.sseq, this.cseq);
   }
 
   public toString(): string {

@@ -11,6 +11,7 @@ module.exports = {
     es6: true,
   },
   rules: {
+    'max-len': [1, { code: 120 }],
     'prettier/prettier': 1,
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     eqeqeq: ['warn', 'always'],

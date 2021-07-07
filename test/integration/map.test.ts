@@ -26,18 +26,21 @@ describe('Integration test map', function (this: Suite): void {
       map1.remove('Removed');
       expect(map1.get('Removed')).to.undefined;
       await map1.sync();
+
       await client2.connect();
       const map2 = client2.subscribeMap(helper.dtName(this));
       await map2.sync();
 
-      const snap1 = (map1 as _OooMap).getSnapshotOperation();
-      const snap2 = (map2 as _OooMap).getSnapshotOperation();
+      const snap1 = (map1 as _OooMap).createSnapshotOperation();
+      const snap2 = (map2 as _OooMap).createSnapshotOperation();
+      helper.L.info(`${snap1}`);
+      helper.L.info(`${snap2}`);
       expect(map1.get('hello')).to.equal(map2.get('hello'));
 
-      const map3 = client3.createMap(helper.dtName(this));
+      const map3 = client3.createMap(helper.dtName(this)) as _OooMap;
 
-      (map3 as _OooMap).setSnapshot(JSON.parse(snap1.getBody()).Snapshot);
-      const snap3 = (map3 as _OooMap).getSnapshotOperation();
+      map3.setSnapshot(snap1.getStringBody());
+      const snap3 = map3.createSnapshotOperation();
       expect(`${snap1}`).to.equal(`${snap2}`).to.equal(`${snap3}`);
       helper.L.info(`${snap3}`);
     } finally {

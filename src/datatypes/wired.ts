@@ -2,13 +2,9 @@ import { CheckPoint } from '@ooo/types/checkpoint';
 import { Op, Operation } from '@ooo/operations/operation';
 import { ClientContext } from '@ooo/context';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { Uint64 } from '@ooo/types/integer';
-import {
-  PPOptions,
-  PushPullOptions,
-  PushPullPack,
-} from '@ooo/types/pushpullpack';
-import { OperationId } from '@ooo/types/operation';
+import { Int64, Uint64 } from '@ooo/types/integer';
+import { PPOptions, PushPullOptions, PushPullPack } from '@ooo/types/pushpullpack';
+import { OperationID } from '@ooo/types/operation';
 import { TransactionDatatype } from '@ooo/datatypes/tansaction';
 import { DUID } from '@ooo/types/uid';
 import { ErrDatatype } from '@ooo/errors/datatype';
@@ -28,15 +24,9 @@ interface Wire {
 abstract class WiredDatatype extends TransactionDatatype {
   private checkPoint: CheckPoint;
   private opBuffer: Op[];
-  private wire?: Wire;
+  wire?: Wire;
 
-  protected constructor(
-    ctx: ClientContext,
-    key: string,
-    type: TypeOfDatatype,
-    state: StateOfDatatype,
-    wire?: Wire
-  ) {
+  protected constructor(ctx: ClientContext, key: string, type: TypeOfDatatype, state: StateOfDatatype, wire?: Wire) {
     super(ctx, key, type, state);
     this.checkPoint = new CheckPoint();
     this.opBuffer = Array<Op>();
@@ -67,10 +57,7 @@ abstract class WiredDatatype extends TransactionDatatype {
     // }
   }
 
-  private async callHandlers(
-    errs: DatatypeError[],
-    opList: Operation[]
-  ): Promise<void> {
+  private async callHandlers(errs: DatatypeError[], opList: Operation[]): Promise<void> {
     if (errs.length > 0) {
       this.callOnErrors(...errs);
     }
@@ -121,9 +108,7 @@ abstract class WiredDatatype extends TransactionDatatype {
     if (this.checkPoint.sseq.compare(newCheckPoint.sseq) < 0) {
       this.checkPoint.sseq = newCheckPoint.sseq;
     }
-    this.ctx.L.debug(
-      `[🚆] SYNC checkpoint: ${oldCheckPoint.toString()}->${this.checkPoint.toString()}`
-    );
+    this.ctx.L.debug(`[🚆] SYNC checkpoint: ${oldCheckPoint.toString()}->${this.checkPoint.toString()}`);
   }
 
   private excludeDuplicateOperations(pushPullPack: PushPullPack) {
@@ -136,11 +121,11 @@ abstract class WiredDatatype extends TransactionDatatype {
   }
 
   private calculatePullingOperations(newCp: CheckPoint): number {
-    return (
-      newCp.sseq.asNumber() -
-      this.checkPoint.sseq.asNumber() -
-      (newCp.cseq.asNumber() - this.checkPoint.cseq.asNumber())
-    );
+    return Int64.sub(newCp.sseq, this.checkPoint.sseq).sub(Int64.sub(newCp.cseq, this.checkPoint.cseq)).asNumber();
+    // (
+    //    -
+    //   (newCp.cseq.asNumber() - this.checkPoint.cseq.asNumber())
+    // );
   }
 
   private checkOptionAndError(ppp: PushPullPack): DatatypeError | undefined {
@@ -164,9 +149,7 @@ abstract class WiredDatatype extends TransactionDatatype {
       }
     }
     if (PPOptions.hasSubscribe(option)) {
-      if (this.state === StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE) {
-        this.resetDatatypeForSubscribe(ppp.duid);
-      }
+      this.resetDatatypeForSubscribe(ppp.duid);
     }
 
     return undefined;
@@ -210,26 +193,19 @@ abstract class WiredDatatype extends TransactionDatatype {
       default:
         break;
     }
-    throw new ErrDatatype.IllegalPushPullOption(
-      PPOptions.toString(option),
-      this.state,
-      this.ctx.L
-    );
+    throw new ErrDatatype.IllegalPushPullOption(PPOptions.toString(option), this.state, this.ctx.L);
   }
 
   private resetDatatypeForSubscribe(duid: DUID) {
     this.checkPoint = new CheckPoint(0, 0);
     this.opBuffer = new Array<Op>();
     this.id = duid;
-    this.opId = new OperationId(this.ctx.cuid);
+    this.opId = new OperationID(this.ctx.cuid);
     this.ctx.L.debug(`[🚆] ready to subscribe:${this.checkPoint}`);
   }
 
   isSyncState(): boolean {
-    if (
-      this.state === StateOfDatatype.CLOSED ||
-      this.state === StateOfDatatype.DELETED
-    ) {
+    if (this.state === StateOfDatatype.CLOSED || this.state === StateOfDatatype.DELETED) {
       return false;
     }
     return true;
@@ -240,10 +216,7 @@ abstract class WiredDatatype extends TransactionDatatype {
       return;
     }
     const operations = this.peekOperations(this.checkPoint.cseq);
-    const cp = new CheckPoint(
-      this.checkPoint.sseq,
-      Uint64.add(this.checkPoint.cseq, operations.length)
-    );
+    const cp = new CheckPoint(this.checkPoint.sseq, Uint64.add(this.checkPoint.cseq, operations.length));
 
     return new PushPullPack(
       this.id,
@@ -269,14 +242,8 @@ abstract class WiredDatatype extends TransactionDatatype {
     return new Array<Op>();
   }
 
-  async deliverTransaction(
-    transaction: Op[],
-    manually?: boolean
-  ): Promise<void> {
-    if (
-      this.state === StateOfDatatype.CLOSED ||
-      this.state === StateOfDatatype.DELETED
-    ) {
+  async deliverTransaction(transaction: Op[], manually?: boolean): Promise<void> {
+    if (this.state === StateOfDatatype.CLOSED || this.state === StateOfDatatype.DELETED) {
       return Promise.resolve();
     }
     if (transaction.length > 0) {

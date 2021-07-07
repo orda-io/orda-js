@@ -13,5 +13,6 @@ describe('Test OooMap', () => {
     ortooLogger.info(y);
     expect(x.asNumber()).to.equal(1);
     expect(y.asNumber()).to.equal(5);
+    oooMap.delete('NOT_EXIST');
   });
 });

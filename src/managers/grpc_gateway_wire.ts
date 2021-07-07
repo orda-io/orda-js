@@ -10,6 +10,7 @@ import { ErrClient } from '@ooo/errors/client';
 import { NotifyManager } from '@ooo/managers/notify';
 import { StateOfDatatype } from '@ooo/generated/proto.enum';
 import { ClientMessage, PushPullMessage } from '@ooo/types/messages';
+import { CUID } from '@ooo/types/uid';
 
 export { GrpcGatewayWireManager };
 
@@ -43,11 +44,7 @@ class GrpcGatewayWireManager implements WireManager {
     const req = new ClientMessage(this.ctx.client);
     this.ctx.L.debug(`[🚀🔻] send ClientMessage ${JSON.stringify(req)}`);
     try {
-      const result = await this.openApi.api.ortooServiceProcessClient(
-        req.collection,
-        req.cuid,
-        req
-      );
+      const result = await this.openApi.api.ortooServiceProcessClient(req.collection, req.cuid, req);
       const clientMsg = result.data;
       this.ctx.L.debug(
         `[🚀] received ClientMessage '${clientMsg.clientAlias}'(${clientMsg.cuid}) in collection '${clientMsg.collection}'.`
@@ -62,18 +59,12 @@ class GrpcGatewayWireManager implements WireManager {
     return Promise.resolve();
   }
 
-  public async exchangePushPull(
-    ...pushPullList: PushPullPack[]
-  ): Promise<void> {
+  public async exchangePushPull(cuid: CUID, ...pushPullList: PushPullPack[]): Promise<void> {
     try {
       this.ctx.L.info('[🚀🔻] BEGIN exchangePushPull()');
       const req = new PushPullMessage(this.ctx.client, ...pushPullList);
       this.ctx.L.info(`[🚀] SEND PUSH: ${JSON.stringify(pushPullList)}`);
-      const result = await this.openApi.api.ortooServiceProcessPushPull(
-        req.collection,
-        req.cuid,
-        req
-      );
+      const result = await this.openApi.api.ortooServiceProcessPushPull(req.collection, req.cuid, req);
       const pulled = result.data;
 
       if (pulled.PushPullPacks) {
@@ -85,7 +76,7 @@ class GrpcGatewayWireManager implements WireManager {
         this.dataManager?.applyPushPullPack(...pushPullPacks);
       }
     } catch (e) {
-      const err = new ErrClient.PushPull(this.ctx.L, e.error.message);
+      const err = new ErrClient.PushPull(this.ctx.L, e.error);
       return Promise.reject(err);
     } finally {
       this.ctx.L.info('[🚀🔺] END exchangePushPull()');

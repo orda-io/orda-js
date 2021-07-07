@@ -30,10 +30,9 @@ class InternalWireManager implements WireManager {
     this.duidMap = new ExtMap<string, DUID>();
   }
 
-  exchangePushPull(...pushPullList: PushPullPack[]): Promise<void> {
+  exchangePushPull(cuid: CUID, ...pushPullList: PushPullPack[]): Promise<void> {
     pushPullList.forEach((ppp) => {
-      const firstOp = ppp.opList[0];
-      const ownerCuid = firstOp.id.cuid;
+      const ownerCuid = cuid;
       this.exchangePushPullForSender(ownerCuid, ppp);
       if (ppp.opList.length <= 0) {
         return Promise.resolve();
@@ -135,7 +134,7 @@ class InternalWireManager implements WireManager {
     if (!pushPullPack) {
       return;
     }
-    this.exchangePushPull(pushPullPack);
+    this.exchangePushPull(datatype.ctx.cuid, pushPullPack);
   }
 
   addDataManager(dataManager: DataManager): void {
