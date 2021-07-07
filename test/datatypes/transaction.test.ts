@@ -14,14 +14,12 @@ describe('Test Transaction', function (this: Suite): void {
     expect(counter.increase(1)).to.equal(1);
 
     Int32.enableRangeError = true;
-    const oldOpId = _counter.ctx.datatype.opId.clone();
+    const oldOpId = _counter.ctx.datatype!.opId.clone();
 
     helper.L.info('before error, opId:', oldOpId.toString());
-    expect(() => counter.increase(Number(Int32.MAX_VALUE))).to.throw(
-      ErrDatatype.OutOfBound
-    );
+    expect(() => counter.increase(Number(Int32.MAX_VALUE))).to.throw(ErrDatatype.OutOfBound);
     expect(counter.get()).to.equal(1);
-    expect(_counter.ctx.datatype.opId.compare(oldOpId)).to.equal(0);
+    expect(_counter.ctx.datatype!.opId.compare(oldOpId)).to.equal(0);
 
     counter.transaction('succeededTx', (counterTx: CounterTx) => {
       counterTx.increase(2);

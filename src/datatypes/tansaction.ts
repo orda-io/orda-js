@@ -1,11 +1,7 @@
 import { Op, Operation } from '@ooo/operations/operation';
 import { TransactionOperation } from '@ooo/operations/meta';
 import { ClientContext } from '@ooo/context';
-import {
-  DatatypeMeta,
-  StateOfDatatype,
-  TypeOfDatatype,
-} from '@ooo/types/datatype';
+import { DatatypeMeta, StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { BaseDatatype } from '@ooo/datatypes/base';
 
 const LOCAL_TX_TAG = 'LocalTransactionTag!@#$%OrToO';
@@ -18,19 +14,14 @@ abstract class TransactionDatatype extends BaseDatatype {
   private txCtxInProgress: TransactionContext | null; // if null, no transaction in progress.
   private rollbackCtx!: RollbackContext;
 
-  protected constructor(
-    ctx: ClientContext,
-    key: string,
-    type: TypeOfDatatype,
-    state: StateOfDatatype
-  ) {
+  protected constructor(ctx: ClientContext, key: string, type: TypeOfDatatype, state: StateOfDatatype) {
     super(ctx, key, type, state);
     this.inProgress = false;
     this.txCtxInProgress = null;
   }
 
-  sentenceLocalInTx(...opArray: Op[]): unknown[] {
-    return this.sentenceInTx(true, ...opArray);
+  sentenceLocalInTx(op: Op): unknown {
+    return this.sentenceInTx(true, op)[0];
   }
 
   sentenceRemoteInTx(...opArray: Op[]): Operation[] {
@@ -58,10 +49,7 @@ abstract class TransactionDatatype extends BaseDatatype {
   in either transaction() of datatype implementations 
   or sentenceInTx()
    */
-  doTransaction(
-    tag: string,
-    txFunc: (txCtx: TransactionContext) => boolean
-  ): boolean {
+  doTransaction(tag: string, txFunc: (txCtx: TransactionContext) => boolean): boolean {
     const began = this.beginTransaction(tag);
     try {
       const result = txFunc(this.txCtxInProgress!); // might throw error, then go to finally in cascade
@@ -102,9 +90,7 @@ abstract class TransactionDatatype extends BaseDatatype {
           if (op instanceof TransactionOperation) {
             op.body.numOfOps = this.txCtxInProgress.opBuffer.length;
           }
-          this.ctx.L.debug(
-            `[🔒] contains ${this.txCtxInProgress.opBuffer.length} operation(s)`
-          );
+          this.ctx.L.debug(`[🔒] contains ${this.txCtxInProgress.opBuffer.length} operation(s)`);
         }
         this.rollbackCtx.push(this.txCtxInProgress.opBuffer);
         if (REMOTE_TX_TAG !== this.txCtxInProgress.tag) {
@@ -130,17 +116,14 @@ abstract class TransactionDatatype extends BaseDatatype {
     this.ctx.L.debug(`[🔒🔃🔻] BEGIN rollback:${this.txCtxInProgress?.tag}`);
     this.setMetaAndSnapshot(this.rollbackCtx.meta, this.rollbackCtx.snap);
     this.rollbackCtx.opBuffer.forEach((op) => {
-      this.replay(op);
+      this.sentenceRemote(op);
     });
     this.resetRollbackContext();
     this.ctx.L.debug(`[🔒🔃🔺] END rollback:${this.txCtxInProgress?.tag}`);
   }
 
   resetRollbackContext(): RollbackContext {
-    this.rollbackCtx = new RollbackContext(
-      this.getMeta(),
-      JSON.stringify(this.getSnapshot())
-    );
+    this.rollbackCtx = new RollbackContext(this.getMeta(), JSON.stringify(this.getSnapshot()));
     return this.rollbackCtx;
   }
 

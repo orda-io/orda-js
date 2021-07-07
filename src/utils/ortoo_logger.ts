@@ -60,14 +60,9 @@ function getFilePos(whichStack: number): string {
   const errStr = new Error()?.stack;
   if (errStr) {
     const results = errStr.match(REGEX);
-    let errPos =
-      results && results.length > whichStack + 1 ? results[whichStack] : '';
+    let errPos = results && results.length > whichStack + 1 ? results[whichStack] : '';
     errPos = errPos.replace(/\\/g, '/').replace(/[(|)]/g, '');
-    const begin = Math.max(
-      errPos.indexOf('/src/'),
-      errPos.indexOf('/test/'),
-      0
-    );
+    const begin = Math.max(errPos.indexOf('/src/'), errPos.indexOf('/test/'), 0);
     return errPos.substring(begin);
   }
   return '';
@@ -90,12 +85,7 @@ class OrtooConsole implements IConsole {
   _warn: logFunction;
   _error: logFunction;
 
-  constructor(
-    name: string,
-    withPos = true,
-    logLevel?: OrtooLogLevel,
-    iConsole?: IConsole
-  ) {
+  constructor(name: string, withPos = true, logLevel?: OrtooLogLevel, iConsole?: IConsole) {
     this.name = name;
     if (iConsole) {
       this.original = iConsole;

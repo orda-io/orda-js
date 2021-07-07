@@ -10,13 +10,7 @@ export const BaseErrorCode = {
 export class OrtooError extends Error {
   code: number;
 
-  constructor(
-    code: number,
-    msg: string,
-    log?: OrtooLogger,
-    e?: Error,
-    ...args: string[]
-  ) {
+  constructor(code: number, msg: string, log?: OrtooLogger, e?: Error, ...args: string[]) {
     super(`[${code}] ${msg} ${e ? e.message : ''}`);
     this.code = code;
     if (e) {

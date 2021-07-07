@@ -6,47 +6,47 @@ export interface TimedType {
 
   isTomb(): boolean;
 
-  makeTomb(ts: Timestamp): void;
+  makeTomb(ts?: Timestamp): void;
+
+  equals(o: TimedType): boolean;
 }
 
 export class TimedNode implements TimedType {
-  private V: unknown;
-  private T: Timestamp;
+  value: unknown;
+  time: Timestamp;
+
+  constructor(v: unknown, ts: Timestamp) {
+    this.value = v;
+    this.time = ts;
+  }
 
   isTomb(): boolean {
-    return !this.V;
+    return !this.value;
   }
 
   makeTomb(ts: Timestamp): void {
-    this.T = ts;
-    this.V = undefined;
-  }
-
-  constructor(v: unknown, ts: Timestamp) {
-    this.V = v;
-    this.T = ts;
-  }
-
-  get value(): unknown {
-    return this.V;
-  }
-
-  set value(v: unknown) {
-    this.V = v;
-  }
-
-  get time(): Timestamp {
-    return this.T;
-  }
-
-  set time(ts: Timestamp) {
-    this.T = ts;
+    this.value = undefined;
+    this.time = ts.clone();
   }
 
   toJSON(): unknown {
     return {
-      v: this.V,
-      t: this.T,
+      v: this.value ? this.value : null,
+      t: this.time,
     };
+  }
+
+  static fromJSON(json: any): TimedNode {
+    return new TimedNode(json.v, json.t);
+  }
+
+  equals(o: TimedType): boolean {
+    if (!Timestamp.equals(this.time, o.time)) {
+      return false;
+    }
+    if (this.value !== o.value) {
+      return false;
+    }
+    return true;
   }
 }

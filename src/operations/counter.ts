@@ -7,10 +7,10 @@ import { ErrDatatype } from '@ooo/errors/datatype';
 export { IncreaseOperation };
 
 class increaseBody {
-  delta: Int32;
+  Delta: Int32;
 
   constructor(delta: Int32) {
-    this.delta = delta;
+    this.Delta = delta;
   }
 }
 
@@ -24,8 +24,8 @@ class IncreaseOperation extends Op {
 
   static fromOpenApi(body: string, logger?: OrtooLogger): IncreaseOperation {
     try {
-      const snap: increaseBody = JSON.parse(body);
-      return new IncreaseOperation(snap.delta);
+      const snap = JSON.parse(body);
+      return new IncreaseOperation(snap.Delta);
     } catch (e) {
       throw new ErrDatatype.Marshal(logger, e);
     }

@@ -8,25 +8,28 @@ import { DatatypeErrCodes, DatatypeError } from '@ooo/errors/for_handlers';
 export { TransactionOperation, SnapshotOperation, ErrorOperation };
 
 class snapshotBody {
-  Snapshot: string;
+  Type: number;
+  Snapshot: unknown;
 
-  constructor(snapshot: string) {
+  constructor(Type: number, snapshot: unknown) {
+    this.Type = Type;
     this.Snapshot = snapshot;
   }
 }
 
 class SnapshotOperation extends Op {
-  body: snapshotBody;
+  body: string;
 
   constructor(snapshot: string) {
     super(TypeOfOperation.SNAPSHOT);
-    this.body = new snapshotBody(snapshot);
+    this.body = snapshot;
   }
 
   static fromOpenApi(body: string, logger?: OrtooLogger): SnapshotOperation {
     try {
-      const bodySnapshot: snapshotBody = JSON.parse(body);
-      return new SnapshotOperation(bodySnapshot.Snapshot);
+      // const bodySnapshot = JSON.parse(body);
+
+      return new SnapshotOperation(body);
     } catch (e) {
       throw new ErrDatatype.Marshal(logger, e);
     }
@@ -53,11 +56,8 @@ class TransactionOperation extends Op {
 
   static fromOpenApi(body: string, logger?: OrtooLogger): TransactionOperation {
     try {
-      const bodyTransaction: transactionBody = JSON.parse(body);
-      return new TransactionOperation(
-        bodyTransaction.tag,
-        bodyTransaction.numOfOps
-      );
+      const bodyTransaction = JSON.parse(body);
+      return new TransactionOperation(bodyTransaction.Tag, bodyTransaction.NumOfOps);
     } catch (e) {
       throw new ErrDatatype.Marshal(logger, e);
     }
@@ -77,15 +77,15 @@ class errorBody {
 class ErrorOperation extends Op {
   body: errorBody;
 
-  constructor(body: errorBody) {
+  constructor(code: number, msg: string) {
     super(TypeOfOperation.ERROR);
-    this.body = body;
+    this.body = new errorBody(code, msg);
   }
 
   static fromOpenApi(body: string, logger?: OrtooLogger): ErrorOperation {
     try {
-      const bodyError: errorBody = JSON.parse(body);
-      return new ErrorOperation(bodyError);
+      const bodyError = JSON.parse(body);
+      return new ErrorOperation(bodyError.Code, bodyError.Msg);
     } catch (e) {
       throw new ErrDatatype.Marshal(logger, e);
     }
@@ -96,16 +96,10 @@ class ErrorOperation extends Op {
       case PushPullErrorCode.AbortionOfServer:
       case PushPullErrorCode.AbortionOfClient:
       case PushPullErrorCode.DuplicateKey:
-        return new DatatypeError(
-          DatatypeErrCodes.DUPLICATED_KEY,
-          this.body.Msg
-        );
+        return new DatatypeError(DatatypeErrCodes.DUPLICATED_KEY, this.body.Msg);
       case PushPullErrorCode.MissingOps:
       case PushPullErrorCode.NoDatatypeToSubscribe:
-        return new DatatypeError(
-          DatatypeErrCodes.NO_DATATYPE_TO_SUBSCRIBE,
-          this.body.Msg
-        );
+        return new DatatypeError(DatatypeErrCodes.NO_DATATYPE_TO_SUBSCRIBE, this.body.Msg);
     }
     return new DatatypeError(DatatypeErrCodes.UNKNOWN, this.body.Msg);
   }

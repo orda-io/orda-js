@@ -14,7 +14,7 @@ const errs = {
 };
 
 abstract class Int {
-  private num: BigInt;
+  private num: bigint;
 
   constructor(numeric?: NumericType) {
     this.num = this.validate(numeric, true);
@@ -28,11 +28,11 @@ abstract class Int {
     enableRangeError = value;
   }
 
-  protected abstract getMax(): BigInt;
+  protected abstract getMax(): bigint;
 
-  protected abstract getMin(): BigInt;
+  protected abstract getMin(): bigint;
 
-  protected transform(numeric?: NumericType): BigInt {
+  protected transform(numeric?: NumericType): bigint {
     switch (typeof numeric) {
       case 'undefined':
         return 0n;
@@ -52,21 +52,25 @@ abstract class Int {
     }
   }
 
-  protected validate(numeric?: NumericType, throwError = false): BigInt {
-    const num: BigInt = this.transform(numeric);
+  protected validate(numeric?: NumericType, throwError = false): bigint {
+    const num: bigint = this.transform(numeric);
     if (num >= this.getMin() && num <= this.getMax()) {
       return num;
     }
     if (Int.enableRangeError || throwError) {
-      throw new RangeError(
-        `value ${num} is out of range: ${this.getMin()} <= n <= ${this.getMax()} is allowed`
-      );
+      throw new RangeError(`value ${num} is out of range: ${this.getMin()} <= n <= ${this.getMax()} is allowed`);
     }
     if (num > this.getMax()) {
-      return BigInt(this.getMin()) + (BigInt(num) & BigInt(this.getMax()));
+      return this.getMin() + (num & this.getMax());
     }
+
     // if(num < this.getMin()) {
     return ~(BigInt(-num) - 1n) & BigInt(this.getMax());
+  }
+
+  public set(numeric: NumericType): this {
+    this.num = this.validate(BigInt(this.transform(numeric)));
+    return this;
   }
 
   public add(numeric: NumericType = 1): this {
@@ -94,9 +98,6 @@ abstract class Int {
   }
 
   public clone<T extends Int>(c: new (n?: NumericType) => T): T {
-    if (this instanceof Uint32) {
-      return new c(this.num);
-    }
     return new c(this.num);
   }
 
@@ -139,87 +140,71 @@ abstract class Int {
     return Number(this.num);
   }
 
-  public static add<T extends Int>(
-    this: new (num?: NumericType) => T,
-    a: NumericType,
-    b: NumericType
-  ): T {
+  public static add<T extends Int>(this: new (num?: NumericType) => T, a: NumericType, b: NumericType): T {
     return new this(a).add(b) as T;
   }
 
-  public static sub<T extends Int>(
-    this: new (num?: NumericType) => T,
-    a: NumericType,
-    b: NumericType
-  ): T {
+  public static sub<T extends Int>(this: new (num?: NumericType) => T, a: NumericType, b: NumericType): T {
     return new this(a).sub(b) as T;
   }
 
-  public static mul<T extends Int>(
-    this: new (num?: NumericType) => T,
-    a: NumericType,
-    b: NumericType
-  ): T {
+  public static mul<T extends Int>(this: new (num?: NumericType) => T, a: NumericType, b: NumericType): T {
     return new this(a).mul(b) as T;
   }
 
-  public static div<T extends Int>(
-    this: new (num?: NumericType) => T,
-    a: NumericType,
-    b: NumericType
-  ): T {
+  public static div<T extends Int>(this: new (num?: NumericType) => T, a: NumericType, b: NumericType): T {
     return new this(a).div(b) as T;
   }
 }
 
 class Uint32 extends Int {
-  public static MIN_VALUE: BigInt = 0n;
-  public static MAX_VALUE: BigInt = 4294967295n;
+  public static MIN_VALUE = 0n;
+  public static MAX_VALUE = 4294967295n;
 
-  protected getMax(): BigInt {
+  protected getMax(): bigint {
     return Uint32.MAX_VALUE;
   }
 
-  protected getMin(): BigInt {
+  protected getMin(): bigint {
     return 0n;
   }
 }
 
 class Uint64 extends Int {
-  public static MIN_VALUE: BigInt = 0n;
-  public static MAX_VALUE: BigInt = 18446744073709551615n;
+  public static MIN_VALUE = 0n;
+  public static MAX_VALUE = 18446744073709551615n;
 
-  protected getMax(): BigInt {
+  protected getMax(): bigint {
     return Uint64.MAX_VALUE;
   }
 
-  protected getMin(): BigInt {
+  protected getMin(): bigint {
     return 0n;
   }
 }
 
 class Int32 extends Int {
-  public static MIN_VALUE: BigInt = -2147483648n;
-  public static MAX_VALUE: BigInt = 2147483647n;
+  public static MIN_VALUE = -2147483648n;
+  public static MAX_VALUE = 2147483647n;
 
-  protected getMax(): BigInt {
+  protected getMax(): bigint {
     return Int32.MAX_VALUE;
   }
 
-  protected getMin(): BigInt {
+  protected getMin(): bigint {
     return Int32.MIN_VALUE;
   }
 }
 
 class Int64 extends Int {
-  public static MIN_VALUE: BigInt = -9223372036854775808n;
-  public static MAX_VALUE: BigInt = 9223372036854775807n;
+  public static MIN_VALUE = -9223372036854775808n;
+  public static MAX_VALUE = 9223372036854775807n;
 
-  protected getMax(): BigInt {
+  protected getMax(): bigint {
     return Int64.MAX_VALUE;
   }
 
-  protected getMin(): BigInt {
+  protected getMin(): bigint {
     return Int64.MIN_VALUE;
   }
 }

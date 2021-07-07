@@ -3,9 +3,9 @@ import { ClientContext } from '@ooo/context';
 import { Wire, WiredDatatype } from '@ooo/datatypes/wired';
 import { SnapshotOperation } from '@ooo/operations/meta';
 import { DatatypeHandlers } from '@ooo/handlers/handlers';
-import { encodeStateOfDatatype } from '@ooo/generated/proto.enum';
-import { Op, Operation } from '@ooo/operations/operation';
+import { Operation } from '@ooo/operations/operation';
 import { DatatypeError } from '@ooo/errors/for_handlers';
+import { encodeTypeOfDatatype } from '@ooo/generated/proto.enum';
 
 export { Datatype };
 export type { IDatatype };
@@ -35,10 +35,7 @@ abstract class Datatype extends WiredDatatype {
     this.handlers = handlers;
   }
 
-  callOnStateChange(
-    oldState: StateOfDatatype,
-    newState: StateOfDatatype
-  ): void {
+  callOnStateChange(oldState: StateOfDatatype, newState: StateOfDatatype): void {
     if (
       newState === StateOfDatatype.SUBSCRIBED ||
       newState === StateOfDatatype.CLOSED ||
@@ -63,8 +60,8 @@ abstract class Datatype extends WiredDatatype {
     }
   }
 
-  getSnapshotOperation(): SnapshotOperation {
-    return new SnapshotOperation(this.getSnapshot().toJSONString());
+  createSnapshotOperation(): SnapshotOperation {
+    return new SnapshotOperation(JSON.stringify(this.getSnapshot()));
   }
 
   subscribeOrCreate(): void {
@@ -72,6 +69,6 @@ abstract class Datatype extends WiredDatatype {
       this.deliverTransaction([]).then();
       return;
     }
-    this.sentenceLocalInTx(this.getSnapshotOperation());
+    this.sentenceLocalInTx(this.createSnapshotOperation());
   }
 }

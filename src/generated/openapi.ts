@@ -40,7 +40,11 @@ export interface OrtooDatatypeMeta {
   DUID?: string;
   opID?: OrtooOperationID;
   typeOf?: OrtooTypeOfDatatype;
-  state?: OrtooStateOfDatatype;
+}
+
+export interface OrtooEncodingMessage {
+  type?: OrtooTypeOfDatatype;
+  op?: OrtooOperation;
 }
 
 export interface OrtooHeader {
@@ -100,16 +104,6 @@ export interface OrtooSnapshotResponse {
   json?: string;
 }
 
-export enum OrtooStateOfDatatype {
-  DUE_TO_CREATE = "DUE_TO_CREATE",
-  DUE_TO_SUBSCRIBE = "DUE_TO_SUBSCRIBE",
-  DUE_TO_SUBSCRIBE_CREATE = "DUE_TO_SUBSCRIBE_CREATE",
-  SUBSCRIBED = "SUBSCRIBED",
-  DUE_TO_UNSUBSCRIBE = "DUE_TO_UNSUBSCRIBE",
-  CLOSED = "CLOSED",
-  DELETED = "DELETED",
-}
-
 export enum OrtooSyncType {
   LOCAL_ONLY = "LOCAL_ONLY",
   MANUALLY = "MANUALLY",
@@ -134,11 +128,11 @@ export enum OrtooTypeOfOperation {
   LIST_INSERT = "LIST_INSERT",
   LIST_DELETE = "LIST_DELETE",
   LIST_UPDATE = "LIST_UPDATE",
-  DOC_PUT_OBJ = "DOC_PUT_OBJ",
-  DOC_DEL_OBJ = "DOC_DEL_OBJ",
-  DOC_INS_ARR = "DOC_INS_ARR",
-  DOC_DEL_ARR = "DOC_DEL_ARR",
-  DOC_UPD_ARR = "DOC_UPD_ARR",
+  DOC_OBJ_PUT = "DOC_OBJ_PUT",
+  DOC_OBJ_RMV = "DOC_OBJ_RMV",
+  DOC_ARR_INS = "DOC_ARR_INS",
+  DOC_ARR_DEL = "DOC_ARR_DEL",
+  DOC_ARR_UPD = "DOC_ARR_UPD",
 }
 
 export interface ProtobufAny {
@@ -252,9 +246,17 @@ export class HttpClient<SecurityDataType = unknown> {
     [ContentType.Json]: (input: any) =>
       input !== null && (typeof input === "object" || typeof input === "string") ? JSON.stringify(input) : input,
     [ContentType.FormData]: (input: any) =>
-      Object.keys(input || {}).reduce((data, key) => {
-        data.append(key, input[key]);
-        return data;
+      Object.keys(input || {}).reduce((formData, key) => {
+        const property = input[key];
+        formData.append(
+          key,
+          property instanceof Blob
+            ? property
+            : typeof property === "object" && property !== null
+            ? JSON.stringify(property)
+            : `${property}`,
+        );
+        return formData;
       }, new FormData()),
     [ContentType.UrlEncoded]: (input: any) => this.toQueryString(input),
   };
@@ -326,8 +328,8 @@ export class HttpClient<SecurityDataType = unknown> {
       body: typeof body === "undefined" || body === null ? null : payloadFormatter(body),
     }).then(async (response) => {
       const r = response as HttpResponse<T, E>;
-      r.data = (null as unknown) as T;
-      r.error = (null as unknown) as E;
+      r.data = null as unknown as T;
+      r.error = null as unknown as E;
 
       const data = !responseFormat
         ? r
@@ -452,6 +454,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<OrtooCollectionMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}/reset`,
         method: "PUT",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags OrtooService
+     * @name OrtooServiceTestEncodingOperation
+     * @request POST:/api/v1/samples/operation
+     */
+    ortooServiceTestEncodingOperation: (body: OrtooEncodingMessage, params: RequestParams = {}) =>
+      this.request<OrtooEncodingMessage, RpcStatus>({
+        path: `/api/v1/samples/operation`,
+        method: "POST",
+        body: body,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

@@ -11,6 +11,8 @@ import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { DatatypeHandlers } from '@ooo/handlers/handlers';
 import { ErrClient } from '@ooo/errors/client';
 import { OooMap } from '@ooo/datatypes/map';
+import { List } from '@ooo/datatypes/list';
+import { _Document, Document } from '@ooo/datatypes/document';
 
 export { Client };
 
@@ -27,12 +29,7 @@ class Client {
   private readonly dataManager: DataManager;
 
   constructor(conf: ClientConfig, alias: string, wireManager?: WireManager) {
-    this.model = new ClientModel(
-      createUID(),
-      alias,
-      conf.collectionName,
-      conf.syncType
-    );
+    this.model = new ClientModel(createUID(), alias, conf.collectionName, conf.syncType);
 
     this.ctx = new ClientContext(this.model, conf.loggerFactory);
     this.state = clientState.NOT_CONNECTED;
@@ -112,10 +109,7 @@ class Client {
    * @param {DatatypeHandlers} handlers
    * @returns {Counter}
    */
-  public subscribeOrCreateCounter(
-    key: string,
-    handlers?: DatatypeHandlers
-  ): Counter {
+  public subscribeOrCreateCounter(key: string, handlers?: DatatypeHandlers): Counter {
     return this.subscribeOrCreateDatatype(
       key,
       TypeOfDatatype.COUNTER,
@@ -130,21 +124,11 @@ class Client {
     state: StateOfDatatype,
     handlers?: DatatypeHandlers
   ): IDatatype {
-    return this.dataManager.subscribeOrCreateDatatype(
-      key,
-      type,
-      state,
-      handlers
-    );
+    return this.dataManager.subscribeOrCreateDatatype(key, type, state, handlers);
   }
 
   public createMap(key: string, handlers?: DatatypeHandlers): OooMap {
-    return this.subscribeOrCreateDatatype(
-      key,
-      TypeOfDatatype.MAP,
-      StateOfDatatype.DUE_TO_CREATE,
-      handlers
-    ) as OooMap;
+    return this.subscribeOrCreateDatatype(key, TypeOfDatatype.MAP, StateOfDatatype.DUE_TO_CREATE, handlers) as OooMap;
   }
 
   public subscribeMap(key: string, handlers?: DatatypeHandlers): OooMap {
@@ -161,18 +145,74 @@ class Client {
    * otherwise, the Ortoo server is going to create and subscribe a new Map of the given key.
    * @param {string} key
    * @param {DatatypeHandlers} handlers
-   * @returns {Counter}
+   * @returns {Map}
    */
-  public subscribeOrCreateMap(
-    key: string,
-    handlers?: DatatypeHandlers
-  ): OooMap {
+  public subscribeOrCreateMap(key: string, handlers?: DatatypeHandlers): OooMap {
     return this.subscribeOrCreateDatatype(
       key,
       TypeOfDatatype.MAP,
       StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE,
       handlers
     ) as OooMap;
+  }
+
+  public createList(key: string, handlers?: DatatypeHandlers): List {
+    return this.subscribeOrCreateDatatype(key, TypeOfDatatype.LIST, StateOfDatatype.DUE_TO_CREATE, handlers) as List;
+  }
+
+  public subscribeList(key: string, handlers?: DatatypeHandlers): List {
+    return this.subscribeOrCreateDatatype(key, TypeOfDatatype.LIST, StateOfDatatype.DUE_TO_SUBSCRIBE, handlers) as List;
+  }
+
+  /**
+   * subscribe List with the given key if it exists in the ortoo server;
+   * otherwise, the Ortoo server is going to create and subscribe a new List of the given key.
+   * @param {string} key
+   * @param {DatatypeHandlers} handlers
+   * @returns {List}
+   */
+  public subscribeOrCreateList(key: string, handlers?: DatatypeHandlers): List {
+    return this.subscribeOrCreateDatatype(
+      key,
+      TypeOfDatatype.LIST,
+      StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE,
+      handlers
+    ) as List;
+  }
+
+  public createDocument(key: string, handlers?: DatatypeHandlers): Document {
+    return (
+      this.subscribeOrCreateDatatype(key, TypeOfDatatype.DOCUMENT, StateOfDatatype.DUE_TO_CREATE, handlers) as _Document
+    ).toDocument();
+  }
+
+  public subscribeDocument(key: string, handlers?: DatatypeHandlers): Document {
+    return (
+      this.subscribeOrCreateDatatype(
+        key,
+        TypeOfDatatype.DOCUMENT,
+        StateOfDatatype.DUE_TO_SUBSCRIBE,
+        handlers
+      ) as _Document
+    ).toDocument();
+  }
+
+  /**
+   * subscribe Document with the given key if it exists in the ortoo server;
+   * otherwise, the Ortoo server is going to create and subscribe a new List of the given key.
+   * @param {string} key
+   * @param {DatatypeHandlers} handlers
+   * @returns {Document}
+   */
+  public subscribeOrCreateDocument(key: string, handlers?: DatatypeHandlers): Document {
+    return (
+      this.subscribeOrCreateDatatype(
+        key,
+        TypeOfDatatype.DOCUMENT,
+        StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE,
+        handlers
+      ) as _Document
+    ).toDocument();
   }
 
   public async sync(): Promise<void> {

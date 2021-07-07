@@ -60,16 +60,16 @@ export class ClientContext {
 }
 
 export class DatatypeContext extends ClientContext {
-  public datatype: BaseDatatype;
+  public datatype?: BaseDatatype;
 
-  constructor(clientContext: ClientContext, datatype: BaseDatatype) {
+  constructor(clientContext: ClientContext, datatype?: BaseDatatype) {
     super(clientContext.client, clientContext.loggerFactory);
     this.datatype = datatype;
   }
 
   public getLogName(): string {
-    return `${this.client.getLogName()}:${this.datatype.key}:${
-      this.datatype.id
+    return `${this.client.getLogName()}:${this.datatype?.key}:${
+      this.datatype?.id
     }`;
   }
 }
