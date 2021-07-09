@@ -1,31 +1,31 @@
-import { helper } from '@test/helper/helper';
-import { testEncodingOperation } from '@test/encoding/sampler';
-import { Suite } from 'mocha';
-import { convertFromOpenApiOperation } from '@ooo/operations/converter';
-import { IncreaseOperation } from '@ooo/operations/counter';
-import { int32 } from '@ooo/types/integer';
-import { OperationID } from '@ooo/types/operation';
-import { createUID } from '@ooo/types/uid';
-import { expect } from 'chai';
-import { PutOperation, RemoveOperation } from '@ooo/operations/map';
-import { Op } from '@ooo/operations/operation';
-import { _Counter } from '@ooo/datatypes/counter';
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { _OooMap } from '@ooo/datatypes/map';
-import { Datatype } from '@ooo/datatypes/datatype';
-import { DeleteOperation, InsertOperation, UpdateOperation } from '@ooo/operations/list';
-import { Timestamp } from '@ooo/types/timestamp';
-import { _List } from '@ooo/datatypes/list';
+import { helper } from "@test/helper/helper";
+import { testEncodingOperation } from "@test/encoding/sampler";
+import { Suite } from "mocha";
+import { convertFromOpenApiOperation } from "@ooo/operations/converter";
+import { IncreaseOperation } from "@ooo/operations/counter";
+import { int32 } from "@ooo/types/integer";
+import { OperationID } from "@ooo/types/operation";
+import { createUID } from "@ooo/types/uid";
+import { expect } from "chai";
+import { PutOperation, RemoveOperation } from "@ooo/operations/map";
+import { Op } from "@ooo/operations/operation";
+import { _Counter } from "@ooo/datatypes/counter";
+import { StateOfDatatype, TypeOfDatatype } from "@ooo/types/datatype";
+import { _OooMap } from "@ooo/datatypes/map";
+import { Datatype } from "@ooo/datatypes/datatype";
+import { DeleteOperation, InsertOperation, UpdateOperation } from "@ooo/operations/list";
+import { Timestamp } from "@ooo/types/timestamp";
+import { _List } from "@ooo/datatypes/list";
 import {
   DocDeleteInArrayOperation,
   DocInsertToArrayOperation,
   DocPutInObjOperation,
   DocRemoveInObjOperation,
-  DocUpdateInArrayOperation,
-} from '@ooo/operations/document';
-import { _Document } from '@ooo/datatypes/document';
-import { ErrorOperation, TransactionOperation } from '@ooo/operations/meta';
-import { ErrDatatype } from '@ooo/errors/datatype';
+  DocUpdateInArrayOperation
+} from "@ooo/operations/document";
+import { _Document } from "@ooo/datatypes/document";
+import { ErrorOperation, TransactionOperation } from "@ooo/operations/meta";
+import { ErrDatatype } from "@ooo/errors/datatype";
 
 describe('Test encoding operations with server', function (this: Suite): void {
   it('Can encode and decode meta operations', async () => {
@@ -112,10 +112,10 @@ describe('Test encoding operations with server', function (this: Suite): void {
   });
 
   it('Can encode and decode document operations', async () => {
-    const jsOp1 = new DocPutInObjOperation(randomTimestamp(), 'Ortoo', 1234);
+    const jsOp1 = new DocPutInObjOperation(randomTimestamp(), 'Orda', 1234);
     await exchangeAndValidateOperation(TypeOfDatatype.DOCUMENT, jsOp1);
 
-    const jsOp2 = new DocRemoveInObjOperation(randomTimestamp(), 'Ortoo');
+    const jsOp2 = new DocRemoveInObjOperation(randomTimestamp(), 'Orda');
     await exchangeAndValidateOperation(TypeOfDatatype.DOCUMENT, jsOp2);
 
     const jsOp3 = new DocInsertToArrayOperation(randomTimestamp(), 0, [1234, 3.141592, true, 'hello']);

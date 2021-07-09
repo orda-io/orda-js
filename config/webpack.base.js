@@ -6,7 +6,7 @@ const babelrc = require('./babelrc.config.json');
 exports.root = root;
 exports.config = {
   entry: {
-    ortoo: ['./src/ortoo.ts'],
+    orda: ['./src/orda.ts'],
   },
   resolve: {
     extensions: ['.ts', '.js'],

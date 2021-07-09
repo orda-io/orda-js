@@ -1,6 +1,6 @@
-import { ortooLogger } from '@ooo/utils/ortoo_logger';
-import { Op } from '@ooo/operations/operation';
-import { BaseDatatype } from '@ooo/datatypes/base';
+import { ordaLogger } from "@ooo/utils/orda_logger";
+import { Op } from "@ooo/operations/operation";
+import { BaseDatatype } from "@ooo/datatypes/base";
 
 export { logNew, logOp };
 
@@ -10,7 +10,7 @@ function logNew() {
     return class extends constructor {
       constructor(...args: any[]) {
         super(...args);
-        ortooLogger.debug(this.toString());
+        ordaLogger.debug(this.toString());
       }
     };
   };

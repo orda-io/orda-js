@@ -1,30 +1,26 @@
-import { WireManager } from '@ooo/managers/wire';
-import { WiredDatatype } from '@ooo/datatypes/wired';
-import { DataManager } from '@ooo/managers/data';
-import { CUID, DUID } from '@ooo/types/uid';
-import {
-  PPOptions,
-  PushPullOptions,
-  PushPullPack,
-} from '@ooo/types/pushpullpack';
-import { uint64 } from '@ooo/types/integer';
-import { Op } from '@ooo/operations/operation';
-import { OrtooLogger } from '@ooo/utils/ortoo_logger';
-import { ExtMap } from '@ooo/utils/map';
-import { CheckPoint } from '@ooo/types/checkpoint';
+import { WireManager } from "@ooo/managers/wire";
+import { WiredDatatype } from "@ooo/datatypes/wired";
+import { DataManager } from "@ooo/managers/data";
+import { CUID, DUID } from "@ooo/types/uid";
+import { PPOptions, PushPullOptions, PushPullPack } from "@ooo/types/pushpullpack";
+import { uint64 } from "@ooo/types/integer";
+import { Op } from "@ooo/operations/operation";
+import { OrdaLogger } from "@ooo/utils/orda_logger";
+import { ExtMap } from "@ooo/utils/map";
+import { CheckPoint } from "@ooo/types/checkpoint";
 
 export { InternalWireManager };
 
 class InternalWireManager implements WireManager {
   private dataManagers: ExtMap<CUID, DataManager>; // client -> dataManager
-  private loggerMap: ExtMap<CUID, OrtooLogger>; // client -> logger
+  private loggerMap: ExtMap<CUID, OrdaLogger>; // client -> logger
   private checkPointMap: ExtMap<CUID, ExtMap<string, CheckPoint>>; // client -> data -> checkpoint
   private historyMap: ExtMap<string, Array<Op>>; // data -> history
   private duidMap: ExtMap<string, DUID>; // data -> duid
 
   constructor() {
     this.dataManagers = new ExtMap<CUID, DataManager>();
-    this.loggerMap = new ExtMap<CUID, OrtooLogger>();
+    this.loggerMap = new ExtMap<CUID, OrdaLogger>();
     this.checkPointMap = new ExtMap<CUID, ExtMap<string, CheckPoint>>();
     this.historyMap = new ExtMap<string, Array<Op>>();
     this.duidMap = new ExtMap<string, DUID>();

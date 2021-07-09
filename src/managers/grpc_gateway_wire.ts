@@ -1,16 +1,16 @@
-import { WireManager } from '@ooo/managers/wire';
-import { uint32, Uint32 } from '@ooo/types/integer';
-import { ClientContext } from '@ooo/context';
-import { ClientConfig } from '@ooo/config';
-import { DataManager } from '@ooo/managers/data';
-import { WiredDatatype } from '@ooo/datatypes/wired';
-import { PushPullPack } from '@ooo/types/pushpullpack';
-import { Api, ApiConfig, OrtooSyncType } from '@ooo/generated/openapi';
-import { ErrClient } from '@ooo/errors/client';
-import { NotifyManager } from '@ooo/managers/notify';
-import { StateOfDatatype } from '@ooo/generated/proto.enum';
-import { ClientMessage, PushPullMessage } from '@ooo/types/messages';
-import { CUID } from '@ooo/types/uid';
+import { WireManager } from "@ooo/managers/wire";
+import { uint32, Uint32 } from "@ooo/types/integer";
+import { ClientContext } from "@ooo/context";
+import { ClientConfig } from "@ooo/config";
+import { DataManager } from "@ooo/managers/data";
+import { WiredDatatype } from "@ooo/datatypes/wired";
+import { PushPullPack } from "@ooo/types/pushpullpack";
+import { Api, ApiConfig, OrdaSyncType } from "@ooo/generated/openapi";
+import { ErrClient } from "@ooo/errors/client";
+import { NotifyManager } from "@ooo/managers/notify";
+import { StateOfDatatype } from "@ooo/generated/proto.enum";
+import { ClientMessage, PushPullMessage } from "@ooo/types/messages";
+import { CUID } from "@ooo/types/uid";
 
 export { GrpcGatewayWireManager };
 
@@ -28,7 +28,7 @@ class GrpcGatewayWireManager implements WireManager {
       baseUrl: conf.serverAddr,
     };
     this.openApi = new Api(apiConfig);
-    if (this.ctx.client.syncType === OrtooSyncType.REALTIME) {
+    if (this.ctx.client.syncType === OrdaSyncType.REALTIME) {
       this.notifyManager = new NotifyManager(conf, ctx);
     }
   }
@@ -44,7 +44,7 @@ class GrpcGatewayWireManager implements WireManager {
     const req = new ClientMessage(this.ctx.client);
     this.ctx.L.debug(`[🚀🔻] send ClientMessage ${JSON.stringify(req)}`);
     try {
-      const result = await this.openApi.api.ortooServiceProcessClient(req.collection, req.cuid, req);
+      const result = await this.openApi.api.ordaServiceProcessClient(req.collection, req.cuid, req);
       const clientMsg = result.data;
       this.ctx.L.debug(
         `[🚀] received ClientMessage '${clientMsg.clientAlias}'(${clientMsg.cuid}) in collection '${clientMsg.collection}'.`
@@ -64,7 +64,7 @@ class GrpcGatewayWireManager implements WireManager {
       this.ctx.L.info('[🚀🔻] BEGIN exchangePushPull()');
       const req = new PushPullMessage(this.ctx.client, ...pushPullList);
       this.ctx.L.info(`[🚀] SEND PUSH: ${JSON.stringify(pushPullList)}`);
-      const result = await this.openApi.api.ortooServiceProcessPushPull(req.collection, req.cuid, req);
+      const result = await this.openApi.api.ordaServiceProcessPushPull(req.collection, req.cuid, req);
       const pulled = result.data;
 
       if (pulled.PushPullPacks) {

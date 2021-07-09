@@ -1,8 +1,8 @@
-import { Op } from '@ooo/operations/operation';
-import { Timestamp } from '@ooo/types/timestamp';
-import { OrtooLogger } from '@ooo/utils/ortoo_logger';
-import { ErrDatatype } from '@ooo/errors/datatype';
-import { TypeOfOperation } from '@ooo/types/operation';
+import { Op } from "@ooo/operations/operation";
+import { Timestamp } from "@ooo/types/timestamp";
+import { OrdaLogger } from "@ooo/utils/orda_logger";
+import { ErrDatatype } from "@ooo/errors/datatype";
+import { TypeOfOperation } from "@ooo/types/operation";
 
 class insertBody {
   T: Timestamp;
@@ -24,7 +24,7 @@ export class InsertOperation extends Op {
     this.body = new insertBody(Timestamp.getOldest(), values);
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): InsertOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): InsertOperation {
     try {
       const snap = JSON.parse(body);
       const insert = new InsertOperation(0, snap.V);
@@ -56,7 +56,7 @@ export class DeleteOperation extends Op {
     this.body = new deleteBody([]);
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): DeleteOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): DeleteOperation {
     try {
       const snap = JSON.parse(body);
       const del = new DeleteOperation(0, snap.T.length);
@@ -90,7 +90,7 @@ export class UpdateOperation extends Op {
     this.body = new updateBody([], values);
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): UpdateOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): UpdateOperation {
     try {
       const snap = JSON.parse(body);
       const update = new UpdateOperation(0, snap.V);

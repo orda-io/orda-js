@@ -1,13 +1,13 @@
-import { OrtooLoggerFactory } from '@ooo/utils/ortoo_logger';
+import { OrdaLoggerFactory } from "@ooo/utils/orda_logger";
 
 function generate_error(): Error {
   throw new Error('generated error');
 }
 
-describe('Test OrtooLogger', () => {
-  it('Can log with OrtooLogger', () => {
+describe('Test OrdaLogger', () => {
+  it('Can log with OrdaLogger', () => {
     const num = 1234;
-    const logFactory = new OrtooLoggerFactory('trace');
+    const logFactory = new OrdaLoggerFactory('trace');
     const logger = logFactory.getLogger('test logging');
     logger.trace('trace message');
     logger.debug('debug message');

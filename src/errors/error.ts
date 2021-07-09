@@ -1,4 +1,4 @@
-import { OrtooLogger } from '@ooo/utils/ortoo_logger';
+import { OrdaLogger } from "@ooo/utils/orda_logger";
 
 export const BaseErrorCode = {
   Common: 0,
@@ -7,10 +7,10 @@ export const BaseErrorCode = {
   PushPull: 300,
 };
 
-export class OrtooError extends Error {
+export class OrdaError extends Error {
   code: number;
 
-  constructor(code: number, msg: string, log?: OrtooLogger, e?: Error, ...args: string[]) {
+  constructor(code: number, msg: string, log?: OrdaLogger, e?: Error, ...args: string[]) {
     super(`[${code}] ${msg} ${e ? e.message : ''}`);
     this.code = code;
     if (e) {

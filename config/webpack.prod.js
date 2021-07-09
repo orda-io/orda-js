@@ -5,12 +5,12 @@ const terser = require('terser-webpack-plugin');
 module.exports = function () {
   const merged = webpackMerge.merge(base.config, {
     entry: {
-      ortoo: './src/ortoo.ts',
+      orda: './src/orda.ts',
     },
     mode: 'production',
     output: {
       filename: '[name].bundle.js',
-      library: 'ortoo',
+      library: 'orda',
       libraryTarget: 'umd',
       umdNamedDefine: true,
       globalObject: `this`,

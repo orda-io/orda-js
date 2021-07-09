@@ -1,7 +1,7 @@
-import { Op } from '@ooo/operations/operation';
-import { TypeOfOperation } from '@ooo/types/operation';
-import { OrtooLogger } from '@ooo/utils/ortoo_logger';
-import { ErrDatatype } from '@ooo/errors/datatype';
+import { Op } from "@ooo/operations/operation";
+import { TypeOfOperation } from "@ooo/types/operation";
+import { OrdaLogger } from "@ooo/utils/orda_logger";
+import { ErrDatatype } from "@ooo/errors/datatype";
 
 export { PutOperation, RemoveOperation };
 
@@ -23,7 +23,7 @@ class PutOperation extends Op {
     this.body = new putBody(key, value);
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): PutOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): PutOperation {
     try {
       const snap = JSON.parse(body);
       return new PutOperation(snap.Key, snap.Value);
@@ -49,7 +49,7 @@ class RemoveOperation extends Op {
     this.body = new removeBody(key);
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): RemoveOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): RemoveOperation {
     try {
       const snap = JSON.parse(body);
       return new RemoveOperation(snap.Key);

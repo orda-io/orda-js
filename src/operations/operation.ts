@@ -1,7 +1,6 @@
-import { OperationID, TypeOfOperation } from '@ooo/types/operation';
-import { OrtooOperation as OperationOa } from '@ooo/generated/openapi';
-import { Uint32 } from '@ooo/types/integer';
-import { Timestamp } from '@ooo/types/timestamp';
+import { OperationID, TypeOfOperation } from "@ooo/types/operation";
+import { OrdaOperation as OperationOa } from "@ooo/generated/openapi";
+import { Timestamp } from "@ooo/types/timestamp";
 
 export type { OperationOa };
 export { Op };

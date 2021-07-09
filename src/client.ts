@@ -1,18 +1,18 @@
-import { createUID } from '@ooo/types/uid';
-import { ClientConfig } from '@ooo/config';
-import { DataManager } from '@ooo/managers/data';
-import { ClientContext } from '@ooo/context';
-import { Counter } from '@ooo/datatypes/counter';
-import { IDatatype } from '@ooo/datatypes/datatype';
-import { WireManager } from '@ooo/managers/wire';
-import { GrpcGatewayWireManager } from '@ooo/managers/grpc_gateway_wire';
-import { ClientModel, SyncType } from '@ooo/types/client';
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { DatatypeHandlers } from '@ooo/handlers/handlers';
-import { ErrClient } from '@ooo/errors/client';
-import { OooMap } from '@ooo/datatypes/map';
-import { List } from '@ooo/datatypes/list';
-import { _Document, Document } from '@ooo/datatypes/document';
+import { createUID } from "@ooo/types/uid";
+import { ClientConfig } from "@ooo/config";
+import { DataManager } from "@ooo/managers/data";
+import { ClientContext } from "@ooo/context";
+import { Counter } from "@ooo/datatypes/counter";
+import { IDatatype } from "@ooo/datatypes/datatype";
+import { WireManager } from "@ooo/managers/wire";
+import { GrpcGatewayWireManager } from "@ooo/managers/grpc_gateway_wire";
+import { ClientModel, SyncType } from "@ooo/types/client";
+import { StateOfDatatype, TypeOfDatatype } from "@ooo/types/datatype";
+import { DatatypeHandlers } from "@ooo/handlers/handlers";
+import { ErrClient } from "@ooo/errors/client";
+import { OooMap } from "@ooo/datatypes/map";
+import { List } from "@ooo/datatypes/list";
+import { _Document, Document } from "@ooo/datatypes/document";
 
 export { Client };
 
@@ -103,8 +103,8 @@ class Client {
   }
 
   /**
-   * subscribe Counter with the given key if it exists in the ortoo server;
-   * otherwise, the Ortoo server is going to create and subscribe a new Counter of the given key.
+   * subscribe Counter with the given key if it exists in the orda server;
+   * otherwise, the Orda server is going to create and subscribe a new Counter of the given key.
    * @param {string} key
    * @param {DatatypeHandlers} handlers
    * @returns {Counter}
@@ -141,8 +141,8 @@ class Client {
   }
 
   /**
-   * subscribe Map with the given key if it exists in the ortoo server;
-   * otherwise, the Ortoo server is going to create and subscribe a new Map of the given key.
+   * subscribe Map with the given key if it exists in the orda server;
+   * otherwise, the Orda server is going to create and subscribe a new Map of the given key.
    * @param {string} key
    * @param {DatatypeHandlers} handlers
    * @returns {Map}
@@ -165,8 +165,8 @@ class Client {
   }
 
   /**
-   * subscribe List with the given key if it exists in the ortoo server;
-   * otherwise, the Ortoo server is going to create and subscribe a new List of the given key.
+   * subscribe List with the given key if it exists in the orda server;
+   * otherwise, the Orda server is going to create and subscribe a new List of the given key.
    * @param {string} key
    * @param {DatatypeHandlers} handlers
    * @returns {List}
@@ -198,8 +198,8 @@ class Client {
   }
 
   /**
-   * subscribe Document with the given key if it exists in the ortoo server;
-   * otherwise, the Ortoo server is going to create and subscribe a new List of the given key.
+   * subscribe Document with the given key if it exists in the orda server;
+   * otherwise, the Orda server is going to create and subscribe a new List of the given key.
    * @param {string} key
    * @param {DatatypeHandlers} handlers
    * @returns {Document}

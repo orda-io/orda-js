@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-export interface OrtooCheckPoint {
+export interface OrdaCheckPoint {
   /** @format uint64 */
   sseq?: string;
 
@@ -17,51 +17,51 @@ export interface OrtooCheckPoint {
   cseq?: string;
 }
 
-export interface OrtooClientMessage {
-  header?: OrtooHeader;
+export interface OrdaClientMessage {
+  header?: OrdaHeader;
   collection?: string;
   cuid?: string;
   clientAlias?: string;
-  clientType?: OrtooClientType;
-  syncType?: OrtooSyncType;
+  clientType?: OrdaClientType;
+  syncType?: OrdaSyncType;
 }
 
-export enum OrtooClientType {
+export enum OrdaClientType {
   PERSISTENT = "PERSISTENT",
   EPHEMERAL = "EPHEMERAL",
 }
 
-export interface OrtooCollectionMessage {
+export interface OrdaCollectionMessage {
   collection?: string;
 }
 
-export interface OrtooDatatypeMeta {
+export interface OrdaDatatypeMeta {
   key?: string;
   DUID?: string;
-  opID?: OrtooOperationID;
-  typeOf?: OrtooTypeOfDatatype;
+  opID?: OrdaOperationID;
+  typeOf?: OrdaTypeOfDatatype;
 }
 
-export interface OrtooEncodingMessage {
-  type?: OrtooTypeOfDatatype;
-  op?: OrtooOperation;
+export interface OrdaEncodingMessage {
+  type?: OrdaTypeOfDatatype;
+  op?: OrdaOperation;
 }
 
-export interface OrtooHeader {
+export interface OrdaHeader {
   version?: string;
   agent?: string;
-  type?: OrtooRequestType;
+  type?: OrdaRequestType;
 }
 
-export interface OrtooOperation {
-  ID?: OrtooOperationID;
-  opType?: OrtooTypeOfOperation;
+export interface OrdaOperation {
+  ID?: OrdaOperationID;
+  opType?: OrdaTypeOfOperation;
 
   /** @format byte */
   body?: string;
 }
 
-export interface OrtooOperationID {
+export interface OrdaOperationID {
   /** @format int64 */
   era?: number;
 
@@ -73,51 +73,51 @@ export interface OrtooOperationID {
   seq?: string;
 }
 
-export interface OrtooPushPullMessage {
-  header?: OrtooHeader;
+export interface OrdaPushPullMessage {
+  header?: OrdaHeader;
   collection?: string;
   cuid?: string;
-  PushPullPacks?: OrtooPushPullPack[];
+  PushPullPacks?: OrdaPushPullPack[];
 }
 
-export interface OrtooPushPullPack {
+export interface OrdaPushPullPack {
   DUID?: string;
   key?: string;
 
   /** @format int64 */
   option?: number;
-  checkPoint?: OrtooCheckPoint;
+  checkPoint?: OrdaCheckPoint;
 
   /** @format int64 */
   era?: number;
-  type?: OrtooTypeOfDatatype;
-  operations?: OrtooOperation[];
+  type?: OrdaTypeOfDatatype;
+  operations?: OrdaOperation[];
 }
 
-export enum OrtooRequestType {
+export enum OrdaRequestType {
   CLIENTS = "CLIENTS",
   PUSHPULLS = "PUSHPULLS",
 }
 
-export interface OrtooSnapshotResponse {
-  meta?: OrtooDatatypeMeta;
+export interface OrdaSnapshotResponse {
+  meta?: OrdaDatatypeMeta;
   json?: string;
 }
 
-export enum OrtooSyncType {
+export enum OrdaSyncType {
   LOCAL_ONLY = "LOCAL_ONLY",
   MANUALLY = "MANUALLY",
   REALTIME = "REALTIME",
 }
 
-export enum OrtooTypeOfDatatype {
+export enum OrdaTypeOfDatatype {
   COUNTER = "COUNTER",
   MAP = "MAP",
   LIST = "LIST",
   DOCUMENT = "DOCUMENT",
 }
 
-export enum OrtooTypeOfOperation {
+export enum OrdaTypeOfOperation {
   NO_OP = "NO_OP",
   SNAPSHOT = "SNAPSHOT",
   ERROR = "ERROR",
@@ -358,7 +358,7 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title Ortoo gRPC gateway APIs
+ * @title Orda gRPC gateway APIs
  * @version v1
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
@@ -366,12 +366,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags OrtooService
-     * @name OrtooServiceCreateCollection
+     * @tags OrdaService
+     * @name OrdaServiceCreateCollection
      * @request PUT:/api/v1/collections/{collection}
      */
-    ortooServiceCreateCollection: (collection: string, params: RequestParams = {}) =>
-      this.request<OrtooCollectionMessage, RpcStatus>({
+    ordaServiceCreateCollection: (collection: string, params: RequestParams = {}) =>
+      this.request<OrdaCollectionMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}`,
         method: "PUT",
         format: "json",
@@ -381,17 +381,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags OrtooService
-     * @name OrtooServiceProcessClient
+     * @tags OrdaService
+     * @name OrdaServiceProcessClient
      * @request POST:/api/v1/collections/{collection}/clients/{cuid}
      */
-    ortooServiceProcessClient: (
+    ordaServiceProcessClient: (
       collection: string,
       cuid: string,
-      body: OrtooClientMessage,
+      body: OrdaClientMessage,
       params: RequestParams = {},
     ) =>
-      this.request<OrtooClientMessage, RpcStatus>({
+      this.request<OrdaClientMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}/clients/${cuid}`,
         method: "POST",
         body: body,
@@ -403,17 +403,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags OrtooService
-     * @name OrtooServiceSnapshotDatatype
+     * @tags OrdaService
+     * @name OrdaServiceSnapshotDatatype
      * @request GET:/api/v1/collections/{collection}/datatypes/{key}
      */
-    ortooServiceSnapshotDatatype: (
+    ordaServiceSnapshotDatatype: (
       collection: string,
       key: string,
       query?: { duid?: string; sseq?: string },
       params: RequestParams = {},
     ) =>
-      this.request<OrtooSnapshotResponse, RpcStatus>({
+      this.request<OrdaSnapshotResponse, RpcStatus>({
         path: `/api/v1/collections/${collection}/datatypes/${key}`,
         method: "GET",
         query: query,
@@ -424,17 +424,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags OrtooService
-     * @name OrtooServiceProcessPushPull
+     * @tags OrdaService
+     * @name OrdaServiceProcessPushPull
      * @request POST:/api/v1/collections/{collection}/pushpulls/{cuid}
      */
-    ortooServiceProcessPushPull: (
+    ordaServiceProcessPushPull: (
       collection: string,
       cuid: string,
-      body: OrtooPushPullMessage,
+      body: OrdaPushPullMessage,
       params: RequestParams = {},
     ) =>
-      this.request<OrtooPushPullMessage, RpcStatus>({
+      this.request<OrdaPushPullMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}/pushpulls/${cuid}`,
         method: "POST",
         body: body,
@@ -446,12 +446,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags OrtooService
-     * @name OrtooServiceResetCollection
+     * @tags OrdaService
+     * @name OrdaServiceResetCollection
      * @request PUT:/api/v1/collections/{collection}/reset
      */
-    ortooServiceResetCollection: (collection: string, params: RequestParams = {}) =>
-      this.request<OrtooCollectionMessage, RpcStatus>({
+    ordaServiceResetCollection: (collection: string, params: RequestParams = {}) =>
+      this.request<OrdaCollectionMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}/reset`,
         method: "PUT",
         format: "json",
@@ -461,12 +461,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags OrtooService
-     * @name OrtooServiceTestEncodingOperation
+     * @tags OrdaService
+     * @name OrdaServiceTestEncodingOperation
      * @request POST:/api/v1/samples/operation
      */
-    ortooServiceTestEncodingOperation: (body: OrtooEncodingMessage, params: RequestParams = {}) =>
-      this.request<OrtooEncodingMessage, RpcStatus>({
+    ordaServiceTestEncodingOperation: (body: OrdaEncodingMessage, params: RequestParams = {}) =>
+      this.request<OrdaEncodingMessage, RpcStatus>({
         path: `/api/v1/samples/operation`,
         method: "POST",
         body: body,

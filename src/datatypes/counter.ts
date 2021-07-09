@@ -1,17 +1,17 @@
-import { Datatype, IDatatype } from '@ooo/datatypes/datatype';
-import { int32, Int32 } from '@ooo/types/integer';
-import { IncreaseOperation } from '@ooo/operations/counter';
-import { ClientContext, DatatypeContext } from '@ooo/context';
-import { Op } from '@ooo/operations/operation';
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { TypeOfOperation } from '@ooo/types/operation';
-import { TransactionContext } from '@ooo/datatypes/tansaction';
-import { Snapshot } from '@ooo/datatypes/snapshot';
-import { ErrDatatype } from '@ooo/errors/datatype';
-import { OrtooError } from '@ooo/errors/error';
-import { Wire } from '@ooo/datatypes/wired';
-import { SnapshotOperation } from '@ooo/operations/meta';
-import { DatatypeHandlers } from '@ooo/handlers/handlers';
+import { Datatype, IDatatype } from "@ooo/datatypes/datatype";
+import { int32, Int32 } from "@ooo/types/integer";
+import { IncreaseOperation } from "@ooo/operations/counter";
+import { ClientContext, DatatypeContext } from "@ooo/context";
+import { Op } from "@ooo/operations/operation";
+import { StateOfDatatype, TypeOfDatatype } from "@ooo/types/datatype";
+import { TypeOfOperation } from "@ooo/types/operation";
+import { TransactionContext } from "@ooo/datatypes/tansaction";
+import { Snapshot } from "@ooo/datatypes/snapshot";
+import { ErrDatatype } from "@ooo/errors/datatype";
+import { OrdaError } from "@ooo/errors/error";
+import { Wire } from "@ooo/datatypes/wired";
+import { SnapshotOperation } from "@ooo/operations/meta";
+import { DatatypeHandlers } from "@ooo/handlers/handlers";
 
 export { _Counter };
 export type { CounterTx, Counter };
@@ -52,7 +52,7 @@ class _Counter extends Datatype implements Counter {
       const ret = this.sentenceLocalInTx(new IncreaseOperation(int32(delta))) as Int32;
       return ret.asNumber();
     } catch (e) {
-      if (e instanceof OrtooError) {
+      if (e instanceof OrdaError) {
         throw e;
       }
       throw new ErrDatatype.IllegalParameters(this.ctx.L, e);

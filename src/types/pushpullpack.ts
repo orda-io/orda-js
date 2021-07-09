@@ -1,10 +1,10 @@
-import { CheckPoint } from '@ooo/types/checkpoint';
-import { uint32, Uint32 } from '@ooo/types/integer';
-import { Op, OperationOa } from '@ooo/operations/operation';
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { OrtooPushPullPack } from '@ooo/generated/openapi';
-import { OrtooLogger } from '@ooo/utils/ortoo_logger';
-import { convertFromOpenApiOperation } from '@ooo/operations/converter';
+import { CheckPoint } from "@ooo/types/checkpoint";
+import { uint32, Uint32 } from "@ooo/types/integer";
+import { Op, OperationOa } from "@ooo/operations/operation";
+import { StateOfDatatype, TypeOfDatatype } from "@ooo/types/datatype";
+import { OrdaPushPullPack } from "@ooo/generated/openapi";
+import { OrdaLogger } from "@ooo/utils/orda_logger";
+import { convertFromOpenApiOperation } from "@ooo/operations/converter";
 
 export { PushPullPack, PushPullOptions, PPOptions };
 
@@ -123,7 +123,7 @@ class PushPullPack {
     return pbOpList;
   }
 
-  toOpenApi(): OrtooPushPullPack {
+  toOpenApi(): OrdaPushPullPack {
     return {
       DUID: this.duid,
       key: this.key,
@@ -136,8 +136,8 @@ class PushPullPack {
   }
 
   static fromOpenApi(
-    ppp: OrtooPushPullPack,
-    logger?: OrtooLogger
+    ppp: OrdaPushPullPack,
+    logger?: OrdaLogger
   ): PushPullPack {
     const opList: Op[] = new Array<Op>();
     if (ppp.operations) {

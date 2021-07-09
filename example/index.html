@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Ortoo Example</title>
-  <script src="./ortoo.bundle.js"></script>
+  <title>Orda Example</title>
+  <script src="./orda.bundle.js"></script>
   <script src="./test.js"></script>
   <script>
-    console.log(ortoo);
+    console.log(orda);
 
-    var conf = ortoo.createClientConfig()
-    var conf = ortoo.createClientConfig("http://127.0.0.1:16091", "ws://127.0.0.1:9001", "hello_world", ortoo.SyncType.REALTIME);
-    var c = ortoo.createClient(conf, "hello");
+    var conf = orda.createClientConfig()
+    var conf = orda.createClientConfig("http://127.0.0.1:16091", "ws://127.0.0.1:9001", "hello_world", orda.SyncType.REALTIME);
+    var c = orda.createClient(conf, "hello");
     console.log(c.syncManager);
   </script>
 </head>
 <body>
-Hello, ortoo1
+Hello, orda1
 </body>
 </html>

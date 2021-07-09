@@ -1,20 +1,20 @@
-import { Datatype, IDatatype } from '@ooo/datatypes/datatype';
-import { Snapshot } from '@ooo/datatypes/snapshot';
-import { ClientContext, DatatypeContext } from '@ooo/context';
-import { StateOfDatatype } from '@ooo/generated/proto.enum';
-import { Wire } from '@ooo/datatypes/wired';
-import { DatatypeHandlers } from '@ooo/handlers/handlers';
-import { TypeOfDatatype } from '@ooo/types/datatype';
-import { Op } from '@ooo/operations/operation';
-import { TypeOfOperation } from '@ooo/types/operation';
-import { createNullOrderedNode, OrderedNode, OrderedType } from '@ooo/datatypes/ordered';
-import { Timestamp } from '@ooo/types/timestamp';
-import { DeleteOperation, InsertOperation, UpdateOperation } from '@ooo/operations/list';
-import { TimedNode, TimedType } from '@ooo/datatypes/timed';
-import { ErrDatatype } from '@ooo/errors/datatype';
-import { SnapshotOperation } from '@ooo/operations/meta';
-import { OrtooError } from '@ooo/errors/error';
-import { TransactionContext } from '@ooo/datatypes/tansaction';
+import { Datatype, IDatatype } from "@ooo/datatypes/datatype";
+import { Snapshot } from "@ooo/datatypes/snapshot";
+import { ClientContext, DatatypeContext } from "@ooo/context";
+import { StateOfDatatype } from "@ooo/generated/proto.enum";
+import { Wire } from "@ooo/datatypes/wired";
+import { DatatypeHandlers } from "@ooo/handlers/handlers";
+import { TypeOfDatatype } from "@ooo/types/datatype";
+import { Op } from "@ooo/operations/operation";
+import { TypeOfOperation } from "@ooo/types/operation";
+import { createNullOrderedNode, OrderedNode, OrderedType } from "@ooo/datatypes/ordered";
+import { Timestamp } from "@ooo/types/timestamp";
+import { DeleteOperation, InsertOperation, UpdateOperation } from "@ooo/operations/list";
+import { TimedNode, TimedType } from "@ooo/datatypes/timed";
+import { ErrDatatype } from "@ooo/errors/datatype";
+import { SnapshotOperation } from "@ooo/operations/meta";
+import { OrdaError } from "@ooo/errors/error";
+import { TransactionContext } from "@ooo/datatypes/tansaction";
 
 export interface ListTx extends IDatatype {
   insert(pos: number, ...values: unknown[]): void;
@@ -227,12 +227,12 @@ export class ListSnapshot implements Snapshot {
     return [deletedOts, oldValues];
   }
 
-  deleteRemoteForList(op: DeleteOperation): [TimedType[], OrtooError[]] {
+  deleteRemoteForList(op: DeleteOperation): [TimedType[], OrdaError[]] {
     return this.deleteRemote(op.body.T, op.timestamp);
   }
 
-  deleteRemote(targets: Timestamp[], ts: Timestamp): [TimedType[], OrtooError[]] {
-    const errors = new Array<OrtooError>();
+  deleteRemote(targets: Timestamp[], ts: Timestamp): [TimedType[], OrdaError[]] {
+    const errors = new Array<OrdaError>();
     const deleted = new Array<TimedType>();
     for (const target of targets) {
       const thisTs = ts.getAndNextDelimiter();
@@ -278,7 +278,7 @@ export class ListSnapshot implements Snapshot {
   }
 
   updateRemote(op: UpdateOperation) {
-    const errors = new Array<OrtooError>();
+    const errors = new Array<OrdaError>();
     const ts = op.timestamp;
     for (let i = 0; i < op.body.T.length; i++) {
       const target = op.body.T[i];

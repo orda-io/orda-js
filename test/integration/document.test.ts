@@ -1,11 +1,11 @@
-import { Suite } from 'mocha';
+import { Suite } from "mocha";
 
-import { helper } from '@test/helper/helper';
-import { SyncType } from '@ooo/types/client';
-import { Client } from '@ooo/client';
-import { expect } from 'chai';
-import { ErrDatatype } from '@ooo/errors/datatype';
-import { DocumentTx } from '@ooo/datatypes/document';
+import { helper } from "@test/helper/helper";
+import { SyncType } from "@ooo/types/client";
+import { Client } from "@ooo/client";
+import { expect } from "chai";
+import { ErrDatatype } from "@ooo/errors/datatype";
+import { DocumentTx } from "@ooo/datatypes/document";
 
 describe('Integration test document', function (this: Suite): void {
   it('Can synchronize Document with server', async () => {
@@ -25,15 +25,15 @@ describe('Integration test document', function (this: Suite): void {
 
       doc1.putToObject('K1', 'hello');
       doc1.putToObject('K2', ['world', 1234, 3.141592, true]);
-      doc1.putToObject('K3', { X1: 'ortoo', X2: 1234 });
+      doc1.putToObject('K3', { X1: 'orda', X2: 1234 });
       await doc1.sync();
       await doc2.sync();
       helper.L.info(`${JSON.stringify(doc1.getValue())}`);
       expect(JSON.stringify(doc1)).to.eq(JSON.stringify(doc2));
 
-      doc2.getFromObject('K3')?.putToObject('X1', 'ortoo-js');
+      doc2.getFromObject('K3')?.putToObject('X1', 'orda-js');
       doc2.getFromObject('K3')?.removeInObject('X2');
-      doc2.getFromObject('K2')?.insertToArray(0, 'ortoo');
+      doc2.getFromObject('K2')?.insertToArray(0, 'orda');
       expect(() => {
         doc2.insertToArray(0, 1234);
       }).to.throw(ErrDatatype.InvalidParent);

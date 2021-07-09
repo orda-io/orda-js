@@ -1,5 +1,5 @@
-import { NumericType, uint64, Uint64 } from '@ooo/types/integer';
-import { OrtooCheckPoint as CheckPointOa } from '@ooo/generated/openapi';
+import { NumericType, uint64, Uint64 } from "@ooo/types/integer";
+import { OrdaCheckPoint as CheckPointOa } from "@ooo/generated/openapi";
 
 export { CheckPoint };
 

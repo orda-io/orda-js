@@ -22,7 +22,7 @@
     }
   },
   "include": [
-    "./src/protobuf/ortoo_pb.js",
+    "./src/protobuf/orda_pb.js",
     "./src/**/*",
     "./test/**/*"
   ],
@@ -31,8 +31,8 @@
     "node_modules"
   ],
   "typedocOptions": {
-    "entryPoints": ["src/ortoo.ts"],
-    "name": "Ortoo-js",
+    "entryPoints": ["src/orda.ts"],
+    "name": "Orda-js",
     "theme": "node_modules/eledoc/bin/default/",
     "out": "docs"
   }

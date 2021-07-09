@@ -1,8 +1,8 @@
-import { Op } from '@ooo/operations/operation';
-import { Timestamp } from '@ooo/types/timestamp';
-import { TypeOfOperation } from '@ooo/types/operation';
-import { OrtooLogger } from '@ooo/utils/ortoo_logger';
-import { ErrDatatype } from '@ooo/errors/datatype';
+import { Op } from "@ooo/operations/operation";
+import { Timestamp } from "@ooo/types/timestamp";
+import { TypeOfOperation } from "@ooo/types/operation";
+import { OrdaLogger } from "@ooo/utils/orda_logger";
+import { ErrDatatype } from "@ooo/errors/datatype";
 
 class docPutInObjBody {
   P: Timestamp;
@@ -24,7 +24,7 @@ export class DocPutInObjOperation extends Op {
     this.body = new docPutInObjBody(parent, key, value);
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): DocPutInObjOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): DocPutInObjOperation {
     try {
       const snap = JSON.parse(body);
       return new DocPutInObjOperation(Timestamp.fromJSON(snap.P), snap.K, snap.V);
@@ -52,7 +52,7 @@ export class DocRemoveInObjOperation extends Op {
     this.body = new docDeleteInObjBody(parent, key);
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): DocRemoveInObjOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): DocRemoveInObjOperation {
     try {
       const snap = JSON.parse(body);
       return new DocRemoveInObjOperation(Timestamp.fromJSON(snap.P), snap.K);
@@ -83,7 +83,7 @@ export class DocInsertToArrayOperation extends Op {
     this.pos = pos;
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): DocInsertToArrayOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): DocInsertToArrayOperation {
     try {
       const snap = JSON.parse(body);
       const ins = new DocInsertToArrayOperation(Timestamp.fromJSON(snap.P), 0, snap.V);
@@ -117,7 +117,7 @@ export class DocUpdateInArrayOperation extends Op {
     this.pos = pos;
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): DocUpdateInArrayOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): DocUpdateInArrayOperation {
     try {
       const snap = JSON.parse(body);
       const update = new DocUpdateInArrayOperation(Timestamp.fromJSON(snap.P), 0, snap.V);
@@ -153,7 +153,7 @@ export class DocDeleteInArrayOperation extends Op {
     this.body = new docDeleteInArrayBody(parent);
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): DocDeleteInArrayOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): DocDeleteInArrayOperation {
     try {
       const snap = JSON.parse(body);
       const del = new DocDeleteInArrayOperation(Timestamp.fromJSON(snap.P), 0, 0);

@@ -1,18 +1,18 @@
-import { OrtooLogger, OrtooLoggerFactory } from '@ooo/utils/ortoo_logger';
-import { ClientModel } from '@ooo/types/client';
-import { BaseDatatype } from '@ooo/datatypes/base';
-import { CUID } from '@ooo/types/uid';
-import { Mutex } from 'async-mutex';
-import MutexInterface from 'async-mutex/lib/MutexInterface';
+import { OrdaLogger, OrdaLoggerFactory } from "@ooo/utils/orda_logger";
+import { ClientModel } from "@ooo/types/client";
+import { BaseDatatype } from "@ooo/datatypes/base";
+import { CUID } from "@ooo/types/uid";
+import { Mutex } from "async-mutex";
+import MutexInterface from "async-mutex/lib/MutexInterface";
 
 export class ClientContext {
-  public loggerFactory: OrtooLoggerFactory;
+  public loggerFactory: OrdaLoggerFactory;
   public client: ClientModel;
-  private _L?: OrtooLogger;
+  private _L?: OrdaLogger;
   private lock: Mutex;
   private unlock?: MutexInterface.Releaser;
 
-  constructor(cm: ClientModel, logFactory: OrtooLoggerFactory) {
+  constructor(cm: ClientModel, logFactory: OrdaLoggerFactory) {
     this.loggerFactory = logFactory;
     this.client = cm;
     this.lock = new Mutex();
@@ -43,7 +43,7 @@ export class ClientContext {
     return this.client.cuid;
   }
 
-  get L(): OrtooLogger {
+  get L(): OrdaLogger {
     if (!this._L) {
       this._L = this.loggerFactory.getLogger(this.getLogName());
     }
