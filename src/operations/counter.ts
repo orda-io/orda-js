@@ -1,8 +1,8 @@
-import { Op } from "@ooo/operations/operation";
-import { Int32 } from "@ooo/types/integer";
-import { TypeOfOperation } from "@ooo/types/operation";
-import { OrdaLogger } from "@ooo/utils/orda_logger";
-import { ErrDatatype } from "@ooo/errors/datatype";
+import { Op } from '@ooo/operations/operation';
+import { Int32 } from '@ooo/types/integer';
+import { TypeOfOperation } from '@ooo/types/operation';
+import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { ErrDatatype } from '@ooo/errors/datatype';
 
 export { IncreaseOperation };
 

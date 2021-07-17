@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -27,8 +28,8 @@ export interface OrdaClientMessage {
 }
 
 export enum OrdaClientType {
-  PERSISTENT = "PERSISTENT",
-  EPHEMERAL = "EPHEMERAL",
+  PERSISTENT = 'PERSISTENT',
+  EPHEMERAL = 'EPHEMERAL',
 }
 
 export interface OrdaCollectionMessage {
@@ -95,8 +96,8 @@ export interface OrdaPushPullPack {
 }
 
 export enum OrdaRequestType {
-  CLIENTS = "CLIENTS",
-  PUSHPULLS = "PUSHPULLS",
+  CLIENTS = 'CLIENTS',
+  PUSHPULLS = 'PUSHPULLS',
 }
 
 export interface OrdaSnapshotResponse {
@@ -105,34 +106,34 @@ export interface OrdaSnapshotResponse {
 }
 
 export enum OrdaSyncType {
-  LOCAL_ONLY = "LOCAL_ONLY",
-  MANUALLY = "MANUALLY",
-  REALTIME = "REALTIME",
+  LOCAL_ONLY = 'LOCAL_ONLY',
+  MANUALLY = 'MANUALLY',
+  REALTIME = 'REALTIME',
 }
 
 export enum OrdaTypeOfDatatype {
-  COUNTER = "COUNTER",
-  MAP = "MAP",
-  LIST = "LIST",
-  DOCUMENT = "DOCUMENT",
+  COUNTER = 'COUNTER',
+  MAP = 'MAP',
+  LIST = 'LIST',
+  DOCUMENT = 'DOCUMENT',
 }
 
 export enum OrdaTypeOfOperation {
-  NO_OP = "NO_OP",
-  SNAPSHOT = "SNAPSHOT",
-  ERROR = "ERROR",
-  TRANSACTION = "TRANSACTION",
-  COUNTER_INCREASE = "COUNTER_INCREASE",
-  MAP_PUT = "MAP_PUT",
-  MAP_REMOVE = "MAP_REMOVE",
-  LIST_INSERT = "LIST_INSERT",
-  LIST_DELETE = "LIST_DELETE",
-  LIST_UPDATE = "LIST_UPDATE",
-  DOC_OBJ_PUT = "DOC_OBJ_PUT",
-  DOC_OBJ_RMV = "DOC_OBJ_RMV",
-  DOC_ARR_INS = "DOC_ARR_INS",
-  DOC_ARR_DEL = "DOC_ARR_DEL",
-  DOC_ARR_UPD = "DOC_ARR_UPD",
+  NO_OP = 'NO_OP',
+  SNAPSHOT = 'SNAPSHOT',
+  ERROR = 'ERROR',
+  TRANSACTION = 'TRANSACTION',
+  COUNTER_INCREASE = 'COUNTER_INCREASE',
+  MAP_PUT = 'MAP_PUT',
+  MAP_REMOVE = 'MAP_REMOVE',
+  LIST_INSERT = 'LIST_INSERT',
+  LIST_DELETE = 'LIST_DELETE',
+  LIST_UPDATE = 'LIST_UPDATE',
+  DOC_OBJ_PUT = 'DOC_OBJ_PUT',
+  DOC_OBJ_RMV = 'DOC_OBJ_RMV',
+  DOC_ARR_INS = 'DOC_ARR_INS',
+  DOC_ARR_DEL = 'DOC_ARR_DEL',
+  DOC_ARR_UPD = 'DOC_ARR_UPD',
 }
 
 export interface ProtobufAny {
@@ -150,9 +151,9 @@ export interface RpcStatus {
 }
 
 export type QueryParamsType = Record<string | number, any>;
-export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
+export type ResponseFormat = keyof Omit<Body, 'body' | 'bodyUsed'>;
 
-export interface FullRequestParams extends Omit<RequestInit, "body"> {
+export interface FullRequestParams extends Omit<RequestInit, 'body'> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -171,11 +172,11 @@ export interface FullRequestParams extends Omit<RequestInit, "body"> {
   cancelToken?: CancelToken;
 }
 
-export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">;
+export type RequestParams = Omit<FullRequestParams, 'body' | 'method' | 'query' | 'path'>;
 
 export interface ApiConfig<SecurityDataType = unknown> {
   baseUrl?: string;
-  baseApiParams?: Omit<RequestParams, "baseUrl" | "cancelToken" | "signal">;
+  baseApiParams?: Omit<RequestParams, 'baseUrl' | 'cancelToken' | 'signal'>;
   securityWorker?: (securityData: SecurityDataType | null) => Promise<RequestParams | void> | RequestParams | void;
   customFetch?: typeof fetch;
 }
@@ -188,23 +189,23 @@ export interface HttpResponse<D extends unknown, E extends unknown = unknown> ex
 type CancelToken = Symbol | string | number;
 
 export enum ContentType {
-  Json = "application/json",
-  FormData = "multipart/form-data",
-  UrlEncoded = "application/x-www-form-urlencoded",
+  Json = 'application/json',
+  FormData = 'multipart/form-data',
+  UrlEncoded = 'application/x-www-form-urlencoded',
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = "";
+  public baseUrl: string = '';
   private securityData: SecurityDataType | null = null;
-  private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
+  private securityWorker?: ApiConfig<SecurityDataType>['securityWorker'];
   private abortControllers = new Map<CancelToken, AbortController>();
   private customFetch = (...fetchParams: Parameters<typeof fetch>) => fetch(...fetchParams);
 
   private baseApiParams: RequestParams = {
-    credentials: "same-origin",
+    credentials: 'same-origin',
     headers: {},
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
   };
 
   constructor(apiConfig: ApiConfig<SecurityDataType> = {}) {
@@ -217,7 +218,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
   private encodeQueryParam(key: string, value: any) {
     const encodedKey = encodeURIComponent(key);
-    return `${encodedKey}=${encodeURIComponent(typeof value === "number" ? value : `${value}`)}`;
+    return `${encodedKey}=${encodeURIComponent(typeof value === 'number' ? value : `${value}`)}`;
   }
 
   private addQueryParam(query: QueryParamsType, key: string) {
@@ -226,25 +227,25 @@ export class HttpClient<SecurityDataType = unknown> {
 
   private addArrayQueryParam(query: QueryParamsType, key: string) {
     const value = query[key];
-    return value.map((v: any) => this.encodeQueryParam(key, v)).join("&");
+    return value.map((v: any) => this.encodeQueryParam(key, v)).join('&');
   }
 
   protected toQueryString(rawQuery?: QueryParamsType): string {
     const query = rawQuery || {};
-    const keys = Object.keys(query).filter((key) => "undefined" !== typeof query[key]);
+    const keys = Object.keys(query).filter((key) => 'undefined' !== typeof query[key]);
     return keys
       .map((key) => (Array.isArray(query[key]) ? this.addArrayQueryParam(query, key) : this.addQueryParam(query, key)))
-      .join("&");
+      .join('&');
   }
 
   protected addQueryParams(rawQuery?: QueryParamsType): string {
     const queryString = this.toQueryString(rawQuery);
-    return queryString ? `?${queryString}` : "";
+    return queryString ? `?${queryString}` : '';
   }
 
   private contentFormatters: Record<ContentType, (input: any) => any> = {
     [ContentType.Json]: (input: any) =>
-      input !== null && (typeof input === "object" || typeof input === "string") ? JSON.stringify(input) : input,
+      input !== null && (typeof input === 'object' || typeof input === 'string') ? JSON.stringify(input) : input,
     [ContentType.FormData]: (input: any) =>
       Object.keys(input || {}).reduce((formData, key) => {
         const property = input[key];
@@ -252,9 +253,9 @@ export class HttpClient<SecurityDataType = unknown> {
           key,
           property instanceof Blob
             ? property
-            : typeof property === "object" && property !== null
+            : typeof property === 'object' && property !== null
             ? JSON.stringify(property)
-            : `${property}`,
+            : `${property}`
         );
         return formData;
       }, new FormData()),
@@ -309,7 +310,7 @@ export class HttpClient<SecurityDataType = unknown> {
     ...params
   }: FullRequestParams): Promise<HttpResponse<T, E>> => {
     const secureParams =
-      ((typeof secure === "boolean" ? secure : this.baseApiParams.secure) &&
+      ((typeof secure === 'boolean' ? secure : this.baseApiParams.secure) &&
         this.securityWorker &&
         (await this.securityWorker(this.securityData))) ||
       {};
@@ -318,14 +319,14 @@ export class HttpClient<SecurityDataType = unknown> {
     const payloadFormatter = this.contentFormatters[type || ContentType.Json];
     const responseFormat = format || requestParams.format;
 
-    return this.customFetch(`${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`, {
+    return this.customFetch(`${baseUrl || this.baseUrl || ''}${path}${queryString ? `?${queryString}` : ''}`, {
       ...requestParams,
       headers: {
-        ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
+        ...(type && type !== ContentType.FormData ? { 'Content-Type': type } : {}),
         ...(requestParams.headers || {}),
       },
       signal: cancelToken ? this.createAbortSignal(cancelToken) : void 0,
-      body: typeof body === "undefined" || body === null ? null : payloadFormatter(body),
+      body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body),
     }).then(async (response) => {
       const r = response as HttpResponse<T, E>;
       r.data = null as unknown as T;
@@ -373,8 +374,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ordaServiceCreateCollection: (collection: string, params: RequestParams = {}) =>
       this.request<OrdaCollectionMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}`,
-        method: "PUT",
-        format: "json",
+        method: 'PUT',
+        format: 'json',
         ...params,
       }),
 
@@ -385,18 +386,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name OrdaServiceProcessClient
      * @request POST:/api/v1/collections/{collection}/clients/{cuid}
      */
-    ordaServiceProcessClient: (
-      collection: string,
-      cuid: string,
-      body: OrdaClientMessage,
-      params: RequestParams = {},
-    ) =>
+    ordaServiceProcessClient: (collection: string, cuid: string, body: OrdaClientMessage, params: RequestParams = {}) =>
       this.request<OrdaClientMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}/clients/${cuid}`,
-        method: "POST",
+        method: 'POST',
         body: body,
         type: ContentType.Json,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -411,13 +407,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       collection: string,
       key: string,
       query?: { duid?: string; sseq?: string },
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<OrdaSnapshotResponse, RpcStatus>({
         path: `/api/v1/collections/${collection}/datatypes/${key}`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -432,14 +428,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       collection: string,
       cuid: string,
       body: OrdaPushPullMessage,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<OrdaPushPullMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}/pushpulls/${cuid}`,
-        method: "POST",
+        method: 'POST',
         body: body,
         type: ContentType.Json,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -453,8 +449,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ordaServiceResetCollection: (collection: string, params: RequestParams = {}) =>
       this.request<OrdaCollectionMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}/reset`,
-        method: "PUT",
-        format: "json",
+        method: 'PUT',
+        format: 'json',
         ...params,
       }),
 
@@ -468,10 +464,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ordaServiceTestEncodingOperation: (body: OrdaEncodingMessage, params: RequestParams = {}) =>
       this.request<OrdaEncodingMessage, RpcStatus>({
         path: `/api/v1/samples/operation`,
-        method: "POST",
+        method: 'POST',
         body: body,
         type: ContentType.Json,
-        format: "json",
+        format: 'json',
         ...params,
       }),
   };

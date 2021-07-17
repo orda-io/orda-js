@@ -1,4 +1,4 @@
-import { isBrowser } from "@ooo/utils/browser_or_node";
+import { isBrowser } from '@ooo/utils/browser_or_node';
 
 export type { OrdaLogger, OrdaLogLevel };
 export { OrdaLoggerFactory, ordaLogger };

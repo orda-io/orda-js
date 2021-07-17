@@ -8,7 +8,7 @@ export function createUID(): string {
 }
 
 export function createNullUID(): string {
-  return Buffer.alloc(defaultUIDLength).fill('0').toString();
+  return '0'.repeat(defaultUIDLength);
 }
 
 type CUID = string;

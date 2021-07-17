@@ -1,13 +1,13 @@
-import { WireManager } from "@ooo/managers/wire";
-import { WiredDatatype } from "@ooo/datatypes/wired";
-import { DataManager } from "@ooo/managers/data";
-import { CUID, DUID } from "@ooo/types/uid";
-import { PPOptions, PushPullOptions, PushPullPack } from "@ooo/types/pushpullpack";
-import { uint64 } from "@ooo/types/integer";
-import { Op } from "@ooo/operations/operation";
-import { OrdaLogger } from "@ooo/utils/orda_logger";
-import { ExtMap } from "@ooo/utils/map";
-import { CheckPoint } from "@ooo/types/checkpoint";
+import { WireManager } from '@ooo/managers/wire';
+import { WiredDatatype } from '@ooo/datatypes/wired';
+import { DataManager } from '@ooo/managers/data';
+import { CUID, DUID } from '@ooo/types/uid';
+import { PPOptions, PushPullOptions, PushPullPack } from '@ooo/types/pushpullpack';
+import { uint64 } from '@ooo/types/integer';
+import { Op } from '@ooo/operations/operation';
+import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { ExtMap } from '@ooo/utils/map';
+import { CheckPoint } from '@ooo/types/checkpoint';
 
 export { InternalWireManager };
 
@@ -44,10 +44,7 @@ class InternalWireManager implements WireManager {
   }
 
   private getCheckPoint(cuid: CUID, key: string): CheckPoint {
-    const map = this.checkPointMap.getOrElseSet(
-      cuid,
-      new ExtMap<string, CheckPoint>()
-    );
+    const map = this.checkPointMap.getOrElseSet(cuid, new ExtMap<string, CheckPoint>());
     return map.getOrElseSet(key, new CheckPoint());
   }
 
@@ -63,15 +60,7 @@ class InternalWireManager implements WireManager {
       opList.push(...history.slice(startSseq));
     }
 
-    return new PushPullPack(
-      ppp.duid,
-      ppp.key,
-      ppp.type,
-      checkPoint,
-      ppp.era,
-      ppp.option,
-      opList
-    );
+    return new PushPullPack(ppp.duid, ppp.key, ppp.type, checkPoint, ppp.era, ppp.option, opList);
   }
 
   private exchangePushPullForSender(ownerCuid: CUID, ppp: PushPullPack): void {
@@ -105,15 +94,7 @@ class InternalWireManager implements WireManager {
     checkPoint.setSseq(history.length);
     checkPoint.setCseq(ppp.checkPoint.cseq);
 
-    const response = new PushPullPack(
-      ppp.duid,
-      ppp.key,
-      ppp.type,
-      checkPoint,
-      ppp.era,
-      option,
-      opArray
-    );
+    const response = new PushPullPack(ppp.duid, ppp.key, ppp.type, checkPoint, ppp.era, option, opArray);
     dataManager?.applyPushPullPack(response);
   }
 

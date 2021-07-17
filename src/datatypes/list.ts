@@ -1,20 +1,20 @@
-import { Datatype, IDatatype } from "@ooo/datatypes/datatype";
-import { Snapshot } from "@ooo/datatypes/snapshot";
-import { ClientContext, DatatypeContext } from "@ooo/context";
-import { StateOfDatatype } from "@ooo/generated/proto.enum";
-import { Wire } from "@ooo/datatypes/wired";
-import { DatatypeHandlers } from "@ooo/handlers/handlers";
-import { TypeOfDatatype } from "@ooo/types/datatype";
-import { Op } from "@ooo/operations/operation";
-import { TypeOfOperation } from "@ooo/types/operation";
-import { createNullOrderedNode, OrderedNode, OrderedType } from "@ooo/datatypes/ordered";
-import { Timestamp } from "@ooo/types/timestamp";
-import { DeleteOperation, InsertOperation, UpdateOperation } from "@ooo/operations/list";
-import { TimedNode, TimedType } from "@ooo/datatypes/timed";
-import { ErrDatatype } from "@ooo/errors/datatype";
-import { SnapshotOperation } from "@ooo/operations/meta";
-import { OrdaError } from "@ooo/errors/error";
-import { TransactionContext } from "@ooo/datatypes/tansaction";
+import { Datatype, IDatatype } from '@ooo/datatypes/datatype';
+import { Snapshot } from '@ooo/datatypes/snapshot';
+import { ClientContext, DatatypeContext } from '@ooo/context';
+import { StateOfDatatype } from '@ooo/generated/proto.enum';
+import { Wire } from '@ooo/datatypes/wired';
+import { DatatypeHandlers } from '@ooo/handlers/handlers';
+import { TypeOfDatatype } from '@ooo/types/datatype';
+import { Op } from '@ooo/operations/operation';
+import { TypeOfOperation } from '@ooo/types/operation';
+import { createNullOrderedNode, OrderedNode, OrderedType } from '@ooo/datatypes/ordered';
+import { Timestamp } from '@ooo/types/timestamp';
+import { DeleteOperation, InsertOperation, UpdateOperation } from '@ooo/operations/list';
+import { TimedNode, TimedType } from '@ooo/datatypes/timed';
+import { ErrDatatype } from '@ooo/errors/datatype';
+import { SnapshotOperation } from '@ooo/operations/meta';
+import { OrdaError } from '@ooo/errors/error';
+import { TransactionContext } from '@ooo/datatypes/tansaction';
 
 export interface ListTx extends IDatatype {
   insert(pos: number, ...values: unknown[]): void;
@@ -37,7 +37,7 @@ export interface List extends ListTx {
 }
 
 export class _List extends Datatype implements List {
-  private snap: ListSnapshot;
+  private readonly snap: ListSnapshot;
 
   constructor(ctx: ClientContext, key: string, state: StateOfDatatype, wire?: Wire, handlers?: DatatypeHandlers) {
     super(ctx, key, TypeOfDatatype.LIST, state, wire, handlers);

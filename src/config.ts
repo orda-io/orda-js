@@ -1,5 +1,5 @@
-import { OrdaLoggerFactory, OrdaLogLevel } from "@ooo/utils/orda_logger";
-import { SyncType } from "@ooo/types/client";
+import { OrdaLoggerFactory, OrdaLogLevel } from '@ooo/utils/orda_logger';
+import { SyncType } from '@ooo/types/client';
 
 export { createLocalClientConfig };
 

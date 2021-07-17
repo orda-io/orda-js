@@ -1,7 +1,7 @@
-import { Op } from "@ooo/operations/operation";
-import { TypeOfOperation } from "@ooo/types/operation";
-import { OrdaLogger } from "@ooo/utils/orda_logger";
-import { ErrDatatype } from "@ooo/errors/datatype";
+import { Op } from '@ooo/operations/operation';
+import { TypeOfOperation } from '@ooo/types/operation';
+import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { ErrDatatype } from '@ooo/errors/datatype';
 
 export { PutOperation, RemoveOperation };
 

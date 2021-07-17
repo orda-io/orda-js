@@ -5,11 +5,7 @@ import { Operation } from '@ooo/operations/operation';
 
 export type { OnStateChange, OnRemoteOperations, OnErrors };
 
-type OnStateChange = (
-  dt: Datatype,
-  oldState: StateOfDatatype,
-  newState: StateOfDatatype
-) => void;
+type OnStateChange = (dt: Datatype, oldState: StateOfDatatype, newState: StateOfDatatype) => void;
 
 type OnRemoteOperations = (dt: Datatype, opList: Operation[]) => void;
 
@@ -22,37 +18,25 @@ export class DatatypeHandlers {
 
   onErrors?: OnErrors;
 
-  constructor(
-    onStateChange?: OnStateChange,
-    onRemoteOperations?: OnRemoteOperations,
-    onErrors?: OnErrors
-  ) {
+  constructor(onStateChange?: OnStateChange, onRemoteOperations?: OnRemoteOperations, onErrors?: OnErrors) {
     this.onStateChange = onStateChange;
     this.onRemoteOperations = onRemoteOperations;
     this.onErrors = onErrors;
   }
 
   addOnStateChangeHandler(
-    onStateChange: (
-      dt: Datatype,
-      oldState: StateOfDatatype,
-      newState: StateOfDatatype
-    ) => void
+    onStateChange: (dt: Datatype, oldState: StateOfDatatype, newState: StateOfDatatype) => void
   ): DatatypeHandlers {
     this.onStateChange = onStateChange;
     return this;
   }
 
-  addOnRemoteOperationsHandler(
-    onRemoteOperations: (dt: Datatype, opList: Operation[]) => void
-  ): DatatypeHandlers {
+  addOnRemoteOperationsHandler(onRemoteOperations: (dt: Datatype, opList: Operation[]) => void): DatatypeHandlers {
     this.onRemoteOperations = onRemoteOperations;
     return this;
   }
 
-  addOnErrorsHandler(
-    onErrors: (dt: Datatype, ...errs: DatatypeError[]) => void
-  ): DatatypeHandlers {
+  addOnErrorsHandler(onErrors: (dt: Datatype, ...errs: DatatypeError[]) => void): DatatypeHandlers {
     this.onErrors = onErrors;
     return this;
   }

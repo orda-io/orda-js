@@ -1,10 +1,28 @@
 import { helper } from '@test/helper/helper';
 import { expect } from 'chai';
-import { SyncType } from '@ooo/types/client';
+import { ClientModel, SyncType } from '@ooo/types/client';
 import { Client } from '@ooo/client';
 import { Suite } from 'mocha';
+import { createUID } from '@ooo/types/uid';
 
 describe('Test Clients', function (this: Suite): void {
+  it('Can connect synchronously', async () => {
+    const conf = await helper.createTestClientConfig();
+    const client1: Client = new Client(conf, 'client2');
+    // console.log('1');
+    const cm = new ClientModel(createUID(), 'client1', conf.collectionName, conf.syncType);
+    // const ctx = new ClientContext(cm, conf.loggerFactory);
+    // const wireManager = new GrpcGatewayWireManager(conf, ctx);
+    // const req = new ClientMessage(ctx.client);
+    // const response = await wireManager.openApi.api.ordaServiceProcessClient(conf.collectionName, cm.cuid, req);
+    // console.log(`response:${response.status}`);
+    // await wireManager.exchangeClient();
+    await client1.connect();
+    // const api =
+    console.log('2');
+    // await helper.sleep(2);
+  });
+
   it('Can connect a client', async () => {
     const conf1 = helper.createClientConfig('NOT_EXIST');
 

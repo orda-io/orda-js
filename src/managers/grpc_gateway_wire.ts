@@ -1,23 +1,23 @@
-import { WireManager } from "@ooo/managers/wire";
-import { uint32, Uint32 } from "@ooo/types/integer";
-import { ClientContext } from "@ooo/context";
-import { ClientConfig } from "@ooo/config";
-import { DataManager } from "@ooo/managers/data";
-import { WiredDatatype } from "@ooo/datatypes/wired";
-import { PushPullPack } from "@ooo/types/pushpullpack";
-import { Api, ApiConfig, OrdaSyncType } from "@ooo/generated/openapi";
-import { ErrClient } from "@ooo/errors/client";
-import { NotifyManager } from "@ooo/managers/notify";
-import { StateOfDatatype } from "@ooo/generated/proto.enum";
-import { ClientMessage, PushPullMessage } from "@ooo/types/messages";
-import { CUID } from "@ooo/types/uid";
+import { WireManager } from '@ooo/managers/wire';
+import { uint32, Uint32 } from '@ooo/types/integer';
+import { ClientContext } from '@ooo/context';
+import { ClientConfig } from '@ooo/config';
+import { DataManager } from '@ooo/managers/data';
+import { WiredDatatype } from '@ooo/datatypes/wired';
+import { PushPullPack } from '@ooo/types/pushpullpack';
+import { Api, ApiConfig, OrdaSyncType } from '@ooo/generated/openapi';
+import { ErrClient } from '@ooo/errors/client';
+import { NotifyManager } from '@ooo/managers/notify';
+import { StateOfDatatype } from '@ooo/generated/proto.enum';
+import { ClientMessage, PushPullMessage } from '@ooo/types/messages';
+import { CUID } from '@ooo/types/uid';
 
 export { GrpcGatewayWireManager };
 
 class GrpcGatewayWireManager implements WireManager {
   private seq: Uint32;
   private dataManager?: DataManager;
-  private openApi: Api<any>;
+  openApi: Api<any>;
   private ctx: ClientContext;
   private notifyManager?: NotifyManager;
 
@@ -39,17 +39,21 @@ class GrpcGatewayWireManager implements WireManager {
   }
 
   public async exchangeClient(): Promise<void> {
-    const arr: Uint8Array = new Uint8Array();
-    arr.buffer;
     const req = new ClientMessage(this.ctx.client);
     this.ctx.L.debug(`[🚀🔻] send ClientMessage ${JSON.stringify(req)}`);
     try {
-      const result = await this.openApi.api.ordaServiceProcessClient(req.collection, req.cuid, req);
-      const clientMsg = result.data;
-      this.ctx.L.debug(
-        `[🚀] received ClientMessage '${clientMsg.clientAlias}'(${clientMsg.cuid}) in collection '${clientMsg.collection}'.`
-      );
-      this.notifyManager?.connect();
+      const response = await this.openApi.api.ordaServiceProcessClient(req.collection, req.cuid, req);
+
+      if (response && response.status === 200) {
+        const clientMsg = await response.data;
+        this.ctx.L.debug(
+          `[🚀] received ClientMessage '${clientMsg.clientAlias}'(${clientMsg.cuid}) in collection '${clientMsg.collection}'.`
+        );
+        this.ctx.L.error('error');
+        console.error('error');
+      } else {
+        this.ctx.L.warn(`[🚀] fail to receive ClientMessage: status(${response?.status}`);
+      }
     } catch (e) {
       const err = new ErrClient.Connect(this.ctx.L, e.error.message);
       return Promise.reject(err);
@@ -64,19 +68,22 @@ class GrpcGatewayWireManager implements WireManager {
       this.ctx.L.info('[🚀🔻] BEGIN exchangePushPull()');
       const req = new PushPullMessage(this.ctx.client, ...pushPullList);
       this.ctx.L.info(`[🚀] SEND PUSH: ${JSON.stringify(pushPullList)}`);
-      const result = await this.openApi.api.ordaServiceProcessPushPull(req.collection, req.cuid, req);
-      const pulled = result.data;
-
-      if (pulled.PushPullPacks) {
-        const pushPullPacks: PushPullPack[] = new Array<PushPullPack>();
-        for (const ppp of pulled.PushPullPacks) {
-          pushPullPacks.push(PushPullPack.fromOpenApi(ppp));
+      const response = await this.openApi.api.ordaServiceProcessPushPull(req.collection, req.cuid, req);
+      if (response && response.status === 200) {
+        const pulled = await response.data;
+        if (pulled.PushPullPacks) {
+          const pushPullPacks: PushPullPack[] = new Array<PushPullPack>();
+          for (const ppp of pulled.PushPullPacks) {
+            pushPullPacks.push(PushPullPack.fromOpenApi(ppp));
+          }
+          this.ctx.L.info(`[🚀] RECV PULL: ${JSON.stringify(pushPullPacks)}`);
+          this.dataManager?.applyPushPullPack(...pushPullPacks);
         }
-        this.ctx.L.info(`[🚀] RECV PULL: ${JSON.stringify(pushPullPacks)}`);
-        this.dataManager?.applyPushPullPack(...pushPullPacks);
+      } else {
+        this.ctx.L.warn(`[🚀] fail to receive PushPullMessage: status(${response?.status}`);
       }
     } catch (e) {
-      const err = new ErrClient.PushPull(this.ctx.L, e.error);
+      const err = new ErrClient.PushPull(this.ctx.L, e);
       return Promise.reject(err);
     } finally {
       this.ctx.L.info('[🚀🔺] END exchangePushPull()');
@@ -87,7 +94,7 @@ class GrpcGatewayWireManager implements WireManager {
   async deliverTransaction(wired: WiredDatatype): Promise<void> {
     this.ctx.L.info('[🚀] deliverTransaction');
     await this.dataManager?.trySyncDatatype(wired);
-    return Promise.resolve();
+    return;
   }
 
   onChangeDatatypeState(wired: WiredDatatype): void {

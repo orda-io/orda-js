@@ -1,9 +1,9 @@
-import { OrdaLogger, OrdaLoggerFactory } from "@ooo/utils/orda_logger";
-import { ClientModel } from "@ooo/types/client";
-import { BaseDatatype } from "@ooo/datatypes/base";
-import { CUID } from "@ooo/types/uid";
-import { Mutex } from "async-mutex";
-import MutexInterface from "async-mutex/lib/MutexInterface";
+import { OrdaLogger, OrdaLoggerFactory } from '@ooo/utils/orda_logger';
+import { ClientModel } from '@ooo/types/client';
+import { BaseDatatype } from '@ooo/datatypes/base';
+import { CUID } from '@ooo/types/uid';
+import { Mutex } from 'async-mutex';
+import MutexInterface from 'async-mutex/lib/MutexInterface';
 
 export class ClientContext {
   public loggerFactory: OrdaLoggerFactory;
@@ -28,14 +28,14 @@ export class ClientContext {
 
   async doLock(name?: string): Promise<boolean> {
     this.unlock = await this.lock.acquire();
-    this.L.info(`lock: ${name}`);
+    this.L.info(`[🔒] lock: ${name}`);
     return Promise.resolve(true);
   }
 
   doUnlock(name?: string): void {
     if (this.unlock) {
       this.unlock();
-      this.L.info(`unlock: ${name}`);
+      this.L.info(`[🔓] unlock: ${name}`);
     }
   }
 
@@ -68,8 +68,6 @@ export class DatatypeContext extends ClientContext {
   }
 
   public getLogName(): string {
-    return `${this.client.getLogName()}:${this.datatype?.key}:${
-      this.datatype?.id
-    }`;
+    return `${this.client.getLogName()}:${this.datatype?.key}:${this.datatype?.id}`;
   }
 }

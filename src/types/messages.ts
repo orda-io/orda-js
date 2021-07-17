@@ -5,11 +5,11 @@ import {
   OrdaPushPullMessage,
   OrdaPushPullPack,
   OrdaRequestType,
-  OrdaSyncType
-} from "@ooo/generated/openapi";
-import { getAgent } from "@ooo/constants/constants";
-import { ClientModel } from "@ooo/types/client";
-import { PushPullPack } from "@ooo/types/pushpullpack";
+  OrdaSyncType,
+} from '@ooo/generated/openapi';
+import { getAgent } from '@ooo/constants/constants';
+import { ClientModel } from '@ooo/types/client';
+import { PushPullPack } from '@ooo/types/pushpullpack';
 
 const ProtocolVersion = 'v1';
 

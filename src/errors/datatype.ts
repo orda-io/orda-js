@@ -1,6 +1,6 @@
-import { BaseErrorCode, OrdaError } from "@ooo/errors/error";
-import { OrdaLogger } from "@ooo/utils/orda_logger";
-import { StateOfDatatype } from "@ooo/types/datatype";
+import { BaseErrorCode, OrdaError } from '@ooo/errors/error';
+import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { StateOfDatatype } from '@ooo/types/datatype';
 
 export { ErrDatatype };
 

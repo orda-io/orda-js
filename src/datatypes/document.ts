@@ -1,5 +1,4 @@
 import { Datatype, IDatatype } from '@ooo/datatypes/datatype';
-import { JSONArray, JSONObject, JSONType, newJSONObject, TypeOfJSON } from '@ooo/datatypes/json';
 import { ClientContext, DatatypeContext } from '@ooo/context';
 import { StateOfDatatype } from '@ooo/generated/proto.enum';
 import { Wire } from '@ooo/datatypes/wired';
@@ -7,7 +6,7 @@ import { DatatypeHandlers } from '@ooo/handlers/handlers';
 import { Timestamp } from '@ooo/types/timestamp';
 import { TypeOfOperation } from '@ooo/types/operation';
 import { Op } from '@ooo/operations/operation';
-import { TypeOfDatatype } from '@ooo/types/datatype';
+import { TypeOfDatatype, TypeOfJSON } from '@ooo/types/datatype';
 import { Snapshot } from '@ooo/datatypes/snapshot';
 import { ErrDatatype } from '@ooo/errors/datatype';
 import {
@@ -18,6 +17,7 @@ import {
   DocUpdateInArrayOperation,
 } from '@ooo/operations/document';
 import { TransactionContext } from '@ooo/datatypes/tansaction';
+import { JSONArray, JSONObject, JSONType, newJSONObject } from '@ooo/datatypes/json';
 
 export interface DocumentTx extends IDatatype {
   putToObject(key: string, value: unknown): Document | undefined;
@@ -139,7 +139,7 @@ export class __Document implements Document {
     return this._doc.ctx;
   }
 
-  sync(): Promise<void> {
+  async sync(): Promise<void> {
     return this._doc.sync();
   }
 
@@ -168,7 +168,6 @@ export class __Document implements Document {
 
   putToObject(key: string, value: unknown): Document | undefined {
     this.assertLocalOp('putToObject', TypeOfJSON.object, false);
-
     const ret = this._doc.sentenceLocalInTx(new DocPutInObjOperation(this.current.cTime, key, value));
     return ret ? this.toDocument(ret as JSONType) : undefined;
   }
@@ -209,7 +208,7 @@ export class __Document implements Document {
     });
   }
 
-  private assertLocalOp(opName: string, ofJSON: TypeOfJSON, workOnGarbage: boolean) {
+  assertLocalOp(opName: string, ofJSON: TypeOfJSON, workOnGarbage: boolean) {
     if (this.current.type !== ofJSON) {
       throw new ErrDatatype.InvalidParent(this.ctx.L, `${opName} is not allowed`);
     }

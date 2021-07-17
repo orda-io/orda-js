@@ -1,10 +1,10 @@
-import { CheckPoint } from "@ooo/types/checkpoint";
-import { uint32, Uint32 } from "@ooo/types/integer";
-import { Op, OperationOa } from "@ooo/operations/operation";
-import { StateOfDatatype, TypeOfDatatype } from "@ooo/types/datatype";
-import { OrdaPushPullPack } from "@ooo/generated/openapi";
-import { OrdaLogger } from "@ooo/utils/orda_logger";
-import { convertFromOpenApiOperation } from "@ooo/operations/converter";
+import { CheckPoint } from '@ooo/types/checkpoint';
+import { uint32, Uint32 } from '@ooo/types/integer';
+import { Op, OperationOa } from '@ooo/operations/operation';
+import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
+import { OrdaPushPullPack } from '@ooo/generated/openapi';
+import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { convertFromOpenApiOperation } from '@ooo/operations/converter';
 
 export { PushPullPack, PushPullOptions, PPOptions };
 
@@ -101,11 +101,9 @@ class PushPullPack {
   }
 
   toString(): string {
-    let ret = `{ ${this.type} ${this.key}(${
-      this.duid
-    }) ${this.checkPoint.toString()}, era:${this.era} ${PPOptions.toString(
-      this.option
-    )} (${this.opList.length})[ `;
+    let ret = `{ ${this.type} ${this.key}(${this.duid}) ${this.checkPoint.toString()}, era:${
+      this.era
+    } ${PPOptions.toString(this.option)} (${this.opList.length})[ `;
     for (const op of this.opList) {
       const opStr = op.toString();
       ret = ret.concat(opStr).concat(' ');
@@ -135,10 +133,7 @@ class PushPullPack {
     };
   }
 
-  static fromOpenApi(
-    ppp: OrdaPushPullPack,
-    logger?: OrdaLogger
-  ): PushPullPack {
+  static fromOpenApi(ppp: OrdaPushPullPack, logger?: OrdaLogger): PushPullPack {
     const opList: Op[] = new Array<Op>();
     if (ppp.operations) {
       for (const oop of ppp.operations) {

@@ -1,19 +1,20 @@
-import { OooMapSnapshot } from "@ooo/datatypes/map";
-import { DatatypeContext } from "@ooo/context";
-import { Timestamp } from "@ooo/types/timestamp";
-import { Snapshot } from "@ooo/datatypes/snapshot";
-import { ErrDatatype } from "@ooo/errors/datatype";
-import { ListSnapshot } from "@ooo/datatypes/list";
-import { TimedType } from "@ooo/datatypes/timed";
-import { OrderedNode, OrderedType } from "@ooo/datatypes/ordered";
-import { OrdaError } from "@ooo/errors/error";
+import { OooMapSnapshot } from '@ooo/datatypes/map';
+import { DatatypeContext } from '@ooo/context';
+import { Timestamp } from '@ooo/types/timestamp';
+import { Snapshot } from '@ooo/datatypes/snapshot';
+import { ErrDatatype } from '@ooo/errors/datatype';
+import { ListSnapshot } from '@ooo/datatypes/list';
+import { TimedType } from '@ooo/datatypes/timed';
+import { OrderedNode, OrderedType } from '@ooo/datatypes/ordered';
+import { OrdaError } from '@ooo/errors/error';
 import {
   DocDeleteInArrayOperation,
   DocInsertToArrayOperation,
   DocPutInObjOperation,
   DocRemoveInObjOperation,
-  DocUpdateInArrayOperation
-} from "@ooo/operations/document";
+  DocUpdateInArrayOperation,
+} from '@ooo/operations/document';
+import { TypeOfJSON } from '@ooo/types/datatype';
 
 type TypeOfJSONForMarshal = 'E' | 'O' | 'A';
 
@@ -170,12 +171,6 @@ class UnmarshalAssistant {
     const ts = Timestamp.fromJSON(json);
     return this.unifyingTS(ts);
   }
-}
-
-export enum TypeOfJSON {
-  element = 1,
-  object,
-  array,
 }
 
 export class JSONCommon {
@@ -652,7 +647,7 @@ export class JSONObject extends JSONPrimitive implements Snapshot {
     }
     throw new ErrDatatype.IllegalParameters(
       this.ctx.L,
-      `invalid type: expect ${TypeOfJSON[TypeOfJSON.element]}, but ${TypeOfJSON[jsonType.type]}`
+      `invalid type: expect ${TypeOfJSON.element}, but ${jsonType.type}`
     );
   }
 
@@ -666,7 +661,7 @@ export class JSONObject extends JSONPrimitive implements Snapshot {
     }
     throw new ErrDatatype.IllegalParameters(
       this.ctx.L,
-      `invalid type: expect ${TypeOfJSON[TypeOfJSON.object]}, but ${TypeOfJSON[jsonType.type]}`
+      `invalid type: expect ${TypeOfJSON.object}, but ${jsonType.type}`
     );
   }
 
@@ -680,7 +675,7 @@ export class JSONObject extends JSONPrimitive implements Snapshot {
     }
     throw new ErrDatatype.IllegalParameters(
       this.ctx.L,
-      `invalid type: expect ${TypeOfJSON[TypeOfJSON.array]}, but ${TypeOfJSON[jsonType.type]}`
+      `invalid type: expect ${TypeOfJSON.array}, but ${jsonType.type}`
     );
   }
 

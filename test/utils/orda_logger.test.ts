@@ -1,4 +1,4 @@
-import { OrdaLoggerFactory } from "@ooo/utils/orda_logger";
+import { OrdaLoggerFactory } from '@ooo/utils/orda_logger';
 
 function generate_error(): Error {
   throw new Error('generated error');

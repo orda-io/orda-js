@@ -1,9 +1,8 @@
 import { Suite } from 'mocha';
 import { helper } from '@test/helper/helper';
 import { expect } from 'chai';
-import { TypeOfJSON } from '@ooo/datatypes/json';
 import { ErrDatatype } from '@ooo/errors/datatype';
-import { __Document } from '@ooo/datatypes/document';
+import { TypeOfJSON } from '@ooo/types/datatype';
 
 const obj1 = {
   K1: 'hello',

@@ -1,23 +1,25 @@
-import { OrdaOperation as OperationOa, OrdaTypeOfOperation as OpType } from "@ooo/generated/openapi";
-import { OrdaLogger } from "@ooo/utils/orda_logger";
-import { ErrorOperation, SnapshotOperation, TransactionOperation } from "@ooo/operations/meta";
-import { IncreaseOperation } from "@ooo/operations/counter";
-import { OperationID } from "@ooo/types/operation";
-import { ErrDatatype } from "@ooo/errors/datatype";
-import { Op } from "@ooo/operations/operation";
-import { PutOperation, RemoveOperation } from "@ooo/operations/map";
-import { DeleteOperation, InsertOperation, UpdateOperation } from "@ooo/operations/list";
+import { OrdaOperation as OperationOa, OrdaTypeOfOperation as OpType } from '@ooo/generated/openapi';
+import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { ErrorOperation, SnapshotOperation, TransactionOperation } from '@ooo/operations/meta';
+import { IncreaseOperation } from '@ooo/operations/counter';
+import { OperationID } from '@ooo/types/operation';
+import { ErrDatatype } from '@ooo/errors/datatype';
+import { Op } from '@ooo/operations/operation';
+import { PutOperation, RemoveOperation } from '@ooo/operations/map';
+import { DeleteOperation, InsertOperation, UpdateOperation } from '@ooo/operations/list';
 import {
   DocDeleteInArrayOperation,
   DocInsertToArrayOperation,
   DocPutInObjOperation,
   DocRemoveInObjOperation,
-  DocUpdateInArrayOperation
-} from "@ooo/operations/document";
+  DocUpdateInArrayOperation,
+} from '@ooo/operations/document';
+import { commonBtoA, isBrowser } from '@ooo/utils/browser_or_node';
 
 export function convertFromOpenApiOperation(opa: OperationOa, logger?: OrdaLogger): Op {
   let op: Op | undefined;
-  const decodedBody = Buffer.from(opa.body!, 'base64').toString('ascii');
+  logger?.log(`isBrowser:${isBrowser}`);
+  const decodedBody = commonBtoA(opa.body!);
 
   switch (opa?.opType) {
     case OpType.SNAPSHOT:

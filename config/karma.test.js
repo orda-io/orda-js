@@ -35,7 +35,14 @@ const karmaConfig = {
   preprocessors: {
     './test/**/*.ts': ['webpack'],
   },
-
+  plugins: [
+    'karma-webpack',
+    'karma-mocha',
+    'karma-chai',
+    'karma-sinon',
+    'karma-chrome-launcher',
+    'karma-mocha-reporter',
+  ],
   client: {
     mocha: {
       timeout: 6000, // 6 seconds - upped from 2 seconds

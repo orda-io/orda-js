@@ -10,19 +10,19 @@ module.exports = function () {
     mode: 'production',
     output: {
       filename: '[name].bundle.js',
-      library: 'orda',
-      libraryTarget: 'umd',
-      umdNamedDefine: true,
-      globalObject: `this`,
+      library: {
+        name: 'orda',
+        type: 'umd',
+      },
+      publicPath: '/',
     },
     plugins: [],
     devtool: 'source-map',
     module: {},
     optimization: {
-      minimize: true, // TODO: should be true
+      minimize: true,
       minimizer: [
         new terser({
-          // sourceMap: false,
           terserOptions: {
             compress: {
               drop_console: true,

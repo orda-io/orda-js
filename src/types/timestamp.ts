@@ -1,6 +1,5 @@
 import { NumericType, uint32, Uint32, uint64, Uint64 } from '@ooo/types/integer';
 import { createNullUID, CUID, strcmp } from '@ooo/types/uid';
-import { JSONType } from '@ooo/datatypes/json';
 
 export class Timestamp {
   readonly era: Uint32;

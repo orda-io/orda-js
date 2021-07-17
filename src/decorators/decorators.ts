@@ -1,6 +1,6 @@
-import { ordaLogger } from "@ooo/utils/orda_logger";
-import { Op } from "@ooo/operations/operation";
-import { BaseDatatype } from "@ooo/datatypes/base";
+import { ordaLogger } from '@ooo/utils/orda_logger';
+import { Op } from '@ooo/operations/operation';
+import { BaseDatatype } from '@ooo/datatypes/base';
 
 export { logNew, logOp };
 
@@ -17,11 +17,7 @@ function logNew() {
 }
 
 function logOp() {
-  return function (
-    target: any,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
     descriptor.value = function (...args: any[]) {
       const datatype = this as BaseDatatype;

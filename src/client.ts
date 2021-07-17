@@ -1,18 +1,18 @@
-import { createUID } from "@ooo/types/uid";
-import { ClientConfig } from "@ooo/config";
-import { DataManager } from "@ooo/managers/data";
-import { ClientContext } from "@ooo/context";
-import { Counter } from "@ooo/datatypes/counter";
-import { IDatatype } from "@ooo/datatypes/datatype";
-import { WireManager } from "@ooo/managers/wire";
-import { GrpcGatewayWireManager } from "@ooo/managers/grpc_gateway_wire";
-import { ClientModel, SyncType } from "@ooo/types/client";
-import { StateOfDatatype, TypeOfDatatype } from "@ooo/types/datatype";
-import { DatatypeHandlers } from "@ooo/handlers/handlers";
-import { ErrClient } from "@ooo/errors/client";
-import { OooMap } from "@ooo/datatypes/map";
-import { List } from "@ooo/datatypes/list";
-import { _Document, Document } from "@ooo/datatypes/document";
+import { createUID } from '@ooo/types/uid';
+import { ClientConfig } from '@ooo/config';
+import { DataManager } from '@ooo/managers/data';
+import { ClientContext } from '@ooo/context';
+import { Counter } from '@ooo/datatypes/counter';
+import { IDatatype } from '@ooo/datatypes/datatype';
+import { WireManager } from '@ooo/managers/wire';
+import { GrpcGatewayWireManager } from '@ooo/managers/grpc_gateway_wire';
+import { ClientModel, SyncType } from '@ooo/types/client';
+import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
+import { DatatypeHandlers } from '@ooo/handlers/handlers';
+import { ErrClient } from '@ooo/errors/client';
+import { OooMap } from '@ooo/datatypes/map';
+import { List } from '@ooo/datatypes/list';
+import { _Document, Document } from '@ooo/datatypes/document';
 
 export { Client };
 
@@ -49,11 +49,12 @@ class Client {
 
   public async connect(): Promise<void> {
     if (this.state === clientState.CONNECTED) {
-      this.ctx.L.debug('already connected');
+      this.ctx.L.debug('[🧞] already connected');
       return Promise.resolve();
     }
     if (this.wireManager) {
       try {
+        this.ctx.L.info('[🧞] before exchangeClient');
         await this.wireManager.exchangeClient();
         this.state = clientState.CONNECTED;
       } catch (e) {
