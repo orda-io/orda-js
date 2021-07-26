@@ -41,7 +41,7 @@ export class TestDatatypeHandlers extends DatatypeHandlers {
 
   private setFalse(msg?: string) {
     this.success = false;
-    helper.L.trace(`setFalse: ${msg}`);
+    helper.L.debug(`setFalse: ${msg}`);
     this.errLatchMap.forEach((v, k) => {
       helper.L.info(`err countdown ${k}`);
       v.countDown();
@@ -52,24 +52,12 @@ export class TestDatatypeHandlers extends DatatypeHandlers {
     });
   }
 
-  getNewStateLatch(
-    state: StateOfDatatype,
-    latch?: CountDownLatch
-  ): CountDownLatch {
-    return this.stateLatchMap.getOrElseSet(
-      state,
-      latch ? latch : new CountDownLatch()
-    );
+  getNewStateLatch(state: StateOfDatatype, latch?: CountDownLatch): CountDownLatch {
+    return this.stateLatchMap.getOrElseSet(state, latch ? latch : new CountDownLatch());
   }
 
-  getDatatypeErrLatch(
-    code: DatatypeErrCodes,
-    latch?: CountDownLatch
-  ): CountDownLatch {
-    return this.errLatchMap.getOrElseSet(
-      code,
-      latch ? latch : new CountDownLatch()
-    );
+  getDatatypeErrLatch(code: DatatypeErrCodes, latch?: CountDownLatch): CountDownLatch {
+    return this.errLatchMap.getOrElseSet(code, latch ? latch : new CountDownLatch());
   }
 
   getRemoteLatch(num: number): CountDownLatch {
@@ -77,11 +65,7 @@ export class TestDatatypeHandlers extends DatatypeHandlers {
     return this.remoteLatch;
   }
 
-  thisOnStateChange(
-    datatype: Datatype,
-    oldState: StateOfDatatype,
-    newState: StateOfDatatype
-  ): void {
+  thisOnStateChange(datatype: Datatype, oldState: StateOfDatatype, newState: StateOfDatatype): void {
     const latch = this.stateLatchMap.get(newState);
     if (!latch) {
       this.setFalse(newState);

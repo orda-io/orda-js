@@ -1,5 +1,5 @@
 import { BaseErrorCode, OrdaError } from '@ooo/errors/error';
-import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { OrdaLogger } from '@orda-io/orda-logger';
 
 export { PushPullError };
 

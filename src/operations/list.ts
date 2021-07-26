@@ -1,8 +1,8 @@
 import { Op } from '@ooo/operations/operation';
 import { Timestamp } from '@ooo/types/timestamp';
-import { OrdaLogger } from '@ooo/utils/orda_logger';
 import { ErrDatatype } from '@ooo/errors/datatype';
 import { TypeOfOperation } from '@ooo/types/operation';
+import { OrdaLogger } from '@orda-io/orda-logger';
 
 class insertBody {
   T: Timestamp;

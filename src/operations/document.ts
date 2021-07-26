@@ -1,7 +1,7 @@
 import { Op } from '@ooo/operations/operation';
 import { Timestamp } from '@ooo/types/timestamp';
 import { TypeOfOperation } from '@ooo/types/operation';
-import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { OrdaLogger } from '@orda-io/orda-logger';
 import { ErrDatatype } from '@ooo/errors/datatype';
 
 class docPutInObjBody {

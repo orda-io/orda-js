@@ -1,6 +1,6 @@
-import { ordaLogger } from '@ooo/utils/orda_logger';
 import { Op } from '@ooo/operations/operation';
 import { BaseDatatype } from '@ooo/datatypes/base';
+import { ordaLogger } from '@ooo/constants/constants';
 
 export { logNew, logOp };
 

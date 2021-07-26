@@ -49,8 +49,7 @@ class GrpcGatewayWireManager implements WireManager {
         this.ctx.L.debug(
           `[🚀] received ClientMessage '${clientMsg.clientAlias}'(${clientMsg.cuid}) in collection '${clientMsg.collection}'.`
         );
-        this.ctx.L.error('error');
-        console.error('error');
+        this.notifyManager?.connect();
       } else {
         this.ctx.L.warn(`[🚀] fail to receive ClientMessage: status(${response?.status}`);
       }

@@ -6,6 +6,7 @@ import { DatatypeErrCodes } from '@ooo/errors/for_handlers';
 import { TestDatatypeHandlers } from '@test/integration/test_datatype_handlers';
 import { expect } from 'chai';
 import { StateOfDatatype } from '@ooo/generated/proto.enum';
+import { ordaLogger } from '../../src/constants/constants';
 
 describe('Test Handlers', function (this: Suite): void {
   it('Can handle no datatype to subscribe', async () => {
@@ -15,13 +16,8 @@ describe('Test Handlers', function (this: Suite): void {
     try {
       await client1.connect();
       const latch1 = testHandlers.getNewStateLatch(StateOfDatatype.CLOSED);
-      const latch2 = testHandlers.getDatatypeErrLatch(
-        DatatypeErrCodes.NO_DATATYPE_TO_SUBSCRIBE
-      );
-      const counter1 = client1.subscribeCounter(
-        helper.dtName(this),
-        testHandlers
-      );
+      const latch2 = testHandlers.getDatatypeErrLatch(DatatypeErrCodes.NO_DATATYPE_TO_SUBSCRIBE);
+      const counter1 = client1.subscribeCounter(helper.dtName(this), testHandlers);
 
       counter1.sync().then();
       await latch1.wait();
@@ -42,9 +38,7 @@ describe('Test Handlers', function (this: Suite): void {
       await client1.connect();
       await client2.connect();
       const latch1 = testHandlers.getNewStateLatch(StateOfDatatype.CLOSED);
-      const latch2 = testHandlers.getDatatypeErrLatch(
-        DatatypeErrCodes.DUPLICATED_KEY
-      );
+      const latch2 = testHandlers.getDatatypeErrLatch(DatatypeErrCodes.DUPLICATED_KEY);
       const counter1 = client1.createCounter(helper.dtName(this));
       await counter1.sync();
       const counter2 = client2.createCounter(helper.dtName(this), testHandlers);
@@ -73,13 +67,11 @@ describe('Test Handlers', function (this: Suite): void {
       const latch2 = testHandlers.getRemoteLatch(1);
       const counter1 = client1.subscribeOrCreateCounter(helper.dtName(this));
       await counter1.sync();
-      const counter2 = client2.subscribeOrCreateCounter(
-        helper.dtName(this),
-        testHandlers
-      );
+      const counter2 = client2.subscribeOrCreateCounter(helper.dtName(this), testHandlers);
       await counter2.sync();
       await latch1.wait();
       await latch2.wait();
+      ordaLogger.info('end first sync');
       expect(testHandlers.success).to.true;
       expect(counter1.state).to.equal(StateOfDatatype.SUBSCRIBED);
       expect(counter2.state).to.equal(StateOfDatatype.SUBSCRIBED);

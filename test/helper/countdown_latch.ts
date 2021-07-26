@@ -1,6 +1,4 @@
-type waitType =
-  | ((value?: void | PromiseLike<void> | undefined) => void)
-  | undefined;
+type waitType = ((value?: void | PromiseLike<void> | undefined) => void) | undefined;
 
 export class CountDownLatch {
   private _count: number;

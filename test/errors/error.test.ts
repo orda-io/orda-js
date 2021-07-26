@@ -1,6 +1,6 @@
-import { ErrDatatype } from "@ooo/errors/datatype";
-import { helper } from "@test/helper/helper";
-import { should } from "chai";
+import { ErrDatatype } from '@ooo/errors/datatype';
+import { helper } from '@test/helper/helper';
+import { should } from 'chai';
 
 describe('Test OrdaError', () => {
   it('Can generate and catch a datatype error with log', async () => {

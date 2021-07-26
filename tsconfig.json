@@ -3,16 +3,16 @@
     "target": "esnext",
     "moduleResolution": "node",
     "strict": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "declaration": true,
-    "declarationDir": "./types",
+    "declarationDir": "./dist",
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "outDir": "dist",
+    "outDir": "./dist",
     //    "preserveConstEnums": false,
     "paths": {
       "@ooo/*": [
@@ -24,8 +24,7 @@
     }
   },
   "include": [
-    "./src/**/*",
-    "./test/**/*"
+    "./src/**/*"
   ],
   "exclude": [
     "example",

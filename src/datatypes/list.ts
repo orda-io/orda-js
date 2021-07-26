@@ -277,7 +277,7 @@ export class ListSnapshot implements Snapshot {
     return [targets, oldValues];
   }
 
-  updateRemote(op: UpdateOperation) {
+  updateRemote(op: UpdateOperation): void {
     const errors = new Array<OrdaError>();
     const ts = op.timestamp;
     for (let i = 0; i < op.body.T.length; i++) {
@@ -310,7 +310,7 @@ export class ListSnapshot implements Snapshot {
     return ret;
   }
 
-  validateGetRange(pos: number, numOfNodes: number) {
+  validateGetRange(pos: number, numOfNodes: number): OrdaError | undefined {
     if (pos < 0) {
       return new ErrDatatype.IllegalParameters(this.ctx.L, 'negative position');
     }
@@ -322,7 +322,7 @@ export class ListSnapshot implements Snapshot {
     }
   }
 
-  validateInsertPosition(pos: number) {
+  validateInsertPosition(pos: number): OrdaError | undefined {
     if (pos < 0) {
       return new ErrDatatype.IllegalParameters(this.ctx.L, 'negative position');
     }
@@ -331,7 +331,7 @@ export class ListSnapshot implements Snapshot {
     }
   }
 
-  validateGetPosition(pos: number) {
+  validateGetPosition(pos: number): OrdaError | undefined {
     if (pos < 0) {
       return new ErrDatatype.IllegalParameters(this.ctx.L, 'negative position');
     }

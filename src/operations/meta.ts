@@ -1,7 +1,7 @@
 import { Op } from '@ooo/operations/operation';
 import { TypeOfOperation } from '@ooo/types/operation';
 import { ErrDatatype } from '@ooo/errors/datatype';
-import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { OrdaLogger } from '@orda-io/orda-logger';
 import { PushPullErrorCode } from '@ooo/errors/push_pull';
 import { DatatypeErrCodes, DatatypeError } from '@ooo/errors/for_handlers';
 

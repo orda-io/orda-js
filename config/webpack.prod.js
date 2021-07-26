@@ -3,7 +3,7 @@ const webpackMerge = require('webpack-merge');
 const terser = require('terser-webpack-plugin');
 
 module.exports = function () {
-  const merged = webpackMerge.merge(base.config, {
+  return webpackMerge(base.config, {
     entry: {
       orda: './src/orda.ts',
     },
@@ -34,5 +34,4 @@ module.exports = function () {
       ],
     },
   });
-  return merged;
 };

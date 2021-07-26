@@ -18,10 +18,6 @@ exports.config = {
   module: {
     rules: [
       {
-        test: /\.json$/,
-        loader: 'json-loader',
-      },
-      {
         test: /\.ts(x?)$/,
         exclude: [/node_modules/, root('test')],
         use: [
