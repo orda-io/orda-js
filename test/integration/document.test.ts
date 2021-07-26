@@ -1,11 +1,11 @@
-import { Suite } from "mocha";
+import { Suite } from 'mocha';
 
-import { helper } from "@test/helper/helper";
-import { SyncType } from "@ooo/types/client";
-import { Client } from "@ooo/client";
-import { expect } from "chai";
-import { ErrDatatype } from "@ooo/errors/datatype";
-import { DocumentTx } from "@ooo/datatypes/document";
+import { helper } from '@test/helper/helper';
+import { SyncType } from '@ooo/types/client';
+import { Client } from '@ooo/client';
+import { expect } from 'chai';
+import { ErrDatatype } from '@ooo/errors/datatype';
+import { DocumentTx } from '@ooo/datatypes/document';
 
 describe('Integration test document', function (this: Suite): void {
   it('Can synchronize Document with server', async () => {

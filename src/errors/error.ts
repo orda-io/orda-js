@@ -1,4 +1,4 @@
-import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { OrdaLogger } from '@orda-io/orda-logger';
 
 export const BaseErrorCode = {
   Common: 0,

@@ -1,4 +1,4 @@
-import { OrdaLoggerFactory, OrdaLogLevel } from '@ooo/utils/orda_logger';
+import { OrdaLoggerFactory, OrdaLogLevel } from '@orda-io/orda-logger';
 import { SyncType } from '@ooo/types/client';
 
 export { createLocalClientConfig };
@@ -22,7 +22,7 @@ export class ClientConfig {
     this.serverAddr = serverAddr ? serverAddr : '';
     this.notificationUri = notificationUri ? notificationUri : '';
     if (logLevel === undefined) {
-      this.loggerFactory = new OrdaLoggerFactory('trace');
+      this.loggerFactory = new OrdaLoggerFactory(OrdaLogLevel.TRACE);
     } else {
       this.loggerFactory = new OrdaLoggerFactory(logLevel);
     }
@@ -35,6 +35,6 @@ function createLocalClientConfig(collectionName: string): ClientConfig {
     SyncType.MANUALLY,
     'http://127.0.0.1:29862',
     'ws://127.0.0.1:18881/mqtt',
-    'trace'
+    OrdaLogLevel.TRACE
   );
 }

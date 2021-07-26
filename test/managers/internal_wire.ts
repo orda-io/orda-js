@@ -5,7 +5,7 @@ import { CUID, DUID } from '@ooo/types/uid';
 import { PPOptions, PushPullOptions, PushPullPack } from '@ooo/types/pushpullpack';
 import { uint64 } from '@ooo/types/integer';
 import { Op } from '@ooo/operations/operation';
-import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { OrdaLogger } from '@orda-io/orda-logger';
 import { ExtMap } from '@ooo/utils/map';
 import { CheckPoint } from '@ooo/types/checkpoint';
 

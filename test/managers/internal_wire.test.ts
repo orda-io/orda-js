@@ -1,9 +1,9 @@
-import { Suite } from "mocha";
-import { helper } from "@test/helper/helper";
-import { InternalWireManager } from "@test/managers/internal_wire";
-import { ordaLogger } from "@ooo/utils/orda_logger";
-import { StateOfDatatype } from "@ooo/types/datatype";
-import { expect } from "chai";
+import { Suite } from 'mocha';
+import { helper } from '@test/helper/helper';
+import { InternalWireManager } from '@test/managers/internal_wire';
+import { StateOfDatatype } from '@ooo/types/datatype';
+import { expect } from 'chai';
+import { ordaLogger } from '../../src/constants/constants';
 
 describe('Test InternalWireManager', function (this: Suite): void {
   it('Can create InternalWireManager', async () => {

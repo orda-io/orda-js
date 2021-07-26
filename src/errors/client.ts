@@ -1,4 +1,4 @@
-import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { OrdaLogger } from '@orda-io/orda-logger';
 import { BaseErrorCode, OrdaError } from '@ooo/errors/error';
 
 export { ErrClient };

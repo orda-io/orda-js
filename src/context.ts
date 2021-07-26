@@ -1,4 +1,4 @@
-import { OrdaLogger, OrdaLoggerFactory } from '@ooo/utils/orda_logger';
+import { OrdaLogger, OrdaLoggerFactory } from '@orda-io/orda-logger';
 import { ClientModel } from '@ooo/types/client';
 import { BaseDatatype } from '@ooo/datatypes/base';
 import { CUID } from '@ooo/types/uid';

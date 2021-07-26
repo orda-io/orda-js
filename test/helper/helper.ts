@@ -1,4 +1,4 @@
-import { OrdaLoggerFactory } from '@ooo/utils/orda_logger';
+import { OrdaLoggerFactory } from '@orda-io/orda-logger';
 import { ClientContext, DatatypeContext } from '@ooo/context';
 import { ClientModel, SyncType } from '@ooo/types/client';
 import { createUID } from '@ooo/types/uid';
@@ -9,10 +9,11 @@ import { WireManager } from '@ooo/managers/wire';
 import { MD5 } from 'crypto-js';
 import { Api, ApiConfig } from '@ooo/generated/openapi';
 import * as Assert from 'assert';
+import { OrdaLogLevel } from '@orda-io/orda-logger';
 
 export { helper };
 
-const testLoggerFactory = new OrdaLoggerFactory('trace');
+const testLoggerFactory = new OrdaLoggerFactory(OrdaLogLevel.TRACE);
 const TestDB = 'orda-js-test';
 const helper = {
   loggerFactory: testLoggerFactory,
@@ -83,7 +84,7 @@ const helper = {
       syncType ? syncType : SyncType.MANUALLY,
       'http://127.0.0.1:29862',
       'ws://127.0.0.1:18881/mqtt',
-      'trace'
+      OrdaLogLevel.TRACE
     );
   },
 };

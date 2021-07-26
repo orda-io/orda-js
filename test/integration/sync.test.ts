@@ -54,7 +54,7 @@ describe('Test Synchronization', function (this: Suite): void {
 
       await latch1.wait();
 
-      const counter2 = client2.subscribeOrCreateCounter(
+      const counter2 = client2.subscribeCounter(
         helper.dtName(this),
         new DatatypeHandlers().addOnRemoteOperationsHandler((dt: Datatype, opList) => {
           const cnt2 = dt as unknown as CounterTx;

@@ -3,7 +3,7 @@ import { uint32, Uint32 } from '@ooo/types/integer';
 import { Op, OperationOa } from '@ooo/operations/operation';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { OrdaPushPullPack } from '@ooo/generated/openapi';
-import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { OrdaLogger } from '@orda-io/orda-logger';
 import { convertFromOpenApiOperation } from '@ooo/operations/converter';
 
 export { PushPullPack, PushPullOptions, PPOptions };

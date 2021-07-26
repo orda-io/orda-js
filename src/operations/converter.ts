@@ -1,5 +1,5 @@
 import { OrdaOperation as OperationOa, OrdaTypeOfOperation as OpType } from '@ooo/generated/openapi';
-import { OrdaLogger } from '@ooo/utils/orda_logger';
+import { OrdaLogger } from '@orda-io/orda-logger';
 import { ErrorOperation, SnapshotOperation, TransactionOperation } from '@ooo/operations/meta';
 import { IncreaseOperation } from '@ooo/operations/counter';
 import { OperationID } from '@ooo/types/operation';

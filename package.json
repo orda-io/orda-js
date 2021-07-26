@@ -12,7 +12,7 @@
     "clean": "rimraf dist coverage",
     "clean:dist": "rimraf dist",
     "clean:coverage": "rimraf coverage",
-    "eslint:fix": "eslint --ext .tsx,.ts --fix ./src",
+    "eslint:fix": "eslint --ext .tsx,.ts --fix ./src ./test",
     "prettier": "prettier --config .prettierrc.json --write ./src/**/*.{json,ts,tsx}",
     "gen-openapi": "npx swagger-typescript-api -p http://127.0.0.1:29862/swagger/orda.grpc.swagger.json -o ./src/generated -n openapi.ts",
     "gen-proto-enum": "npx pbjs ../orda/proto/orda.enum.proto --ts ./src/generated/proto.enum.ts && sed -i 's/export const enum/export enum/g' ./src/generated/proto.enum.ts",
@@ -31,7 +31,6 @@
   },
   "homepage": "https://github.com/orda-io/orda-js#readme",
   "devDependencies": {
-    "@orda-io/orda-logger": "^0.1.0",
     "@types/chai": "^4.2.21",
     "@types/crypto-js": "^4.0.2",
     "@types/mocha": "^8.2.3",
@@ -65,10 +64,11 @@
     "webpack": "^5.45.1",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^4.0.0-rc.0",
-    "ws": "^7.5.3",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^4.2.2",
+    "ws": "^7.5.3"
   },
   "dependencies": {
+    "@orda-io/orda-logger": "^0.1.10",
     "async-mutex": "^0.3.0",
     "nanoid": "^3.1.23",
     "paho-mqtt": "^1.1.0"

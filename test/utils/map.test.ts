@@ -1,7 +1,7 @@
-import { ordaLogger } from "@ooo/utils/orda_logger";
-import { Int64, int64 } from "@ooo/types/integer";
-import { ExtMap } from "@ooo/utils/map";
-import { expect } from "chai";
+import { Int64, int64 } from '@ooo/types/integer';
+import { ExtMap } from '@ooo/utils/map';
+import { expect } from 'chai';
+import { ordaLogger } from '../../src/constants/constants';
 
 describe('Test OooMap', () => {
   it('Can use OooMap.getOrElseSet', () => {

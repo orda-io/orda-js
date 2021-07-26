@@ -64,7 +64,8 @@ abstract class Datatype extends WiredDatatype {
   }
 
   subscribeOrCreate(): void {
-    if (this.state === StateOfDatatype.DUE_TO_SUBSCRIBE || this.state === StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE) {
+    if (this.state === StateOfDatatype.DUE_TO_SUBSCRIBE) {
+      this.deliverTransaction([]);
       return;
     }
     this.sentenceLocalInTx(this.createSnapshotOperation());
