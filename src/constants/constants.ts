@@ -1,6 +1,6 @@
 const Version = '0.1';
 const ShortUID = 10;
-const AgentName = 'ortoo-js';
+const AgentName = 'orda-js';
 
 export { Version, ShortUID };
 

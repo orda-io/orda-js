@@ -1,7 +1,7 @@
 import { Op } from '@ooo/operations/operation';
 import { Int32 } from '@ooo/types/integer';
 import { TypeOfOperation } from '@ooo/types/operation';
-import { OrtooLogger } from '@ooo/utils/ortoo_logger';
+import { OrdaLogger } from '@ooo/utils/orda_logger';
 import { ErrDatatype } from '@ooo/errors/datatype';
 
 export { IncreaseOperation };
@@ -22,7 +22,7 @@ class IncreaseOperation extends Op {
     this.body = new increaseBody(delta);
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): IncreaseOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): IncreaseOperation {
     try {
       const snap = JSON.parse(body);
       return new IncreaseOperation(snap.Delta);

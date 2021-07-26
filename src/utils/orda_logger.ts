@@ -1,9 +1,9 @@
 import { isBrowser } from '@ooo/utils/browser_or_node';
 
-export type { OrtooLogger, OrtooLogLevel };
-export { OrtooLoggerFactory, ortooLogger };
+export type { OrdaLogger, OrdaLogLevel };
+export { OrdaLoggerFactory, ordaLogger };
 
-interface OrtooLogger {
+interface OrdaLogger {
   trace: logFunction;
   debug: logFunction;
   info: logFunction;
@@ -22,9 +22,9 @@ interface IConsole {
   error: logFunction;
 }
 
-type OrtooLogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'silent';
+type OrdaLogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'silent';
 
-const logColors: Record<OrtooLogLevel, string> = {
+const logColors: Record<OrdaLogLevel, string> = {
   trace: '\x1B[36m',
   debug: '\x1B[33m',
   info: '\x1b[42m',
@@ -33,7 +33,7 @@ const logColors: Record<OrtooLogLevel, string> = {
   silent: '\x1B[107m',
 };
 
-const LogLevels: Record<OrtooLogLevel, number> = {
+const LogLevels: Record<OrdaLogLevel, number> = {
   trace: 0,
   debug: 1,
   info: 2,
@@ -73,10 +73,10 @@ function withFilePos(fn: logFunction, header?: string): logFunction {
   return fn.bind(null, `${errPos} |${header}`);
 }
 
-class OrtooConsole implements IConsole {
+class OrdaConsole implements IConsole {
   private readonly name: string;
   private withPos: boolean;
-  private _logLevel: OrtooLogLevel;
+  private _logLevel: OrdaLogLevel;
   readonly original: IConsole;
 
   _trace: logFunction;
@@ -85,7 +85,7 @@ class OrtooConsole implements IConsole {
   _warn: logFunction;
   _error: logFunction;
 
-  constructor(name: string, withPos = true, logLevel?: OrtooLogLevel, iConsole?: IConsole) {
+  constructor(name: string, withPos = true, logLevel?: OrdaLogLevel, iConsole?: IConsole) {
     this.name = name;
     if (iConsole) {
       this.original = iConsole;
@@ -109,7 +109,7 @@ class OrtooConsole implements IConsole {
     this.withPos = withPos;
   }
 
-  setLogLevel(level: OrtooLogLevel) {
+  setLogLevel(level: OrdaLogLevel) {
     this._logLevel = level;
   }
 
@@ -117,11 +117,11 @@ class OrtooConsole implements IConsole {
     // do nothing
   }
 
-  private isSilent(ll: OrtooLogLevel) {
+  private isSilent(ll: OrdaLogLevel) {
     return LogLevels[this._logLevel] > LogLevels[ll]; //trace(0) >= trace(0) debug(1)
   }
 
-  private head(ll: OrtooLogLevel): string {
+  private head(ll: OrdaLogLevel): string {
     return `🎪|${logColors[ll]}${ll.toUpperCase()}|${this.name}\x1B[0m|`;
   }
 
@@ -181,11 +181,11 @@ class OrtooConsole implements IConsole {
   }
 }
 
-class OrtooLoggerFactory {
-  private _logLevel: OrtooLogLevel;
+class OrdaLoggerFactory {
+  private _logLevel: OrdaLogLevel;
   private readonly iConsole: IConsole;
 
-  constructor(logLevel: OrtooLogLevel = 'trace', iConsole?: IConsole) {
+  constructor(logLevel: OrdaLogLevel = 'trace', iConsole?: IConsole) {
     this._logLevel = logLevel;
     if (iConsole) {
       this.iConsole = iConsole;
@@ -194,13 +194,13 @@ class OrtooLoggerFactory {
     }
   }
 
-  set logLevel(value: OrtooLogLevel) {
+  set logLevel(value: OrdaLogLevel) {
     this._logLevel = value;
   }
 
-  getLogger(name: string): OrtooLogger {
-    return new OrtooConsole(name, true, this._logLevel, this.iConsole);
+  getLogger(name: string): OrdaLogger {
+    return new OrdaConsole(name, true, this._logLevel, this.iConsole);
   }
 }
 
-const ortooLogger = new OrtooLoggerFactory('trace').getLogger('Ortoo');
+const ordaLogger = new OrdaLoggerFactory('trace').getLogger('Orda');

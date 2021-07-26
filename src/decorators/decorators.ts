@@ -1,4 +1,4 @@
-import { ortooLogger } from '@ooo/utils/ortoo_logger';
+import { ordaLogger } from '@ooo/utils/orda_logger';
 import { Op } from '@ooo/operations/operation';
 import { BaseDatatype } from '@ooo/datatypes/base';
 
@@ -10,18 +10,14 @@ function logNew() {
     return class extends constructor {
       constructor(...args: any[]) {
         super(...args);
-        ortooLogger.debug(this.toString());
+        ordaLogger.debug(this.toString());
       }
     };
   };
 }
 
 function logOp() {
-  return function (
-    target: any,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
     descriptor.value = function (...args: any[]) {
       const datatype = this as BaseDatatype;

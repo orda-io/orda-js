@@ -5,7 +5,7 @@ import { Suite } from 'mocha';
 import { DatatypeHandlers } from '@ooo/handlers/handlers';
 import { CountDownLatch } from '@test/helper/countdown_latch';
 import { expect } from 'chai';
-import { Counter, CounterTx } from '@ooo/datatypes/counter';
+import { CounterTx } from '@ooo/datatypes/counter';
 import { Datatype } from '@ooo/datatypes/datatype';
 
 describe('Test Synchronization', function (this: Suite): void {
@@ -56,12 +56,10 @@ describe('Test Synchronization', function (this: Suite): void {
 
       const counter2 = client2.subscribeOrCreateCounter(
         helper.dtName(this),
-        new DatatypeHandlers().addOnRemoteOperationsHandler(
-          (dt: Datatype, opList) => {
-            const cnt2 = (dt as unknown) as CounterTx;
-            helper.L.info(`cnt2: ${cnt2.get()}`);
-          }
-        )
+        new DatatypeHandlers().addOnRemoteOperationsHandler((dt: Datatype, opList) => {
+          const cnt2 = dt as unknown as CounterTx;
+          helper.L.info(`cnt2: ${cnt2.get()}`);
+        })
       );
 
       for (let j = 0; j < 5; j++) {

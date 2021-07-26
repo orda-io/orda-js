@@ -12,6 +12,8 @@ import { _OooMap } from '@ooo/datatypes/map';
 import { _List } from '@ooo/datatypes/list';
 import { _Document } from '@ooo/datatypes/document';
 
+const trialLimit = 10;
+
 export class DataManager implements NotifyReceiver {
   ctx: ClientContext;
   private wireManager?: WireManager;
@@ -75,7 +77,7 @@ export class DataManager implements NotifyReceiver {
     }
   }
 
-  async trySyncDatatype(datatype: WiredDatatype): Promise<boolean> {
+  async trySyncDatatype(datatype: WiredDatatype, trial = 0): Promise<boolean> {
     if (!(await this.ctx.tryLock(`syncDatatype: ${datatype.key}`))) {
       return Promise.resolve(false);
     }
@@ -89,9 +91,9 @@ export class DataManager implements NotifyReceiver {
     } finally {
       this.ctx.doUnlock(`syncDatatype: ${datatype.key}`);
       this.ctx.L.info(`[💾🔺] END syncDatatype: ${datatype.key}`);
-      if (!this.syncAllIfNeeded()) {
+      if (this.syncAllIfNeeded() && trial < trialLimit) {
         if (datatype.needPush()) {
-          this.trySyncDatatype(datatype).then();
+          await this.trySyncDatatype(datatype, ++trial);
         }
       }
     }

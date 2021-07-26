@@ -1,18 +1,20 @@
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const root = path.join.bind(path, ROOT);
-const babelrc = require('./babelrc.config.json');
 
 exports.root = root;
 exports.config = {
   entry: {
-    ortoo: ['./src/ortoo.ts'],
+    orda: [root('src/orda.ts')],
   },
   resolve: {
     extensions: ['.ts', '.js'],
     modules: [root('src'), 'node_modules'],
+    alias: {
+      '@ooo': root('src'),
+      '@test': root('test'),
+    },
   },
-
   module: {
     rules: [
       {
@@ -20,15 +22,13 @@ exports.config = {
         loader: 'json-loader',
       },
       {
-        test: /\.(js|ts)$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: babelrc.presets,
-            plugins: babelrc.plugins,
+        test: /\.ts(x?)$/,
+        exclude: [/node_modules/, root('test')],
+        use: [
+          {
+            loader: 'ts-loader',
           },
-        },
-        exclude: /node_modules/,
+        ],
       },
     ],
   },

@@ -1,6 +1,6 @@
 import { DUID } from '@ooo/types/uid';
 import { OperationID } from '@ooo/types/operation';
-import { OrtooTypeOfDatatype as TypeOfDatatype } from '@ooo/generated/openapi';
+import { OrdaTypeOfDatatype as TypeOfDatatype } from '@ooo/generated/openapi';
 import { StateOfDatatype } from '@ooo/generated/proto.enum';
 
 export { StateOfDatatype, TypeOfDatatype };
@@ -17,4 +17,10 @@ export class DatatypeMeta {
     this.opId = opID;
     this.type = type;
   }
+}
+
+export const enum TypeOfJSON {
+  element = 'E',
+  object = 'O',
+  array = 'A',
 }

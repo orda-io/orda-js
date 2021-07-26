@@ -11,9 +11,9 @@ export type { WireManager };
 interface WireManager extends Wire {
   addDataManager(dataManager: DataManager): void;
 
-  exchangeClient(): Promise<void>;
+  exchangeClient(): void;
 
-  exchangePushPull(cuid: CUID, ...pushPullList: PushPullPack[]): Promise<void>;
+  exchangePushPull(cuid: CUID, ...pushPullList: PushPullPack[]): void;
 
   close(): void;
 }

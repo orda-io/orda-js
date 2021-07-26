@@ -6,14 +6,15 @@ import { ErrDatatype } from '@ooo/errors/datatype';
 import { ListSnapshot } from '@ooo/datatypes/list';
 import { TimedType } from '@ooo/datatypes/timed';
 import { OrderedNode, OrderedType } from '@ooo/datatypes/ordered';
-import { OrtooError } from '@ooo/errors/error';
+import { OrdaError } from '@ooo/errors/error';
 import {
-  DocRemoveInObjOperation,
+  DocDeleteInArrayOperation,
   DocInsertToArrayOperation,
   DocPutInObjOperation,
-  DocDeleteInArrayOperation,
+  DocRemoveInObjOperation,
   DocUpdateInArrayOperation,
 } from '@ooo/operations/document';
+import { TypeOfJSON } from '@ooo/types/datatype';
 
 type TypeOfJSONForMarshal = 'E' | 'O' | 'A';
 
@@ -172,12 +173,6 @@ class UnmarshalAssistant {
   }
 }
 
-export enum TypeOfJSON {
-  element = 1,
-  object,
-  array,
-}
-
 export class JSONCommon {
   ctx: DatatypeContext;
   root?: JSONObject;
@@ -227,11 +222,11 @@ export interface JSONType extends TimedType, Snapshot {
 
   arrayDeleteLocal(op: DocDeleteInArrayOperation): JSONType[];
 
-  arrayDeleteRemote(op: DocDeleteInArrayOperation): [JSONType[], OrtooError[]];
+  arrayDeleteRemote(op: DocDeleteInArrayOperation): [JSONType[], OrdaError[]];
 
   arrayUpdateLocal(op: DocUpdateInArrayOperation): JSONType[];
 
-  arrayUpdateRemote(op: DocUpdateInArrayOperation): [JSONType[], OrtooError[]];
+  arrayUpdateRemote(op: DocUpdateInArrayOperation): [JSONType[], OrdaError[]];
 }
 
 export function newJSONObject(ctx: DatatypeContext, ts: Timestamp, parent?: JSONType): JSONObject {
@@ -493,7 +488,7 @@ abstract class JSONPrimitive implements JSONType {
     return ret;
   }
 
-  arrayDeleteRemote(op: DocDeleteInArrayOperation): [JSONType[], OrtooError[]] {
+  arrayDeleteRemote(op: DocDeleteInArrayOperation): [JSONType[], OrdaError[]] {
     const parent = this.findJSONType(op.body.P) as JSONArray;
     if (!parent || parent.type !== TypeOfJSON.array) {
       throw new ErrDatatype.InvalidParent(this.ctx.L, op.body.P.toString());
@@ -511,7 +506,7 @@ abstract class JSONPrimitive implements JSONType {
     return ret[1];
   }
 
-  arrayUpdateRemote(op: DocUpdateInArrayOperation): [JSONType[], OrtooError[]] {
+  arrayUpdateRemote(op: DocUpdateInArrayOperation): [JSONType[], OrdaError[]] {
     const parent = this.findJSONType(op.body.P) as JSONArray;
     if (!parent || parent.type !== TypeOfJSON.array) {
       throw new ErrDatatype.InvalidParent(this.ctx.L, op.body.P.toString());
@@ -652,7 +647,7 @@ export class JSONObject extends JSONPrimitive implements Snapshot {
     }
     throw new ErrDatatype.IllegalParameters(
       this.ctx.L,
-      `invalid type: expect ${TypeOfJSON[TypeOfJSON.element]}, but ${TypeOfJSON[jsonType.type]}`
+      `invalid type: expect ${TypeOfJSON.element}, but ${jsonType.type}`
     );
   }
 
@@ -666,7 +661,7 @@ export class JSONObject extends JSONPrimitive implements Snapshot {
     }
     throw new ErrDatatype.IllegalParameters(
       this.ctx.L,
-      `invalid type: expect ${TypeOfJSON[TypeOfJSON.object]}, but ${TypeOfJSON[jsonType.type]}`
+      `invalid type: expect ${TypeOfJSON.object}, but ${jsonType.type}`
     );
   }
 
@@ -680,7 +675,7 @@ export class JSONObject extends JSONPrimitive implements Snapshot {
     }
     throw new ErrDatatype.IllegalParameters(
       this.ctx.L,
-      `invalid type: expect ${TypeOfJSON[TypeOfJSON.array]}, but ${TypeOfJSON[jsonType.type]}`
+      `invalid type: expect ${TypeOfJSON.array}, but ${jsonType.type}`
     );
   }
 
@@ -843,8 +838,8 @@ export class JSONArray extends JSONPrimitive {
     return this.listSnapshot.insertLocalWithTimedTypes(pos, inserted);
   }
 
-  deleteRemote(targets: Timestamp[], ts: Timestamp): [JSONType[], OrtooError[]] {
-    const [deleted, errors] = this.listSnapshot.deleteRemote(targets, ts) as [JSONType[], OrtooError[]];
+  deleteRemote(targets: Timestamp[], ts: Timestamp): [JSONType[], OrdaError[]] {
+    const [deleted, errors] = this.listSnapshot.deleteRemote(targets, ts) as [JSONType[], OrdaError[]];
     deleted.forEach((jt) => {
       this.addToCemetery(jt);
     });
@@ -872,8 +867,8 @@ export class JSONArray extends JSONPrimitive {
     return [updatedTargets, oldJSONTypes];
   }
 
-  updateRemote(ts: Timestamp, targets: Timestamp[], values: unknown[]): [JSONType[], OrtooError[]] {
-    const errs = new Array<OrtooError>();
+  updateRemote(ts: Timestamp, targets: Timestamp[], values: unknown[]): [JSONType[], OrdaError[]] {
+    const errs = new Array<OrdaError>();
     const jsonTypes = new Array<JSONType>();
     for (let i = 0; i < targets.length; i++) {
       const target = this.listSnapshot.map.get(targets[i].hash());

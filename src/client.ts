@@ -49,11 +49,12 @@ class Client {
 
   public async connect(): Promise<void> {
     if (this.state === clientState.CONNECTED) {
-      this.ctx.L.debug('already connected');
+      this.ctx.L.debug('[🧞] already connected');
       return Promise.resolve();
     }
     if (this.wireManager) {
       try {
+        this.ctx.L.info('[🧞] before exchangeClient');
         await this.wireManager.exchangeClient();
         this.state = clientState.CONNECTED;
       } catch (e) {
@@ -103,8 +104,8 @@ class Client {
   }
 
   /**
-   * subscribe Counter with the given key if it exists in the ortoo server;
-   * otherwise, the Ortoo server is going to create and subscribe a new Counter of the given key.
+   * subscribe Counter with the given key if it exists in the orda server;
+   * otherwise, the Orda server is going to create and subscribe a new Counter of the given key.
    * @param {string} key
    * @param {DatatypeHandlers} handlers
    * @returns {Counter}
@@ -141,8 +142,8 @@ class Client {
   }
 
   /**
-   * subscribe Map with the given key if it exists in the ortoo server;
-   * otherwise, the Ortoo server is going to create and subscribe a new Map of the given key.
+   * subscribe Map with the given key if it exists in the orda server;
+   * otherwise, the Orda server is going to create and subscribe a new Map of the given key.
    * @param {string} key
    * @param {DatatypeHandlers} handlers
    * @returns {Map}
@@ -165,8 +166,8 @@ class Client {
   }
 
   /**
-   * subscribe List with the given key if it exists in the ortoo server;
-   * otherwise, the Ortoo server is going to create and subscribe a new List of the given key.
+   * subscribe List with the given key if it exists in the orda server;
+   * otherwise, the Orda server is going to create and subscribe a new List of the given key.
    * @param {string} key
    * @param {DatatypeHandlers} handlers
    * @returns {List}
@@ -198,8 +199,8 @@ class Client {
   }
 
   /**
-   * subscribe Document with the given key if it exists in the ortoo server;
-   * otherwise, the Ortoo server is going to create and subscribe a new List of the given key.
+   * subscribe Document with the given key if it exists in the orda server;
+   * otherwise, the Orda server is going to create and subscribe a new List of the given key.
    * @param {string} key
    * @param {DatatypeHandlers} handlers
    * @returns {Document}

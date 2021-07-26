@@ -1,4 +1,4 @@
-import { OrtooLoggerFactory, OrtooLogLevel } from '@ooo/utils/ortoo_logger';
+import { OrdaLoggerFactory, OrdaLogLevel } from '@ooo/utils/orda_logger';
 import { SyncType } from '@ooo/types/client';
 
 export { createLocalClientConfig };
@@ -8,23 +8,23 @@ export class ClientConfig {
   syncType: SyncType;
   serverAddr: string;
   notificationUri: string;
-  loggerFactory: OrtooLoggerFactory;
+  loggerFactory: OrdaLoggerFactory;
 
   constructor(
     collectionName: string,
     syncType?: SyncType,
     serverAddr?: string,
     notificationUri?: string,
-    logLevel?: OrtooLogLevel
+    logLevel?: OrdaLogLevel
   ) {
     this.collectionName = collectionName;
     this.syncType = syncType ? syncType : SyncType.LOCAL_ONLY;
     this.serverAddr = serverAddr ? serverAddr : '';
     this.notificationUri = notificationUri ? notificationUri : '';
     if (logLevel === undefined) {
-      this.loggerFactory = new OrtooLoggerFactory('trace');
+      this.loggerFactory = new OrdaLoggerFactory('trace');
     } else {
-      this.loggerFactory = new OrtooLoggerFactory(logLevel);
+      this.loggerFactory = new OrdaLoggerFactory(logLevel);
     }
   }
 }

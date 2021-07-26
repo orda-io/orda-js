@@ -13,7 +13,7 @@ import { DeleteOperation, InsertOperation, UpdateOperation } from '@ooo/operatio
 import { TimedNode, TimedType } from '@ooo/datatypes/timed';
 import { ErrDatatype } from '@ooo/errors/datatype';
 import { SnapshotOperation } from '@ooo/operations/meta';
-import { OrtooError } from '@ooo/errors/error';
+import { OrdaError } from '@ooo/errors/error';
 import { TransactionContext } from '@ooo/datatypes/tansaction';
 
 export interface ListTx extends IDatatype {
@@ -37,7 +37,7 @@ export interface List extends ListTx {
 }
 
 export class _List extends Datatype implements List {
-  private snap: ListSnapshot;
+  private readonly snap: ListSnapshot;
 
   constructor(ctx: ClientContext, key: string, state: StateOfDatatype, wire?: Wire, handlers?: DatatypeHandlers) {
     super(ctx, key, TypeOfDatatype.LIST, state, wire, handlers);
@@ -227,12 +227,12 @@ export class ListSnapshot implements Snapshot {
     return [deletedOts, oldValues];
   }
 
-  deleteRemoteForList(op: DeleteOperation): [TimedType[], OrtooError[]] {
+  deleteRemoteForList(op: DeleteOperation): [TimedType[], OrdaError[]] {
     return this.deleteRemote(op.body.T, op.timestamp);
   }
 
-  deleteRemote(targets: Timestamp[], ts: Timestamp): [TimedType[], OrtooError[]] {
-    const errors = new Array<OrtooError>();
+  deleteRemote(targets: Timestamp[], ts: Timestamp): [TimedType[], OrdaError[]] {
+    const errors = new Array<OrdaError>();
     const deleted = new Array<TimedType>();
     for (const target of targets) {
       const thisTs = ts.getAndNextDelimiter();
@@ -278,7 +278,7 @@ export class ListSnapshot implements Snapshot {
   }
 
   updateRemote(op: UpdateOperation) {
-    const errors = new Array<OrtooError>();
+    const errors = new Array<OrdaError>();
     const ts = op.timestamp;
     for (let i = 0; i < op.body.T.length; i++) {
       const target = op.body.T[i];

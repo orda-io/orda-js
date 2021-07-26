@@ -1,17 +1,19 @@
- {
+{
   "compilerOptions": {
     "target": "esnext",
     "moduleResolution": "node",
-    "allowJs": false,
     "strict": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "declaration": true,
+    "declarationDir": "./types",
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
     "outDir": "dist",
+    //    "preserveConstEnums": false,
     "paths": {
       "@ooo/*": [
         "src/*"
@@ -22,7 +24,6 @@
     }
   },
   "include": [
-    "./src/protobuf/ortoo_pb.js",
     "./src/**/*",
     "./test/**/*"
   ],
@@ -30,9 +31,12 @@
     "example",
     "node_modules"
   ],
+  "newline": "LF",
   "typedocOptions": {
-    "entryPoints": ["src/ortoo.ts"],
-    "name": "Ortoo-js",
+    "entryPoints": [
+      "src/orda.ts"
+    ],
+    "name": "Orda-js",
     "theme": "node_modules/eledoc/bin/default/",
     "out": "docs"
   }

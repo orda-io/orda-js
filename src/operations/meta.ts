@@ -1,7 +1,7 @@
 import { Op } from '@ooo/operations/operation';
 import { TypeOfOperation } from '@ooo/types/operation';
 import { ErrDatatype } from '@ooo/errors/datatype';
-import { OrtooLogger } from '@ooo/utils/ortoo_logger';
+import { OrdaLogger } from '@ooo/utils/orda_logger';
 import { PushPullErrorCode } from '@ooo/errors/push_pull';
 import { DatatypeErrCodes, DatatypeError } from '@ooo/errors/for_handlers';
 
@@ -25,7 +25,7 @@ class SnapshotOperation extends Op {
     this.body = snapshot;
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): SnapshotOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): SnapshotOperation {
     try {
       // const bodySnapshot = JSON.parse(body);
 
@@ -54,7 +54,7 @@ class TransactionOperation extends Op {
     this.body = new transactionBody(tag, numOfOps ? numOfOps : 0);
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): TransactionOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): TransactionOperation {
     try {
       const bodyTransaction = JSON.parse(body);
       return new TransactionOperation(bodyTransaction.Tag, bodyTransaction.NumOfOps);
@@ -82,7 +82,7 @@ class ErrorOperation extends Op {
     this.body = new errorBody(code, msg);
   }
 
-  static fromOpenApi(body: string, logger?: OrtooLogger): ErrorOperation {
+  static fromOpenApi(body: string, logger?: OrdaLogger): ErrorOperation {
     try {
       const bodyError = JSON.parse(body);
       return new ErrorOperation(bodyError.Code, bodyError.Msg);

@@ -250,12 +250,15 @@ abstract class WiredDatatype extends TransactionDatatype {
       this.opBuffer.push(...transaction);
     }
     if (manually || this.ctx.client.syncType === SyncType.REALTIME) {
-      return this.wire?.deliverTransaction(this);
+      await this.wire?.deliverTransaction(this);
+      return;
     }
     return Promise.resolve();
   }
 
   async sync(): Promise<void> {
-    return this.deliverTransaction([], true);
+    await this.deliverTransaction([], true);
+    this.ctx.L.info(`[🚆] end sync in WiredDatatype`);
+    return;
   }
 }

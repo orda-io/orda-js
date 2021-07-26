@@ -1,5 +1,5 @@
-import { BaseErrorCode, OrtooError } from '@ooo/errors/error';
-import { OrtooLogger } from '@ooo/utils/ortoo_logger';
+import { BaseErrorCode, OrdaError } from '@ooo/errors/error';
+import { OrdaLogger } from '@ooo/utils/orda_logger';
 
 export { PushPullError };
 
@@ -13,10 +13,10 @@ export const PushPullErrorCode = {
 
 type PushPullErrorCode = typeof PushPullErrorCode[keyof typeof PushPullErrorCode];
 
-class PushPullError extends OrtooError {
+class PushPullError extends OrdaError {
   private readonly pushPullCode: PushPullErrorCode;
 
-  constructor(pushPullCode: number, msg: string, logger?: OrtooLogger) {
+  constructor(pushPullCode: number, msg: string, logger?: OrdaLogger) {
     super(BaseErrorCode.PushPull, msg, logger);
     this.pushPullCode = pushPullCode;
   }

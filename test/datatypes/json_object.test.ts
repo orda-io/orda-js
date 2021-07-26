@@ -1,5 +1,5 @@
 import { Suite } from 'mocha';
-import { JSONObject, newJSONObject, TypeOfJSON } from '@ooo/datatypes/json';
+import { JSONObject, newJSONObject } from '@ooo/datatypes/json';
 import { helper } from '@test/helper/helper';
 import { Timestamp } from '@ooo/types/timestamp';
 import { OperationID } from '@ooo/types/operation';
@@ -7,6 +7,7 @@ import { createUID } from '@ooo/types/uid';
 import { expect } from 'chai';
 import { ErrDatatype } from '@ooo/errors/datatype';
 import { DocPutInObjOperation, DocRemoveInObjOperation } from '@ooo/operations/document';
+import { TypeOfJSON } from '@ooo/types/datatype';
 
 const obj1 = {
   K1: 'hello',

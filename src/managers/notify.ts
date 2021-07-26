@@ -18,12 +18,7 @@ import { getAgent } from '@ooo/constants/constants';
 // with paho-mqtt 114K
 
 export interface NotifyReceiver {
-  onReceiveNotification(
-    cuid: string,
-    duid: string,
-    key: string,
-    sseq: Uint64
-  ): void;
+  onReceiveNotification(cuid: string, duid: string, key: string, sseq: Uint64): void;
 }
 
 const STATES = {
@@ -40,12 +35,9 @@ export class NotifyManager {
   private receiver?: NotifyReceiver;
 
   private states: STATES;
+  private subscribeQueue: string[];
 
-  constructor(
-    conf: ClientConfig,
-    ctx: ClientContext,
-    receiver?: NotifyReceiver
-  ) {
+  constructor(conf: ClientConfig, ctx: ClientContext, receiver?: NotifyReceiver) {
     this.ctx = ctx;
     this.notificationUri = conf.notificationUri;
     this.client = new Paho.Client(this.notificationUri, this.ctx.client.cuid);
@@ -53,9 +45,8 @@ export class NotifyManager {
     this.client.onConnectionLost = this.onConnectLost;
     this.client.onMessageArrived = this.onMessageArrived;
     this.states = STATES.NOT_CONNECTED;
-    this.ctx.L.debug(
-      `[🔔👇] create notifyManager of ${this.ctx.client.alias} to ${this.notificationUri}`
-    );
+    this.subscribeQueue = [];
+    this.ctx.L.debug(`[🔔👇] create notifyManager of ${this.ctx.client.alias} to ${this.notificationUri}`);
   }
 
   addNotifyReceiver(receiver?: NotifyReceiver): void {
@@ -63,12 +54,28 @@ export class NotifyManager {
   }
 
   public connect(): void {
-    this.ctx.L.debug('[🔔] connect notifyManager');
+    this.ctx.L.debug(`[🔔] connect notifyManager`);
     this.client.connect({
       onSuccess: this.onConnect,
       userName: `${getAgent()}/${this.ctx.client.alias}`,
     });
   }
+
+  public onConnect: OnSuccessCallback = (o) => {
+    if (this.states === STATES.CLOSED) {
+      this.ctx.L.debug('connected after closed');
+      this.disconnect();
+      return;
+    }
+    this.ctx.L.debug(`[🔔] connected ${this.ctx.client.alias} by notifyManager to ${this.notificationUri}`);
+    this.states = STATES.CONNECTED;
+    if (this.subscribeQueue.length > 0) {
+      this.subscribeQueue.forEach((key) => {
+        this.subscribeDatatype(key);
+      });
+      this.subscribeQueue = [];
+    }
+  };
 
   public isConnected(): boolean {
     return this.client.isConnected();
@@ -76,11 +83,15 @@ export class NotifyManager {
 
   public subscribeDatatype(key: string): void {
     const topic = `${this.ctx.client.collection}/${key}`;
-    this.ctx.L.debug(`[🔔] subscribe ${topic}`);
-    this.client.subscribe(topic, {
-      qos: 0,
-      onFailure: this.onFailureSubscribe,
-    });
+    if (this.isConnected()) {
+      this.ctx.L.debug(`[🔔] subscribe ${topic} ${this.client.isConnected()}`);
+      this.client.subscribe(topic, {
+        qos: 0,
+        onFailure: this.onFailureSubscribe,
+      });
+    } else {
+      this.subscribeQueue.push(key);
+    }
   }
 
   public unsubscribeDatatype(key: string): void {
@@ -96,25 +107,12 @@ export class NotifyManager {
     throw new ErrClient.Subscribe(this.ctx.L, e.errorMessage);
   };
 
-  onUnsubscribeSuccess: OnSuccessCallback = (o: WithInvocationContext) => {};
-
-  public onConnect: OnSuccessCallback = (o) => {
-    if (this.states === STATES.CLOSED) {
-      this.ctx.L.debug('connected after closed');
-      this.disconnect();
-      return;
-    }
-    this.ctx.L.debug(
-      `[🔔] connected ${this.ctx.client.alias} by notifyManager to ${this.notificationUri}`
-    );
-    this.states = STATES.CONNECTED;
+  onUnsubscribeSuccess: OnSuccessCallback = (o: WithInvocationContext) => {
+    //
   };
 
   private onConnectLost: OnConnectionLostHandler = (error: MQTTError) => {
-    if (error.errorCode !== 0)
-      this.ctx.L.debug(
-        `connection lost: [${error.errorCode}] ${error.errorMessage}`
-      );
+    if (error.errorCode !== 0) this.ctx.L.debug(`connection lost: [${error.errorCode}] ${error.errorMessage}`);
   };
 
   onMessageArrived: OnMessageHandler = async (message: Message) => {
@@ -125,20 +123,13 @@ export class NotifyManager {
     }
     const topics = message.destinationName.split('/');
     if (topics[0] !== this.ctx.client.collection) {
-      this.ctx.L.error(
-        `[🔔] mismatch collections ${this.ctx.client.collection} vs. ${topics[0]}`
-      );
+      this.ctx.L.error(`[🔔] mismatch collections ${this.ctx.client.collection} vs. ${topics[0]}`);
       return;
     }
     const key = topics[1];
     const notification = `Notification{cuid:${notify.CUID}, key:${key}, duid:${notify.DUID}, sseq:${notify.sseq}}`;
     this.ctx.L.debug(`[🔔🔻] receive ${notification}`);
-    await this.receiver?.onReceiveNotification(
-      notify.CUID,
-      notify.DUID,
-      key,
-      uint64(notify.sseq)
-    );
+    await this.receiver?.onReceiveNotification(notify.CUID, notify.DUID, key, uint64(notify.sseq));
     this.ctx.L.debug(`[🔔🔺] finish ${notification}`);
   };
 

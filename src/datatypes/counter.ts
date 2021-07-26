@@ -8,7 +8,7 @@ import { TypeOfOperation } from '@ooo/types/operation';
 import { TransactionContext } from '@ooo/datatypes/tansaction';
 import { Snapshot } from '@ooo/datatypes/snapshot';
 import { ErrDatatype } from '@ooo/errors/datatype';
-import { OrtooError } from '@ooo/errors/error';
+import { OrdaError } from '@ooo/errors/error';
 import { Wire } from '@ooo/datatypes/wired';
 import { SnapshotOperation } from '@ooo/operations/meta';
 import { DatatypeHandlers } from '@ooo/handlers/handlers';
@@ -52,7 +52,7 @@ class _Counter extends Datatype implements Counter {
       const ret = this.sentenceLocalInTx(new IncreaseOperation(int32(delta))) as Int32;
       return ret.asNumber();
     } catch (e) {
-      if (e instanceof OrtooError) {
+      if (e instanceof OrdaError) {
         throw e;
       }
       throw new ErrDatatype.IllegalParameters(this.ctx.L, e);

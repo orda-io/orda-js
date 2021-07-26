@@ -1,4 +1,4 @@
-import { OrtooLoggerFactory } from '@ooo/utils/ortoo_logger';
+import { OrdaLoggerFactory } from '@ooo/utils/orda_logger';
 import { ClientContext, DatatypeContext } from '@ooo/context';
 import { ClientModel, SyncType } from '@ooo/types/client';
 import { createUID } from '@ooo/types/uid';
@@ -7,27 +7,20 @@ import { Client } from '@ooo/client';
 import { ClientConfig } from '@ooo/config';
 import { WireManager } from '@ooo/managers/wire';
 import { MD5 } from 'crypto-js';
-import {
-  Api,
-  ApiConfig,
-  OrtooOperation,
-  OrtooTypeOfOperation,
-} from '@ooo/generated/openapi';
+import { Api, ApiConfig } from '@ooo/generated/openapi';
 import * as Assert from 'assert';
-import { Operation } from '@ooo/operations/operation';
-import { BaseDatatype } from '@ooo/datatypes/base';
 
 export { helper };
 
-const testLoggerFactory = new OrtooLoggerFactory('trace');
-const TestDB = 'ortoo-js-test';
+const testLoggerFactory = new OrdaLoggerFactory('trace');
+const TestDB = 'orda-js-test';
 const helper = {
   loggerFactory: testLoggerFactory,
   resetTestCollection: false,
   L: testLoggerFactory.getLogger('test'),
 
   getLocalClient(alias: string, wireManager?: WireManager): Client {
-    const conf = new ClientConfig('ortoo-js-test', SyncType.LOCAL_ONLY);
+    const conf = new ClientConfig('orda-js-test', SyncType.LOCAL_ONLY);
     return new Client(conf, alias, wireManager);
   },
 
@@ -48,13 +41,11 @@ const helper = {
     const apiConfig: ApiConfig = {
       baseUrl: conf.serverAddr,
     };
-    const ortoo = new Api(apiConfig);
-    await ortoo.api
-      .ortooServiceResetCollection(conf.collectionName)
+    const orda = new Api(apiConfig);
+    await orda.api
+      .ordaServiceResetCollection(conf.collectionName)
       .then((response) => {
-        this.L.debug(
-          `reset collection '${response.data.collection}' successfully`
-        );
+        this.L.debug(`reset collection '${response.data.collection}' successfully`);
       })
       .catch((err) => {
         this.L.error(err);
@@ -72,12 +63,7 @@ const helper = {
   },
 
   createClientContext(s: Suite): ClientContext {
-    const cm = new ClientModel(
-      createUID(),
-      s.title.replace(/\s/g, ''),
-      'test_collection',
-      SyncType.LOCAL_ONLY
-    );
+    const cm = new ClientModel(createUID(), s.title.replace(/\s/g, ''), 'test_collection', SyncType.LOCAL_ONLY);
     return new ClientContext(cm, testLoggerFactory);
   },
 
@@ -91,10 +77,7 @@ const helper = {
     return conf;
   },
 
-  createClientConfig(
-    collectionName: string,
-    syncType?: SyncType
-  ): ClientConfig {
+  createClientConfig(collectionName: string, syncType?: SyncType): ClientConfig {
     return new ClientConfig(
       collectionName,
       syncType ? syncType : SyncType.MANUALLY,

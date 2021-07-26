@@ -5,24 +5,24 @@ const terser = require('terser-webpack-plugin');
 module.exports = function () {
   const merged = webpackMerge.merge(base.config, {
     entry: {
-      ortoo: './src/ortoo.ts',
+      orda: './src/orda.ts',
     },
     mode: 'production',
     output: {
       filename: '[name].bundle.js',
-      library: 'ortoo',
-      libraryTarget: 'umd',
-      umdNamedDefine: true,
-      globalObject: `this`,
+      library: {
+        name: 'orda',
+        type: 'umd',
+      },
+      publicPath: '/',
     },
     plugins: [],
     devtool: 'source-map',
     module: {},
     optimization: {
-      minimize: true, // TODO: should be true
+      minimize: true,
       minimizer: [
         new terser({
-          // sourceMap: false,
           terserOptions: {
             compress: {
               drop_console: true,

@@ -1,4 +1,4 @@
-import { OrtooSyncType as SyncType } from '@ooo/generated/openapi';
+import { OrdaSyncType as SyncType } from '@ooo/generated/openapi';
 
 export { ClientModel };
 export { SyncType };
@@ -9,12 +9,7 @@ class ClientModel {
   collection: string;
   syncType: SyncType;
 
-  constructor(
-    cuid: string,
-    alias: string,
-    collection: string,
-    syncType: SyncType
-  ) {
+  constructor(cuid: string, alias: string, collection: string, syncType: SyncType) {
     this.cuid = cuid;
     this.alias = alias;
     this.collection = collection;
