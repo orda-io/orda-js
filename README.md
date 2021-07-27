@@ -1,20 +1,10 @@
-# orda-js
+# Orda-js
 
+## Introduction
 
-## For Development
+## Install
 
-```
-$ npm install
-$ npm run dev
-```
-
-## For build
-```
-$ npm run build
+```shell
+$ npm i @orda-io/orda
 ```
 
-## For Test 
-
-```
-$ npm test
-```

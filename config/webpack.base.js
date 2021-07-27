@@ -11,7 +11,7 @@ exports.config = {
     extensions: ['.ts', '.js'],
     modules: [root('src'), 'node_modules'],
     alias: {
-      '@ooo': root('src'),
+      '@orda': root('src'),
       '@test': root('test'),
     },
   },

@@ -9,7 +9,7 @@ module.exports = function () {
     },
     mode: 'production',
     output: {
-      filename: '[name].bundle.js',
+      filename: '[name].js',
       library: {
         name: 'orda',
         type: 'umd',
