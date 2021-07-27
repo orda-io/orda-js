@@ -1,5 +1,5 @@
 import { CheckPoint } from '@ooo/types/checkpoint';
-import { uint32, Uint32 } from '@ooo/types/integer';
+import { uint32, Uint32 } from '@orda-io/orda-integer';
 import { Op, OperationOa } from '@ooo/operations/operation';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { OrdaPushPullPack } from '@ooo/generated/openapi';

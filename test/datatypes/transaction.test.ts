@@ -2,7 +2,7 @@ import { Suite } from 'mocha';
 import { helper } from '@test/helper/helper';
 import { _Counter, CounterTx } from '@ooo/datatypes/counter';
 import { expect } from 'chai';
-import { Int32 } from '@ooo/types/integer';
+import { Int32 } from '@orda-io/orda-integer';
 import { ErrDatatype } from '@ooo/errors/datatype';
 
 describe('Test Transaction', function (this: Suite): void {

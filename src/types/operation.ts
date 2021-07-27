@@ -1,4 +1,4 @@
-import { NumericType, uint32, Uint32, uint64, Uint64 } from '@ooo/types/integer';
+import { NumericType, uint32, Uint32, uint64, Uint64 } from '@orda-io/orda-integer';
 import { createNullUID, CUID, strcmp } from '@ooo/types/uid';
 import { OrdaOperationID as OperationIDOa, OrdaTypeOfOperation as TypeOfOperation } from '@ooo/generated/openapi';
 import { Timestamp } from '@ooo/types/timestamp';

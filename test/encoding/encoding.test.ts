@@ -3,7 +3,7 @@ import { testEncodingOperation } from '@test/encoding/sampler';
 import { Suite } from 'mocha';
 import { convertFromOpenApiOperation } from '@ooo/operations/converter';
 import { IncreaseOperation } from '@ooo/operations/counter';
-import { int32 } from '@ooo/types/integer';
+import { int32 } from '@orda-io/orda-integer';
 import { OperationID } from '@ooo/types/operation';
 import { createUID } from '@ooo/types/uid';
 import { expect } from 'chai';

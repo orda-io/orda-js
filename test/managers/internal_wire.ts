@@ -3,7 +3,7 @@ import { WiredDatatype } from '@ooo/datatypes/wired';
 import { DataManager } from '@ooo/managers/data';
 import { CUID, DUID } from '@ooo/types/uid';
 import { PPOptions, PushPullOptions, PushPullPack } from '@ooo/types/pushpullpack';
-import { uint64 } from '@ooo/types/integer';
+import { uint64 } from '@orda-io/orda-integer';
 import { Op } from '@ooo/operations/operation';
 import { OrdaLogger } from '@orda-io/orda-logger';
 import { ExtMap } from '@ooo/utils/map';
