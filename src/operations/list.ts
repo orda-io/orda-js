@@ -1,7 +1,7 @@
-import { Op } from '@ooo/operations/operation';
-import { Timestamp } from '@ooo/types/timestamp';
-import { ErrDatatype } from '@ooo/errors/datatype';
-import { TypeOfOperation } from '@ooo/types/operation';
+import { Op } from '@orda/operations/operation';
+import { Timestamp } from '@orda/types/timestamp';
+import { ErrDatatype } from '@orda/errors/datatype';
+import { TypeOfOperation } from '@orda/types/operation';
 import { OrdaLogger } from '@orda-io/orda-logger';
 
 class insertBody {

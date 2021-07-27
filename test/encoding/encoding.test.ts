@@ -1,31 +1,31 @@
 import { helper } from '@test/helper/helper';
 import { testEncodingOperation } from '@test/encoding/sampler';
 import { Suite } from 'mocha';
-import { convertFromOpenApiOperation } from '@ooo/operations/converter';
-import { IncreaseOperation } from '@ooo/operations/counter';
+import { convertFromOpenApiOperation } from '@orda/operations/converter';
+import { IncreaseOperation } from '@orda/operations/counter';
 import { int32 } from '@orda-io/orda-integer';
-import { OperationID } from '@ooo/types/operation';
-import { createUID } from '@ooo/types/uid';
+import { OperationID } from '@orda/types/operation';
+import { createUID } from '@orda/types/uid';
 import { expect } from 'chai';
-import { PutOperation, RemoveOperation } from '@ooo/operations/map';
-import { Op } from '@ooo/operations/operation';
-import { _Counter } from '@ooo/datatypes/counter';
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { _OooMap } from '@ooo/datatypes/map';
-import { Datatype } from '@ooo/datatypes/datatype';
-import { DeleteOperation, InsertOperation, UpdateOperation } from '@ooo/operations/list';
-import { Timestamp } from '@ooo/types/timestamp';
-import { _List } from '@ooo/datatypes/list';
+import { PutOperation, RemoveOperation } from '@orda/operations/map';
+import { Op } from '@orda/operations/operation';
+import { _Counter } from '@orda/datatypes/counter';
+import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
+import { _OooMap } from '@orda/datatypes/map';
+import { Datatype } from '@orda/datatypes/datatype';
+import { DeleteOperation, InsertOperation, UpdateOperation } from '@orda/operations/list';
+import { Timestamp } from '@orda/types/timestamp';
+import { _List } from '@orda/datatypes/list';
 import {
   DocDeleteInArrayOperation,
   DocInsertToArrayOperation,
   DocPutInObjOperation,
   DocRemoveInObjOperation,
   DocUpdateInArrayOperation,
-} from '@ooo/operations/document';
-import { _Document } from '@ooo/datatypes/document';
-import { ErrorOperation, TransactionOperation } from '@ooo/operations/meta';
-import { ErrDatatype } from '@ooo/errors/datatype';
+} from '@orda/operations/document';
+import { _Document } from '@orda/datatypes/document';
+import { ErrorOperation, TransactionOperation } from '@orda/operations/meta';
+import { ErrDatatype } from '@orda/errors/datatype';
 
 describe('Test encoding operations with server', function (this: Suite): void {
   it('Can encode and decode meta operations', async () => {

@@ -1,10 +1,10 @@
-import { CheckPoint } from '@ooo/types/checkpoint';
+import { CheckPoint } from '@orda/types/checkpoint';
 import { uint32, Uint32 } from '@orda-io/orda-integer';
-import { Op, OperationOa } from '@ooo/operations/operation';
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { OrdaPushPullPack } from '@ooo/generated/openapi';
+import { Op, OperationOa } from '@orda/operations/operation';
+import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
+import { OrdaPushPullPack } from '@orda/generated/openapi';
 import { OrdaLogger } from '@orda-io/orda-logger';
-import { convertFromOpenApiOperation } from '@ooo/operations/converter';
+import { convertFromOpenApiOperation } from '@orda/operations/converter';
 
 export { PushPullPack, PushPullOptions, PPOptions };
 

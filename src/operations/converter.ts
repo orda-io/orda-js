@@ -1,20 +1,20 @@
-import { OrdaOperation as OperationOa, OrdaTypeOfOperation as OpType } from '@ooo/generated/openapi';
+import { OrdaOperation as OperationOa, OrdaTypeOfOperation as OpType } from '@orda/generated/openapi';
 import { OrdaLogger } from '@orda-io/orda-logger';
-import { ErrorOperation, SnapshotOperation, TransactionOperation } from '@ooo/operations/meta';
-import { IncreaseOperation } from '@ooo/operations/counter';
-import { OperationID } from '@ooo/types/operation';
-import { ErrDatatype } from '@ooo/errors/datatype';
-import { Op } from '@ooo/operations/operation';
-import { PutOperation, RemoveOperation } from '@ooo/operations/map';
-import { DeleteOperation, InsertOperation, UpdateOperation } from '@ooo/operations/list';
+import { ErrorOperation, SnapshotOperation, TransactionOperation } from '@orda/operations/meta';
+import { IncreaseOperation } from '@orda/operations/counter';
+import { OperationID } from '@orda/types/operation';
+import { ErrDatatype } from '@orda/errors/datatype';
+import { Op } from '@orda/operations/operation';
+import { PutOperation, RemoveOperation } from '@orda/operations/map';
+import { DeleteOperation, InsertOperation, UpdateOperation } from '@orda/operations/list';
 import {
   DocDeleteInArrayOperation,
   DocInsertToArrayOperation,
   DocPutInObjOperation,
   DocRemoveInObjOperation,
   DocUpdateInArrayOperation,
-} from '@ooo/operations/document';
-import { commonBtoA, isBrowser } from '@ooo/utils/browser_or_node';
+} from '@orda/operations/document';
+import { commonBtoA, isBrowser } from '@orda/utils/browser_or_node';
 
 export function convertFromOpenApiOperation(opa: OperationOa, logger?: OrdaLogger): Op {
   let op: Op | undefined;

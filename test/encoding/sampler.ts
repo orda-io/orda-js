@@ -1,5 +1,5 @@
-import { Api, ApiConfig, OrdaOperation } from '@ooo/generated/openapi';
-import { TypeOfDatatype } from '@ooo/types/datatype';
+import { Api, ApiConfig, OrdaOperation } from '@orda/generated/openapi';
+import { TypeOfDatatype } from '@orda/types/datatype';
 
 const baseUrl = 'http://127.0.0.1:29862';
 

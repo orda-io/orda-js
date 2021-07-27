@@ -1,10 +1,10 @@
-import { DatatypeHandlers } from '@ooo/handlers/handlers';
-import { Datatype } from '@ooo/datatypes/datatype';
-import { DatatypeErrCodes, DatatypeError } from '@ooo/errors/for_handlers';
-import { StateOfDatatype } from '@ooo/generated/proto.enum';
-import { Operation } from '@ooo/operations/operation';
+import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { Datatype } from '@orda/datatypes/datatype';
+import { DatatypeErrCodes, DatatypeError } from '@orda/errors/for_handlers';
+import { StateOfDatatype } from '@orda/generated/proto.enum';
+import { Operation } from '@orda/operations/operation';
 import { CountDownLatch } from '@test/helper/countdown_latch';
-import { ExtMap } from '@ooo/utils/map';
+import { ExtMap } from '@orda/utils/map';
 import { helper } from '@test/helper/helper';
 
 export class TestDatatypeHandlers extends DatatypeHandlers {

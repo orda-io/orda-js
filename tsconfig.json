@@ -13,9 +13,8 @@
     "sourceMap": true,
     "baseUrl": ".",
     "outDir": "./dist",
-    //    "preserveConstEnums": false,
     "paths": {
-      "@ooo/*": [
+      "@orda/*": [
         "src/*"
       ],
       "@test/*": [

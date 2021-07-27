@@ -1,10 +1,10 @@
 import { Suite } from 'mocha';
 import { helper } from '@test/helper/helper';
-import { ClientModel } from '@ooo/types/client';
-import { createUID } from '@ooo/types/uid';
-import { ClientContext } from '@ooo/context';
-import { GrpcGatewayWireManager } from '@ooo/managers/grpc_gateway_wire';
-import { ClientMessage } from '@ooo/types/messages';
+import { ClientModel } from '@orda/types/client';
+import { createUID } from '@orda/types/uid';
+import { ClientContext } from '@orda/context';
+import { GrpcGatewayWireManager } from '@orda/managers/grpc_gateway_wire';
+import { ClientMessage } from '@orda/types/messages';
 
 describe('Test OpenApi', function (this: Suite): void {
   it('Can test async test', async () => {

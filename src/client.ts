@@ -1,18 +1,18 @@
-import { createUID } from '@ooo/types/uid';
-import { ClientConfig } from '@ooo/config';
-import { DataManager } from '@ooo/managers/data';
-import { ClientContext } from '@ooo/context';
-import { Counter } from '@ooo/datatypes/counter';
-import { IDatatype } from '@ooo/datatypes/datatype';
-import { WireManager } from '@ooo/managers/wire';
-import { GrpcGatewayWireManager } from '@ooo/managers/grpc_gateway_wire';
-import { ClientModel, SyncType } from '@ooo/types/client';
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { DatatypeHandlers } from '@ooo/handlers/handlers';
-import { ErrClient } from '@ooo/errors/client';
-import { OooMap } from '@ooo/datatypes/map';
-import { List } from '@ooo/datatypes/list';
-import { _Document, Document } from '@ooo/datatypes/document';
+import { createUID } from '@orda/types/uid';
+import { ClientConfig } from '@orda/config';
+import { DataManager } from '@orda/managers/data';
+import { ClientContext } from '@orda/context';
+import { Counter } from '@orda/datatypes/counter';
+import { IDatatype } from '@orda/datatypes/datatype';
+import { WireManager } from '@orda/managers/wire';
+import { GrpcGatewayWireManager } from '@orda/managers/grpc_gateway_wire';
+import { ClientModel, SyncType } from '@orda/types/client';
+import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
+import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { ErrClient } from '@orda/errors/client';
+import { OooMap } from '@orda/datatypes/map';
+import { List } from '@orda/datatypes/list';
+import { _Document, Document } from '@orda/datatypes/document';
 
 export { Client };
 

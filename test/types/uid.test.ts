@@ -1,5 +1,5 @@
 import { helper } from '@test/helper/helper';
-import { createNullUID, createUID, strcmp } from '@ooo/types/uid';
+import { createNullUID, createUID, strcmp } from '@orda/types/uid';
 import { assert } from 'chai';
 
 describe('Test UID', () => {

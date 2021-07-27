@@ -1,7 +1,7 @@
-import { Timestamp } from '@ooo/types/timestamp';
-import { createUID } from '@ooo/types/uid';
+import { Timestamp } from '@orda/types/timestamp';
+import { createUID } from '@orda/types/uid';
 import { expect } from 'chai';
-import { TimedNode } from '@ooo/datatypes/timed';
+import { TimedNode } from '@orda/datatypes/timed';
 
 describe('Test encoding TimedNode', () => {
   it('Can encode and decode TimedNode', () => {

@@ -5,7 +5,7 @@ const root = path.join.bind(path, ROOT);
 exports.root = root;
 exports.config = {
   entry: {
-    orda: [root('src/orda.ts')],
+    orda: [root('src/index.ts')],
   },
   resolve: {
     extensions: ['.ts', '.js'],

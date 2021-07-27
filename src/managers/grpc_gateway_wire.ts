@@ -1,16 +1,16 @@
-import { WireManager } from '@ooo/managers/wire';
+import { WireManager } from '@orda/managers/wire';
 import { uint32, Uint32 } from '@orda-io/orda-integer';
-import { ClientContext } from '@ooo/context';
-import { ClientConfig } from '@ooo/config';
-import { DataManager } from '@ooo/managers/data';
-import { WiredDatatype } from '@ooo/datatypes/wired';
-import { PushPullPack } from '@ooo/types/pushpullpack';
-import { Api, ApiConfig, OrdaSyncType } from '@ooo/generated/openapi';
-import { ErrClient } from '@ooo/errors/client';
-import { NotifyManager } from '@ooo/managers/notify';
-import { StateOfDatatype } from '@ooo/generated/proto.enum';
-import { ClientMessage, PushPullMessage } from '@ooo/types/messages';
-import { CUID } from '@ooo/types/uid';
+import { ClientContext } from '@orda/context';
+import { ClientConfig } from '@orda/config';
+import { DataManager } from '@orda/managers/data';
+import { WiredDatatype } from '@orda/datatypes/wired';
+import { PushPullPack } from '@orda/types/pushpullpack';
+import { Api, ApiConfig, OrdaSyncType } from '@orda/generated/openapi';
+import { ErrClient } from '@orda/errors/client';
+import { NotifyManager } from '@orda/managers/notify';
+import { StateOfDatatype } from '@orda/generated/proto.enum';
+import { ClientMessage, PushPullMessage } from '@orda/types/messages';
+import { CUID } from '@orda/types/uid';
 
 export { GrpcGatewayWireManager };
 

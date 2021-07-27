@@ -1,23 +1,23 @@
-import { Datatype, IDatatype } from '@ooo/datatypes/datatype';
-import { ClientContext, DatatypeContext } from '@ooo/context';
-import { StateOfDatatype } from '@ooo/generated/proto.enum';
-import { Wire } from '@ooo/datatypes/wired';
-import { DatatypeHandlers } from '@ooo/handlers/handlers';
-import { Timestamp } from '@ooo/types/timestamp';
-import { TypeOfOperation } from '@ooo/types/operation';
-import { Op } from '@ooo/operations/operation';
-import { TypeOfDatatype, TypeOfJSON } from '@ooo/types/datatype';
-import { Snapshot } from '@ooo/datatypes/snapshot';
-import { ErrDatatype } from '@ooo/errors/datatype';
+import { Datatype, IDatatype } from '@orda/datatypes/datatype';
+import { ClientContext, DatatypeContext } from '@orda/context';
+import { StateOfDatatype } from '@orda/generated/proto.enum';
+import { Wire } from '@orda/datatypes/wired';
+import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { Timestamp } from '@orda/types/timestamp';
+import { TypeOfOperation } from '@orda/types/operation';
+import { Op } from '@orda/operations/operation';
+import { TypeOfDatatype, TypeOfJSON } from '@orda/types/datatype';
+import { Snapshot } from '@orda/datatypes/snapshot';
+import { ErrDatatype } from '@orda/errors/datatype';
 import {
   DocDeleteInArrayOperation,
   DocInsertToArrayOperation,
   DocPutInObjOperation,
   DocRemoveInObjOperation,
   DocUpdateInArrayOperation,
-} from '@ooo/operations/document';
-import { TransactionContext } from '@ooo/datatypes/tansaction';
-import { JSONArray, JSONObject, JSONType, newJSONObject } from '@ooo/datatypes/json';
+} from '@orda/operations/document';
+import { TransactionContext } from '@orda/datatypes/tansaction';
+import { JSONArray, JSONObject, JSONType, newJSONObject } from '@orda/datatypes/json';
 
 export interface DocumentTx extends IDatatype {
   putToObject(key: string, value: unknown): Document | undefined;

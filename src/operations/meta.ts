@@ -1,9 +1,9 @@
-import { Op } from '@ooo/operations/operation';
-import { TypeOfOperation } from '@ooo/types/operation';
-import { ErrDatatype } from '@ooo/errors/datatype';
+import { Op } from '@orda/operations/operation';
+import { TypeOfOperation } from '@orda/types/operation';
+import { ErrDatatype } from '@orda/errors/datatype';
 import { OrdaLogger } from '@orda-io/orda-logger';
-import { PushPullErrorCode } from '@ooo/errors/push_pull';
-import { DatatypeErrCodes, DatatypeError } from '@ooo/errors/for_handlers';
+import { PushPullErrorCode } from '@orda/errors/push_pull';
+import { DatatypeErrCodes, DatatypeError } from '@orda/errors/for_handlers';
 
 export { TransactionOperation, SnapshotOperation, ErrorOperation };
 

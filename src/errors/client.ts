@@ -1,5 +1,5 @@
 import { OrdaLogger } from '@orda-io/orda-logger';
-import { BaseErrorCode, OrdaError } from '@ooo/errors/error';
+import { BaseErrorCode, OrdaError } from '@orda/errors/error';
 
 export { ErrClient };
 

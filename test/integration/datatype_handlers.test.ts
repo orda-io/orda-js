@@ -1,11 +1,11 @@
 import { Suite } from 'mocha';
 import { helper } from '@test/helper/helper';
-import { SyncType } from '@ooo/types/client';
-import { Client } from '@ooo/client';
-import { DatatypeErrCodes } from '@ooo/errors/for_handlers';
+import { SyncType } from '@orda/types/client';
+import { Client } from '@orda/client';
+import { DatatypeErrCodes } from '@orda/errors/for_handlers';
 import { TestDatatypeHandlers } from '@test/integration/test_datatype_handlers';
 import { expect } from 'chai';
-import { StateOfDatatype } from '@ooo/generated/proto.enum';
+import { StateOfDatatype } from '@orda/generated/proto.enum';
 import { ordaLogger } from '../../src/constants/constants';
 
 describe('Test Handlers', function (this: Suite): void {

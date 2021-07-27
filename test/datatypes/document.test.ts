@@ -1,8 +1,8 @@
 import { Suite } from 'mocha';
 import { helper } from '@test/helper/helper';
 import { expect } from 'chai';
-import { ErrDatatype } from '@ooo/errors/datatype';
-import { TypeOfJSON } from '@ooo/types/datatype';
+import { ErrDatatype } from '@orda/errors/datatype';
+import { TypeOfJSON } from '@orda/types/datatype';
 
 const obj1 = {
   K1: 'hello',

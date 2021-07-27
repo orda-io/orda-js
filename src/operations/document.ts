@@ -1,8 +1,8 @@
-import { Op } from '@ooo/operations/operation';
-import { Timestamp } from '@ooo/types/timestamp';
-import { TypeOfOperation } from '@ooo/types/operation';
+import { Op } from '@orda/operations/operation';
+import { Timestamp } from '@orda/types/timestamp';
+import { TypeOfOperation } from '@orda/types/operation';
 import { OrdaLogger } from '@orda-io/orda-logger';
-import { ErrDatatype } from '@ooo/errors/datatype';
+import { ErrDatatype } from '@orda/errors/datatype';
 
 class docPutInObjBody {
   P: Timestamp;

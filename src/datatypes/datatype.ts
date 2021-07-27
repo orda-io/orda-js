@@ -1,10 +1,10 @@
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { ClientContext } from '@ooo/context';
-import { Wire, WiredDatatype } from '@ooo/datatypes/wired';
-import { SnapshotOperation } from '@ooo/operations/meta';
-import { DatatypeHandlers } from '@ooo/handlers/handlers';
-import { Operation } from '@ooo/operations/operation';
-import { DatatypeError } from '@ooo/errors/for_handlers';
+import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
+import { ClientContext } from '@orda/context';
+import { Wire, WiredDatatype } from '@orda/datatypes/wired';
+import { SnapshotOperation } from '@orda/operations/meta';
+import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { Operation } from '@orda/operations/operation';
+import { DatatypeError } from '@orda/errors/for_handlers';
 
 export { Datatype };
 export type { IDatatype };

@@ -1,7 +1,7 @@
-import { createUID } from '@ooo/types/uid';
+import { createUID } from '@orda/types/uid';
 import { helper } from '@test/helper/helper';
 import { expect } from 'chai';
-import { Timestamp } from '@ooo/types/timestamp';
+import { Timestamp } from '@orda/types/timestamp';
 import { uint32, uint64 } from '@orda-io/orda-integer';
 
 describe('Test encoding Timestamp', () => {

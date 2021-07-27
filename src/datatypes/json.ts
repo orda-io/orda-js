@@ -1,20 +1,20 @@
-import { OooMapSnapshot } from '@ooo/datatypes/map';
-import { DatatypeContext } from '@ooo/context';
-import { Timestamp } from '@ooo/types/timestamp';
-import { Snapshot } from '@ooo/datatypes/snapshot';
-import { ErrDatatype } from '@ooo/errors/datatype';
-import { ListSnapshot } from '@ooo/datatypes/list';
-import { TimedType } from '@ooo/datatypes/timed';
-import { OrderedNode, OrderedType } from '@ooo/datatypes/ordered';
-import { OrdaError } from '@ooo/errors/error';
+import { OooMapSnapshot } from '@orda/datatypes/map';
+import { DatatypeContext } from '@orda/context';
+import { Timestamp } from '@orda/types/timestamp';
+import { Snapshot } from '@orda/datatypes/snapshot';
+import { ErrDatatype } from '@orda/errors/datatype';
+import { ListSnapshot } from '@orda/datatypes/list';
+import { TimedType } from '@orda/datatypes/timed';
+import { OrderedNode, OrderedType } from '@orda/datatypes/ordered';
+import { OrdaError } from '@orda/errors/error';
 import {
   DocDeleteInArrayOperation,
   DocInsertToArrayOperation,
   DocPutInObjOperation,
   DocRemoveInObjOperation,
   DocUpdateInArrayOperation,
-} from '@ooo/operations/document';
-import { TypeOfJSON } from '@ooo/types/datatype';
+} from '@orda/operations/document';
+import { TypeOfJSON } from '@orda/types/datatype';
 
 type TypeOfJSONForMarshal = 'E' | 'O' | 'A';
 

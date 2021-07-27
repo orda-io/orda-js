@@ -1,13 +1,13 @@
-import { WireManager } from '@ooo/managers/wire';
-import { WiredDatatype } from '@ooo/datatypes/wired';
-import { DataManager } from '@ooo/managers/data';
-import { CUID, DUID } from '@ooo/types/uid';
-import { PPOptions, PushPullOptions, PushPullPack } from '@ooo/types/pushpullpack';
+import { WireManager } from '@orda/managers/wire';
+import { WiredDatatype } from '@orda/datatypes/wired';
+import { DataManager } from '@orda/managers/data';
+import { CUID, DUID } from '@orda/types/uid';
+import { PPOptions, PushPullOptions, PushPullPack } from '@orda/types/pushpullpack';
 import { uint64 } from '@orda-io/orda-integer';
-import { Op } from '@ooo/operations/operation';
+import { Op } from '@orda/operations/operation';
 import { OrdaLogger } from '@orda-io/orda-logger';
-import { ExtMap } from '@ooo/utils/map';
-import { CheckPoint } from '@ooo/types/checkpoint';
+import { ExtMap } from '@orda/utils/map';
+import { CheckPoint } from '@orda/types/checkpoint';
 
 export { InternalWireManager };
 

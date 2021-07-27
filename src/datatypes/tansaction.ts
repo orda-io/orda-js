@@ -1,8 +1,8 @@
-import { Op, Operation } from '@ooo/operations/operation';
-import { TransactionOperation } from '@ooo/operations/meta';
-import { ClientContext } from '@ooo/context';
-import { DatatypeMeta, StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { BaseDatatype } from '@ooo/datatypes/base';
+import { Op, Operation } from '@orda/operations/operation';
+import { TransactionOperation } from '@orda/operations/meta';
+import { ClientContext } from '@orda/context';
+import { DatatypeMeta, StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
+import { BaseDatatype } from '@orda/datatypes/base';
 
 const LOCAL_TX_TAG = 'LocalTransactionTag!@#$%OrToO';
 const REMOTE_TX_TAG = 'RemoteTransactionTag!@#$%OrToO';

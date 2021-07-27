@@ -1,7 +1,7 @@
-import { DUID } from '@ooo/types/uid';
-import { OperationID } from '@ooo/types/operation';
-import { OrdaTypeOfDatatype as TypeOfDatatype } from '@ooo/generated/openapi';
-import { StateOfDatatype } from '@ooo/generated/proto.enum';
+import { DUID } from '@orda/types/uid';
+import { OperationID } from '@orda/types/operation';
+import { OrdaTypeOfDatatype as TypeOfDatatype } from '@orda/generated/openapi';
+import { StateOfDatatype } from '@orda/generated/proto.enum';
 
 export { StateOfDatatype, TypeOfDatatype };
 

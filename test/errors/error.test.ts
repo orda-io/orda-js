@@ -1,4 +1,4 @@
-import { ErrDatatype } from '@ooo/errors/datatype';
+import { ErrDatatype } from '@orda/errors/datatype';
 import { helper } from '@test/helper/helper';
 import { should } from 'chai';
 

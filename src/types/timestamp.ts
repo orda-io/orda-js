@@ -1,5 +1,5 @@
 import { NumericType, uint32, Uint32, uint64, Uint64 } from '@orda-io/orda-integer';
-import { createNullUID, CUID, strcmp } from '@ooo/types/uid';
+import { createNullUID, CUID, strcmp } from '@orda/types/uid';
 
 export class Timestamp {
   readonly era: Uint32;

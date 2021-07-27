@@ -1,7 +1,7 @@
-import { Datatype } from '@ooo/datatypes/datatype';
-import { StateOfDatatype } from '@ooo/types/datatype';
-import { DatatypeError } from '@ooo/errors/for_handlers';
-import { Operation } from '@ooo/operations/operation';
+import { Datatype } from '@orda/datatypes/datatype';
+import { StateOfDatatype } from '@orda/types/datatype';
+import { DatatypeError } from '@orda/errors/for_handlers';
+import { Operation } from '@orda/operations/operation';
 
 export type { OnStateChange, OnRemoteOperations, OnErrors };
 

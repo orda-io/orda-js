@@ -1,12 +1,12 @@
-import { SyncType } from '@ooo/types/client';
+import { SyncType } from '@orda/types/client';
 import { helper } from '@test/helper/helper';
-import { Client } from '@ooo/client';
+import { Client } from '@orda/client';
 import { Suite } from 'mocha';
-import { DatatypeHandlers } from '@ooo/handlers/handlers';
+import { DatatypeHandlers } from '@orda/handlers/handlers';
 import { CountDownLatch } from '@test/helper/countdown_latch';
 import { expect } from 'chai';
-import { CounterTx } from '@ooo/datatypes/counter';
-import { Datatype } from '@ooo/datatypes/datatype';
+import { CounterTx } from '@orda/datatypes/counter';
+import { Datatype } from '@orda/datatypes/datatype';
 
 describe('Test Synchronization', function (this: Suite): void {
   it('Can sync manually', async () => {
