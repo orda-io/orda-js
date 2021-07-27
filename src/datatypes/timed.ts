@@ -1,4 +1,4 @@
-import { Timestamp } from '@ooo/types/timestamp';
+import { Timestamp } from '@orda/types/timestamp';
 
 export interface TimedType {
   value: unknown;

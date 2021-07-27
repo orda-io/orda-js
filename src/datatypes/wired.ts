@@ -1,16 +1,16 @@
-import { CheckPoint } from '@ooo/types/checkpoint';
-import { Op, Operation } from '@ooo/operations/operation';
-import { ClientContext } from '@ooo/context';
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
+import { CheckPoint } from '@orda/types/checkpoint';
+import { Op, Operation } from '@orda/operations/operation';
+import { ClientContext } from '@orda/context';
+import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
 import { Int64, Uint64 } from '@orda-io/orda-integer';
-import { PPOptions, PushPullOptions, PushPullPack } from '@ooo/types/pushpullpack';
-import { OperationID } from '@ooo/types/operation';
-import { TransactionDatatype } from '@ooo/datatypes/tansaction';
-import { DUID } from '@ooo/types/uid';
-import { ErrDatatype } from '@ooo/errors/datatype';
-import { SyncType } from '@ooo/types/client';
-import { ErrorOperation } from '@ooo/operations/meta';
-import { DatatypeErrCodes, DatatypeError } from '@ooo/errors/for_handlers';
+import { PPOptions, PushPullOptions, PushPullPack } from '@orda/types/pushpullpack';
+import { OperationID } from '@orda/types/operation';
+import { TransactionDatatype } from '@orda/datatypes/tansaction';
+import { DUID } from '@orda/types/uid';
+import { ErrDatatype } from '@orda/errors/datatype';
+import { SyncType } from '@orda/types/client';
+import { ErrorOperation } from '@orda/operations/meta';
+import { DatatypeErrCodes, DatatypeError } from '@orda/errors/for_handlers';
 
 export { WiredDatatype };
 export type { Wire };

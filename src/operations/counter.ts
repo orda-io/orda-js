@@ -1,8 +1,8 @@
-import { Op } from '@ooo/operations/operation';
+import { Op } from '@orda/operations/operation';
 import { Int32 } from '@orda-io/orda-integer';
-import { TypeOfOperation } from '@ooo/types/operation';
+import { TypeOfOperation } from '@orda/types/operation';
 import { OrdaLogger } from '@orda-io/orda-logger';
-import { ErrDatatype } from '@ooo/errors/datatype';
+import { ErrDatatype } from '@orda/errors/datatype';
 
 export { IncreaseOperation };
 

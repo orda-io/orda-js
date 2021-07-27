@@ -1,7 +1,7 @@
 import { Suite } from 'mocha';
 import { helper } from '@test/helper/helper';
 import { InternalWireManager } from '@test/managers/internal_wire';
-import { StateOfDatatype } from '@ooo/types/datatype';
+import { StateOfDatatype } from '@orda/types/datatype';
 import { expect } from 'chai';
 import { ordaLogger } from '../../src/constants/constants';
 

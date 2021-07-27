@@ -1,13 +1,13 @@
 import { OrdaLoggerFactory } from '@orda-io/orda-logger';
-import { ClientContext, DatatypeContext } from '@ooo/context';
-import { ClientModel, SyncType } from '@ooo/types/client';
-import { createUID } from '@ooo/types/uid';
+import { ClientContext, DatatypeContext } from '@orda/context';
+import { ClientModel, SyncType } from '@orda/types/client';
+import { createUID } from '@orda/types/uid';
 import { Suite } from 'mocha';
-import { Client } from '@ooo/client';
-import { ClientConfig } from '@ooo/config';
-import { WireManager } from '@ooo/managers/wire';
+import { Client } from '@orda/client';
+import { ClientConfig } from '@orda/config';
+import { WireManager } from '@orda/managers/wire';
 import { MD5 } from 'crypto-js';
-import { Api, ApiConfig } from '@ooo/generated/openapi';
+import { Api, ApiConfig } from '@orda/generated/openapi';
 import * as Assert from 'assert';
 import { OrdaLogLevel } from '@orda-io/orda-logger';
 

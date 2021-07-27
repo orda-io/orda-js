@@ -1,7 +1,7 @@
 import { OrdaLogger, OrdaLoggerFactory } from '@orda-io/orda-logger';
-import { ClientModel } from '@ooo/types/client';
-import { BaseDatatype } from '@ooo/datatypes/base';
-import { CUID } from '@ooo/types/uid';
+import { ClientModel } from '@orda/types/client';
+import { BaseDatatype } from '@orda/datatypes/base';
+import { CUID } from '@orda/types/uid';
 import { Mutex } from 'async-mutex';
 import MutexInterface from 'async-mutex/lib/MutexInterface';
 

@@ -1,7 +1,7 @@
-import { Wire } from '@ooo/datatypes/wired';
-import { DataManager } from '@ooo/managers/data';
-import { PushPullPack } from '@ooo/types/pushpullpack';
-import { CUID } from '@ooo/types/uid';
+import { Wire } from '@orda/datatypes/wired';
+import { DataManager } from '@orda/managers/data';
+import { PushPullPack } from '@orda/types/pushpullpack';
+import { CUID } from '@orda/types/uid';
 
 export type { WireManager };
 

@@ -1,11 +1,11 @@
-import { createUID, DUID } from '@ooo/types/uid';
-import { OperationID, TypeOfOperation } from '@ooo/types/operation';
-import { ClientContext, DatatypeContext } from '@ooo/context';
-import { Op, Operation } from '@ooo/operations/operation';
-import { Snapshot } from '@ooo/datatypes/snapshot';
-import { logOp } from '@ooo/decorators/decorators';
-import { DatatypeMeta, StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { DatatypeError } from '@ooo/errors/for_handlers';
+import { createUID, DUID } from '@orda/types/uid';
+import { OperationID, TypeOfOperation } from '@orda/types/operation';
+import { ClientContext, DatatypeContext } from '@orda/context';
+import { Op, Operation } from '@orda/operations/operation';
+import { Snapshot } from '@orda/datatypes/snapshot';
+import { logOp } from '@orda/decorators/decorators';
+import { DatatypeMeta, StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
+import { DatatypeError } from '@orda/errors/for_handlers';
 
 export { BaseDatatype };
 

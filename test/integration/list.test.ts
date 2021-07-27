@@ -1,8 +1,8 @@
 import { Suite } from 'mocha';
 import { helper } from '@test/helper/helper';
-import { SyncType } from '@ooo/types/client';
-import { Client } from '@ooo/client';
-import { _List } from '@ooo/datatypes/list';
+import { SyncType } from '@orda/types/client';
+import { Client } from '@orda/client';
+import { _List } from '@orda/datatypes/list';
 import { expect } from 'chai';
 
 describe('Integration test list', function (this: Suite): void {

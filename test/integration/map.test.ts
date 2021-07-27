@@ -1,9 +1,9 @@
 import { Suite } from 'mocha';
 import { helper } from '@test/helper/helper';
-import { SyncType } from '@ooo/types/client';
-import { Client } from '@ooo/client';
+import { SyncType } from '@orda/types/client';
+import { Client } from '@orda/client';
 import { expect } from 'chai';
-import { _OooMap } from '@ooo/datatypes/map';
+import { _OooMap } from '@orda/datatypes/map';
 
 describe('Integration test map', function (this: Suite): void {
   it('Can synchronize Map with server', async () => {

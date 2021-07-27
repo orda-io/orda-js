@@ -1,7 +1,7 @@
-import { OperationID, TypeOfOperation } from '@ooo/types/operation';
-import { OrdaOperation as OperationOa } from '@ooo/generated/openapi';
-import { Timestamp } from '@ooo/types/timestamp';
-import { commonAtoB } from '@ooo/utils/browser_or_node';
+import { OperationID, TypeOfOperation } from '@orda/types/operation';
+import { OrdaOperation as OperationOa } from '@orda/generated/openapi';
+import { Timestamp } from '@orda/types/timestamp';
+import { commonAtoB } from '@orda/utils/browser_or_node';
 
 export type { OperationOa };
 export { Op };

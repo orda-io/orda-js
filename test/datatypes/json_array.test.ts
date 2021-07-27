@@ -1,9 +1,9 @@
 import { Suite } from 'mocha';
-import { OperationID } from '@ooo/types/operation';
-import { createUID } from '@ooo/types/uid';
-import { JSONArray, JSONObject, newJSONObject } from '@ooo/datatypes/json';
+import { OperationID } from '@orda/types/operation';
+import { createUID } from '@orda/types/uid';
+import { JSONArray, JSONObject, newJSONObject } from '@orda/datatypes/json';
 import { helper } from '@test/helper/helper';
-import { Timestamp } from '@ooo/types/timestamp';
+import { Timestamp } from '@orda/types/timestamp';
 import { expect } from 'chai';
 import { jsonObjectEncodingTest } from '@test/datatypes/json_object.test';
 import {
@@ -11,8 +11,8 @@ import {
   DocInsertToArrayOperation,
   DocPutInObjOperation,
   DocUpdateInArrayOperation,
-} from '@ooo/operations/document';
-import { TypeOfJSON } from '@ooo/types/datatype';
+} from '@orda/operations/document';
+import { TypeOfJSON } from '@orda/types/datatype';
 
 const obj1 = {
   K1: 'hello',

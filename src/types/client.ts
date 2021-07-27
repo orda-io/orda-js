@@ -1,4 +1,4 @@
-import { OrdaSyncType as SyncType } from '@ooo/generated/openapi';
+import { OrdaSyncType as SyncType } from '@orda/generated/openapi';
 
 export { ClientModel };
 export { SyncType };

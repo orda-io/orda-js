@@ -1,5 +1,5 @@
-import { TimedNode, TimedType } from '@ooo/datatypes/timed';
-import { Timestamp } from '@ooo/types/timestamp';
+import { TimedNode, TimedType } from '@orda/datatypes/timed';
+import { Timestamp } from '@orda/types/timestamp';
 
 export interface OrderedType extends TimedType {
   orderedTime: Timestamp;

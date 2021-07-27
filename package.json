@@ -1,7 +1,7 @@
 {
-  "name": "orda",
-  "version": "0.0.1",
-  "description": "Orda Javascript SDK",
+  "name": "@orda-io/orda",
+  "version": "0.1.0",
+  "description": "Orda-js: A typescript/javascript library for orda project. CRDT-based data synchronization supporting document database.",
   "scripts": {
     "dev": "npx webpack serve --config=./config/webpack.dev.js --stats-all --profile --bail --progress",
     "test": "npx karma start",
@@ -17,13 +17,36 @@
     "gen-openapi": "npx swagger-typescript-api -p http://127.0.0.1:29862/swagger/orda.grpc.swagger.json -o ./src/generated -n openapi.ts",
     "gen-proto-enum": "npx pbjs ../orda/proto/orda.enum.proto --ts ./src/generated/proto.enum.ts && sed -i 's/export const enum/export enum/g' ./src/generated/proto.enum.ts",
     "build:dev": "npm run clean && webpack --config=./config/webpack.dev.js --stats-all --profile --bail",
-    "build:prod": "npm run clean:dist && webpack --config=./config/webpack.prod.js --devtool=cheap-module-source-map --output-path=./dist --stats-all --profile --bail",
-    "build:exam": "npx webpack --config=./config/webpack.dev.js --output-path=./example --devtool=inline-source-map --stats-all --profile --bail"
+    "build:prod": "npm run clean && webpack --config=./config/webpack.prod.js --stats-all --profile --bail",
+    "build:exam": "npx webpack --config=./config/webpack.dev.js --output-path=./example --devtool=inline-source-map --stats-all --profile --bail",
+    "prepare": "npm run build:prod && npm version patch -m \"npm publish tag %s\"",
+    "postpublish": "git push --tags"
   },
+  "main": "dist/orda.js",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/orda-io/orda-js.git"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "keywords": [
+    "json",
+    "synchronization",
+    "replication",
+    "collaboration",
+    "javascript-library",
+    "typescript-library",
+    "document-database",
+    "rga",
+    "datatypes",
+    "eventual-consistency",
+    "crdts",
+    "crdt-implementations",
+    "orda",
+    "conflict-free-replicated-datatype"
+  ],
   "author": "Orda Team",
   "license": "Apache-2.0",
   "bugs": {

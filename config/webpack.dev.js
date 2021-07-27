@@ -4,7 +4,7 @@ const base = require('./webpack.base');
 module.exports = function () {
   const merged = webpackMerge(base.config, {
     entry: {
-      orda: './src/orda.ts',
+      orda: './src/index.ts',
     },
     mode: 'development',
     output: {

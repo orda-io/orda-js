@@ -1,9 +1,9 @@
 import { Suite } from 'mocha';
 import { helper } from '@test/helper/helper';
-import { _Counter, CounterTx } from '@ooo/datatypes/counter';
+import { _Counter, CounterTx } from '@orda/datatypes/counter';
 import { expect } from 'chai';
 import { Int32 } from '@orda-io/orda-integer';
-import { ErrDatatype } from '@ooo/errors/datatype';
+import { ErrDatatype } from '@orda/errors/datatype';
 
 describe('Test Transaction', function (this: Suite): void {
   it('Can transaction', () => {

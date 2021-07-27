@@ -1,16 +1,16 @@
-import { ClientContext } from '@ooo/context';
-import { WireManager } from '@ooo/managers/wire';
-import { Datatype } from '@ooo/datatypes/datatype';
-import { _Counter } from '@ooo/datatypes/counter';
-import { PushPullPack } from '@ooo/types/pushpullpack';
-import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { DatatypeHandlers } from '@ooo/handlers/handlers';
+import { ClientContext } from '@orda/context';
+import { WireManager } from '@orda/managers/wire';
+import { Datatype } from '@orda/datatypes/datatype';
+import { _Counter } from '@orda/datatypes/counter';
+import { PushPullPack } from '@orda/types/pushpullpack';
+import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
+import { DatatypeHandlers } from '@orda/handlers/handlers';
 import { Uint64 } from '@orda-io/orda-integer';
-import { NotifyReceiver } from '@ooo/managers/notify';
-import { WiredDatatype } from '@ooo/datatypes/wired';
-import { _OooMap } from '@ooo/datatypes/map';
-import { _List } from '@ooo/datatypes/list';
-import { _Document } from '@ooo/datatypes/document';
+import { NotifyReceiver } from '@orda/managers/notify';
+import { WiredDatatype } from '@orda/datatypes/wired';
+import { _OooMap } from '@orda/datatypes/map';
+import { _List } from '@orda/datatypes/list';
+import { _Document } from '@orda/datatypes/document';
 
 const trialLimit = 10;
 

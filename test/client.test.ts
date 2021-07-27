@@ -1,9 +1,9 @@
 import { helper } from '@test/helper/helper';
 import { expect } from 'chai';
-import { ClientModel, SyncType } from '@ooo/types/client';
-import { Client } from '@ooo/client';
+import { ClientModel, SyncType } from '@orda/types/client';
+import { Client } from '@orda/client';
 import { Suite } from 'mocha';
-import { createUID } from '@ooo/types/uid';
+import { createUID } from '@orda/types/uid';
 
 describe('Test Clients', function (this: Suite): void {
   it('Can connect synchronously', async () => {

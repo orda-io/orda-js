@@ -1,13 +1,13 @@
 import { Suite } from 'mocha';
-import { JSONObject, newJSONObject } from '@ooo/datatypes/json';
+import { JSONObject, newJSONObject } from '@orda/datatypes/json';
 import { helper } from '@test/helper/helper';
-import { Timestamp } from '@ooo/types/timestamp';
-import { OperationID } from '@ooo/types/operation';
-import { createUID } from '@ooo/types/uid';
+import { Timestamp } from '@orda/types/timestamp';
+import { OperationID } from '@orda/types/operation';
+import { createUID } from '@orda/types/uid';
 import { expect } from 'chai';
-import { ErrDatatype } from '@ooo/errors/datatype';
-import { DocPutInObjOperation, DocRemoveInObjOperation } from '@ooo/operations/document';
-import { TypeOfJSON } from '@ooo/types/datatype';
+import { ErrDatatype } from '@orda/errors/datatype';
+import { DocPutInObjOperation, DocRemoveInObjOperation } from '@orda/operations/document';
+import { TypeOfJSON } from '@orda/types/datatype';
 
 const obj1 = {
   K1: 'hello',

@@ -5,11 +5,11 @@ const terser = require('terser-webpack-plugin');
 module.exports = function () {
   return webpackMerge(base.config, {
     entry: {
-      orda: './src/orda.ts',
+      orda: './src/index.ts',
     },
     mode: 'production',
     output: {
-      filename: '[name].bundle.js',
+      filename: '[name].js',
       library: {
         name: 'orda',
         type: 'umd',

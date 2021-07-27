@@ -1,5 +1,5 @@
-import { ClientConfig } from '@ooo/config';
-import { ClientContext } from '@ooo/context';
+import { ClientConfig } from '@orda/config';
+import { ClientContext } from '@orda/context';
 import type { OnConnectionLostHandler, OnMessageHandler } from 'paho-mqtt';
 import Paho, {
   ErrorWithInvocationContext,
@@ -10,8 +10,8 @@ import Paho, {
   WithInvocationContext,
 } from 'paho-mqtt';
 import { uint64, Uint64 } from '@orda-io/orda-integer';
-import { ErrClient } from '@ooo/errors/client';
-import { getAgent } from '@ooo/constants/constants';
+import { ErrClient } from '@orda/errors/client';
+import { getAgent } from '@orda/constants/constants';
 
 // without mqtt, mqtt-packet 83K
 // with mqtt, mqtt-packet 267K

@@ -1,5 +1,5 @@
-import { OperationID } from '@ooo/types/operation';
-import { createUID, strcmp } from '@ooo/types/uid';
+import { OperationID } from '@orda/types/operation';
+import { createUID, strcmp } from '@orda/types/uid';
 import { expect } from 'chai';
 import { helper } from '@test/helper/helper';
 
