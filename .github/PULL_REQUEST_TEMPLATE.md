@@ -4,7 +4,7 @@
 - Additional reference: #
 
 ### Checklists
- - [ ] New tests created?
+ - [ ] Related tests added?
  - [ ] Related docs updated?
 
 ### Description

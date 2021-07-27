@@ -2,7 +2,7 @@ import { createUID } from '@ooo/types/uid';
 import { helper } from '@test/helper/helper';
 import { expect } from 'chai';
 import { Timestamp } from '@ooo/types/timestamp';
-import { uint32, uint64 } from '@ooo/types/integer';
+import { uint32, uint64 } from '@orda-io/orda-integer';
 
 describe('Test encoding Timestamp', () => {
   it('Can encode and decode Timestamps', () => {

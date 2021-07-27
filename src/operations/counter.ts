@@ -1,5 +1,5 @@
 import { Op } from '@ooo/operations/operation';
-import { Int32 } from '@ooo/types/integer';
+import { Int32 } from '@orda-io/orda-integer';
 import { TypeOfOperation } from '@ooo/types/operation';
 import { OrdaLogger } from '@orda-io/orda-logger';
 import { ErrDatatype } from '@ooo/errors/datatype';

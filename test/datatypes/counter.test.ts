@@ -1,6 +1,6 @@
 import { Suite } from 'mocha';
 import { helper } from '@test/helper/helper';
-import { int32, Int32 } from '@ooo/types/integer';
+import { int32, Int32 } from '@orda-io/orda-integer';
 import { expect } from 'chai';
 
 describe('Test local Counter operations', function (this: Suite): void {

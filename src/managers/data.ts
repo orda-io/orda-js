@@ -5,7 +5,7 @@ import { _Counter } from '@ooo/datatypes/counter';
 import { PushPullPack } from '@ooo/types/pushpullpack';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
 import { DatatypeHandlers } from '@ooo/handlers/handlers';
-import { Uint64 } from '@ooo/types/integer';
+import { Uint64 } from '@orda-io/orda-integer';
 import { NotifyReceiver } from '@ooo/managers/notify';
 import { WiredDatatype } from '@ooo/datatypes/wired';
 import { _OooMap } from '@ooo/datatypes/map';

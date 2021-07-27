@@ -1,5 +1,5 @@
 import { WireManager } from '@ooo/managers/wire';
-import { uint32, Uint32 } from '@ooo/types/integer';
+import { uint32, Uint32 } from '@orda-io/orda-integer';
 import { ClientContext } from '@ooo/context';
 import { ClientConfig } from '@ooo/config';
 import { DataManager } from '@ooo/managers/data';

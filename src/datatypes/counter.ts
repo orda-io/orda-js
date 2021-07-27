@@ -1,5 +1,5 @@
 import { Datatype, IDatatype } from '@ooo/datatypes/datatype';
-import { int32, Int32 } from '@ooo/types/integer';
+import { int32, Int32 } from '@orda-io/orda-integer';
 import { IncreaseOperation } from '@ooo/operations/counter';
 import { ClientContext, DatatypeContext } from '@ooo/context';
 import { Op } from '@ooo/operations/operation';

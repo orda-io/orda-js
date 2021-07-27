@@ -9,7 +9,7 @@ import Paho, {
   OnSuccessCallback,
   WithInvocationContext,
 } from 'paho-mqtt';
-import { uint64, Uint64 } from '@ooo/types/integer';
+import { uint64, Uint64 } from '@orda-io/orda-integer';
 import { ErrClient } from '@ooo/errors/client';
 import { getAgent } from '@ooo/constants/constants';
 

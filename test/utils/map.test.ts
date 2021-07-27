@@ -1,4 +1,4 @@
-import { Int64, int64 } from '@ooo/types/integer';
+import { Int64, int64 } from '@orda-io/orda-integer';
 import { ExtMap } from '@ooo/utils/map';
 import { expect } from 'chai';
 import { ordaLogger } from '../../src/constants/constants';

@@ -1,4 +1,4 @@
-import { NumericType, uint64, Uint64 } from '@ooo/types/integer';
+import { NumericType, uint64, Uint64 } from '@orda-io/orda-integer';
 import { OrdaCheckPoint as CheckPointOa } from '@ooo/generated/openapi';
 
 export { CheckPoint };

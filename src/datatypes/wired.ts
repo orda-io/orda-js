@@ -2,7 +2,7 @@ import { CheckPoint } from '@ooo/types/checkpoint';
 import { Op, Operation } from '@ooo/operations/operation';
 import { ClientContext } from '@ooo/context';
 import { StateOfDatatype, TypeOfDatatype } from '@ooo/types/datatype';
-import { Int64, Uint64 } from '@ooo/types/integer';
+import { Int64, Uint64 } from '@orda-io/orda-integer';
 import { PPOptions, PushPullOptions, PushPullPack } from '@ooo/types/pushpullpack';
 import { OperationID } from '@ooo/types/operation';
 import { TransactionDatatype } from '@ooo/datatypes/tansaction';
