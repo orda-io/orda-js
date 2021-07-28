@@ -23,6 +23,9 @@ exports.config = {
         use: [
           {
             loader: 'ts-loader',
+            options: {
+              compiler: 'ttypescript',
+            },
           },
         ],
       },

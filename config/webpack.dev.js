@@ -2,7 +2,7 @@ const webpackMerge = require('webpack-merge');
 const base = require('./webpack.base');
 
 module.exports = function () {
-  const merged = webpackMerge(base.config, {
+  return webpackMerge(base.config, {
     entry: {
       orda: './src/index.ts',
     },
@@ -16,9 +16,7 @@ module.exports = function () {
       },
       publicPath: '/',
     },
-    plugins: [],
     devtool: 'source-map',
-    module: {},
     devServer: {
       static: {
         directory: base.root('example'),
@@ -28,5 +26,4 @@ module.exports = function () {
       watchFiles: [base.root('example/**/*')],
     },
   });
-  return merged;
 };
