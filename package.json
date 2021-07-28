@@ -1,6 +1,6 @@
 {
   "name": "@orda-io/orda",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Orda-js: A typescript/javascript library for orda project. CRDT-based data synchronization supporting document database.",
   "scripts": {
     "dev": "npx webpack serve --config=./config/webpack.dev.js --stats-all --profile --bail --progress",
@@ -19,7 +19,7 @@
     "build:dev": "npm run clean && webpack --config=./config/webpack.dev.js --stats-all --profile --bail",
     "build:prod": "npm run clean && webpack --config=./config/webpack.prod.js --stats-all --profile --bail",
     "build:exam": "npx webpack --config=./config/webpack.dev.js --output-path=./example --devtool=inline-source-map --stats-all --profile --bail",
-    "prepare": "npm run build:prod && npm version patch -m \"npm publish tag %s\"",
+    "prepublishOnly": "npm run build:prod && npm version patch -m \"npm publish tag %s\"",
     "postpublish": "git push --tags"
   },
   "main": "dist/orda.js",
@@ -59,6 +59,7 @@
     "@types/mocha": "^8.2.3",
     "@types/paho-mqtt": "^1.0.5",
     "@typescript-eslint/eslint-plugin": "^4.28.4",
+    "@zerollup/ts-transform-paths": "^1.7.18",
     "chai": "^4.3.4",
     "crypto-browserify": "^3.12.0",
     "crypto-js": "^4.0.0",
@@ -84,6 +85,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.1.0",
     "tsconfig-paths": "^3.10.1",
+    "ttypescript": "^1.5.12",
     "webpack": "^5.45.1",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^4.0.0-rc.0",
