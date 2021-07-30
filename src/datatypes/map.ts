@@ -8,17 +8,17 @@ import { Timestamp } from '@orda/types/timestamp';
 import { ErrDatatype } from '@orda/errors/datatype';
 import { StateOfDatatype } from '@orda/generated/proto.enum';
 import { Wire } from '@orda/datatypes/wired';
-import { DatatypeHandlers } from '@orda/handlers/datatype_handlers';
+import { DatatypeHandlers } from '@orda/handlers/datatype';
 import { TypeOfDatatype } from '@orda/types/datatype';
 import { TypeOfOperation } from '@orda/types/operation';
 import { PutOperation, RemoveOperation } from '@orda/operations/map';
 import { TransactionContext } from '@orda/datatypes/tansaction';
 import { SnapshotOperation } from '@orda/operations/meta';
 
-export { _OooMap };
-export type { OooMapTx, OooMap };
+export { _OrdaMap };
+export type { OrdaMapTx, OrdaMap };
 
-interface OooMapTx extends IDatatype {
+interface OrdaMapTx extends IDatatype {
   get(key: string): unknown;
 
   put(key: string, value: unknown): unknown;
@@ -28,16 +28,16 @@ interface OooMapTx extends IDatatype {
   size(): number;
 }
 
-interface OooMap extends OooMapTx {
-  transaction(tag: string, fn: (map: OooMapTx) => boolean): boolean;
+interface OrdaMap extends OrdaMapTx {
+  transaction(tag: string, fn: (map: OrdaMapTx) => boolean): boolean;
 }
 
-class _OooMap extends Datatype implements OooMap {
-  private snap: OooMapSnapshot;
+class _OrdaMap extends Datatype implements OrdaMap {
+  private readonly snap: OrdaMapSnapshot;
 
   constructor(ctx: ClientContext, key: string, state: StateOfDatatype, wire?: Wire, handlers?: DatatypeHandlers) {
     super(ctx, key, TypeOfDatatype.MAP, state, wire, handlers);
-    this.snap = new OooMapSnapshot(this.ctx);
+    this.snap = new OrdaMapSnapshot(this.ctx);
     this.resetRollbackContext();
   }
 
@@ -95,7 +95,7 @@ class _OooMap extends Datatype implements OooMap {
     return this.snap.size;
   }
 
-  transaction(tag: string, txFunc: (map: OooMapTx) => boolean): boolean {
+  transaction(tag: string, txFunc: (map: OrdaMapTx) => boolean): boolean {
     return this.doTransaction(tag, (txCtx: TransactionContext): boolean => {
       return txFunc(this);
     });
@@ -106,7 +106,7 @@ class _OooMap extends Datatype implements OooMap {
   }
 }
 
-export class OooMapSnapshot implements Snapshot {
+export class OrdaMapSnapshot implements Snapshot {
   ctx: DatatypeContext;
   map: Map<string, TimedType>;
   size: number;

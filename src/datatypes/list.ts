@@ -3,7 +3,7 @@ import { Snapshot } from '@orda/datatypes/snapshot';
 import { ClientContext, DatatypeContext } from '@orda/context';
 import { StateOfDatatype } from '@orda/generated/proto.enum';
 import { Wire } from '@orda/datatypes/wired';
-import { DatatypeHandlers } from '@orda/handlers/datatype_handlers';
+import { DatatypeHandlers } from '@orda/handlers/datatype';
 import { TypeOfDatatype } from '@orda/types/datatype';
 import { Op } from '@orda/operations/operation';
 import { TypeOfOperation } from '@orda/types/operation';
@@ -16,7 +16,7 @@ import { SnapshotOperation } from '@orda/operations/meta';
 import { OrdaError } from '@orda/errors/error';
 import { TransactionContext } from '@orda/datatypes/tansaction';
 
-export interface ListTx extends IDatatype {
+export interface OrdaListTx extends IDatatype {
   insert(pos: number, ...values: unknown[]): void;
 
   get(pos: number): unknown;
@@ -32,16 +32,16 @@ export interface ListTx extends IDatatype {
   size(): number;
 }
 
-export interface List extends ListTx {
-  transaction(tag: string, fn: (list: ListTx) => boolean): boolean;
+export interface OrdaList extends OrdaListTx {
+  transaction(tag: string, fn: (list: OrdaListTx) => boolean): boolean;
 }
 
-export class _List extends Datatype implements List {
-  private readonly snap: ListSnapshot;
+export class _OrdaList extends Datatype implements OrdaList {
+  private readonly snap: OrdaListSnapshot;
 
   constructor(ctx: ClientContext, key: string, state: StateOfDatatype, wire?: Wire, handlers?: DatatypeHandlers) {
     super(ctx, key, TypeOfDatatype.LIST, state, wire, handlers);
-    this.snap = new ListSnapshot(this.ctx);
+    this.snap = new OrdaListSnapshot(this.ctx);
     this.resetRollbackContext();
   }
 
@@ -113,7 +113,7 @@ export class _List extends Datatype implements List {
     return this.snap.size;
   }
 
-  transaction(tag: string, txFunc: (list: ListTx) => boolean): boolean {
+  transaction(tag: string, txFunc: (list: OrdaListTx) => boolean): boolean {
     return this.doTransaction(tag, (txCtx: TransactionContext): boolean => {
       return txFunc(this);
     });
@@ -129,7 +129,7 @@ export class _List extends Datatype implements List {
   }
 }
 
-export class ListSnapshot implements Snapshot {
+export class OrdaListSnapshot implements Snapshot {
   ctx: DatatypeContext;
   head: OrderedType;
   size: number;

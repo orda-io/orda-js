@@ -1,9 +1,9 @@
-import { OooMapSnapshot } from '@orda/datatypes/map';
+import { OrdaMapSnapshot } from '@orda/datatypes/map';
 import { DatatypeContext } from '@orda/context';
 import { Timestamp } from '@orda/types/timestamp';
 import { Snapshot } from '@orda/datatypes/snapshot';
 import { ErrDatatype } from '@orda/errors/datatype';
-import { ListSnapshot } from '@orda/datatypes/list';
+import { OrdaListSnapshot } from '@orda/datatypes/list';
 import { TimedType } from '@orda/datatypes/timed';
 import { OrderedNode, OrderedType } from '@orda/datatypes/ordered';
 import { OrdaError } from '@orda/errors/error';
@@ -85,7 +85,7 @@ class MarshaledJSONArray {
   n: MarshaledOrderedType[];
   s: number;
 
-  constructor(listSnapshot?: ListSnapshot) {
+  constructor(listSnapshot?: OrdaListSnapshot) {
     this.n = new Array<MarshaledOrderedType>();
     this.s = 0;
     if (listSnapshot) {
@@ -117,7 +117,7 @@ class MarshaledJSONObject {
   m: any;
   s: number;
 
-  constructor(mapSnap?: OooMapSnapshot) {
+  constructor(mapSnap?: OrdaMapSnapshot) {
     this.m = {};
     this.s = 0;
     if (mapSnap) {
@@ -516,11 +516,11 @@ abstract class JSONPrimitive implements JSONType {
 }
 
 export class JSONObject extends JSONPrimitive implements Snapshot {
-  mapSnapshot: OooMapSnapshot;
+  mapSnapshot: OrdaMapSnapshot;
 
   constructor(common: JSONCommon, ts: Timestamp, parent?: JSONType) {
     super(common, ts, parent);
-    this.mapSnapshot = new OooMapSnapshot(common.ctx);
+    this.mapSnapshot = new OrdaMapSnapshot(common.ctx);
   }
 
   get type(): TypeOfJSON {
@@ -610,7 +610,7 @@ export class JSONObject extends JSONPrimitive implements Snapshot {
       throw new ErrDatatype.Marshal(this.ctx.L, undefined, 'not MarshaledJSONObject');
     }
     const marshaledJO = marshaled.o;
-    this.mapSnapshot = new OooMapSnapshot(this.ctx);
+    this.mapSnapshot = new OrdaMapSnapshot(this.ctx);
     for (const k in marshaledJO.m) {
       const realJt = this.findJSONType(marshaledJO.m[k]);
       if (realJt) {
@@ -743,11 +743,11 @@ export class JSONElement extends JSONPrimitive {
 }
 
 export class JSONArray extends JSONPrimitive {
-  listSnapshot: ListSnapshot;
+  listSnapshot: OrdaListSnapshot;
 
   constructor(common: JSONCommon, ts: Timestamp, parent?: JSONType) {
     super(common, ts, parent);
-    this.listSnapshot = new ListSnapshot(common.ctx);
+    this.listSnapshot = new OrdaListSnapshot(common.ctx);
   }
 
   getManyJSONTypes(pos: number, numOfNodes: number): JSONType[] {
@@ -797,7 +797,7 @@ export class JSONArray extends JSONPrimitive {
       throw new ErrDatatype.Marshal(this.ctx.L, undefined, 'not MarshaledJSONArray');
     }
     const marshalJA = marshaled.a;
-    this.listSnapshot = new ListSnapshot(this.ctx);
+    this.listSnapshot = new OrdaListSnapshot(this.ctx);
     let prev = this.listSnapshot.head;
     marshalJA.n.forEach((marshaledOt: MarshaledOrderedType) => {
       const oTs = marshaledOt[0];

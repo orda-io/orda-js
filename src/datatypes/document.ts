@@ -2,7 +2,7 @@ import { Datatype, IDatatype } from '@orda/datatypes/datatype';
 import { ClientContext, DatatypeContext } from '@orda/context';
 import { StateOfDatatype } from '@orda/generated/proto.enum';
 import { Wire } from '@orda/datatypes/wired';
-import { DatatypeHandlers } from '@orda/handlers/datatype_handlers';
+import { DatatypeHandlers } from '@orda/handlers/datatype';
 import { Timestamp } from '@orda/types/timestamp';
 import { TypeOfOperation } from '@orda/types/operation';
 import { Op } from '@orda/operations/operation';
@@ -19,41 +19,41 @@ import {
 import { TransactionContext } from '@orda/datatypes/tansaction';
 import { JSONArray, JSONObject, JSONType, newJSONObject } from '@orda/datatypes/json';
 
-export interface DocumentTx extends IDatatype {
-  putToObject(key: string, value: unknown): Document | undefined;
+export interface OrdaDocTx extends IDatatype {
+  putToObject(key: string, value: unknown): OrdaDoc | undefined;
 
-  removeInObject(key: string): Document | undefined;
+  removeInObject(key: string): OrdaDoc | undefined;
 
-  insertToArray(pos: number, ...values: unknown[]): Document;
+  insertToArray(pos: number, ...values: unknown[]): OrdaDoc;
 
-  updateInArray(pos: number, ...values: unknown[]): Document[];
+  updateInArray(pos: number, ...values: unknown[]): OrdaDoc[];
 
-  deleteInArray(pos: number, numOfNodes?: number): Document[];
+  deleteInArray(pos: number, numOfNodes?: number): OrdaDoc[];
 
   isGarbage(): boolean;
 
   getTypeOfJSON(): TypeOfJSON;
 
-  getRoot(): Document;
+  getRoot(): OrdaDoc;
 
-  getParent(): Document | undefined;
+  getParent(): OrdaDoc | undefined;
 
-  getFromObject(key: string): Document | undefined;
+  getFromObject(key: string): OrdaDoc | undefined;
 
-  getFromArray(pos: number): Document;
+  getFromArray(pos: number): OrdaDoc;
 
-  getManyFromArray(pos: number, numOfNodes: number): Document[];
+  getManyFromArray(pos: number, numOfNodes: number): OrdaDoc[];
 
   getValue(): unknown;
 
-  equals(other: Document): boolean;
+  equals(other: OrdaDoc): boolean;
 }
 
-export interface Document extends DocumentTx {
-  transaction(tag: string, fn: (document: DocumentTx) => boolean): boolean;
+export interface OrdaDoc extends OrdaDocTx {
+  transaction(tag: string, fn: (document: OrdaDocTx) => boolean): boolean;
 }
 
-export class _Document extends Datatype {
+export class _OrdaDoc extends Datatype {
   private readonly root: JSONObject;
 
   constructor(ctx: ClientContext, key: string, state: StateOfDatatype, wire?: Wire, handlers?: DatatypeHandlers) {
@@ -101,7 +101,7 @@ export class _Document extends Datatype {
     return this.root;
   }
 
-  equals(other: _Document): boolean {
+  equals(other: _OrdaDoc): boolean {
     return this.root.equals(other.root);
   }
 
@@ -109,16 +109,16 @@ export class _Document extends Datatype {
     this.root.fromJSON(snap);
   }
 
-  toDocument(): Document {
+  toDocument(): OrdaDoc {
     return new __Document(this, this.root);
   }
 }
 
-export class __Document implements Document {
+export class __Document implements OrdaDoc {
   private readonly current: JSONType;
-  private readonly _doc: _Document;
+  private readonly _doc: _OrdaDoc;
 
-  constructor(base: _Document, current: JSONType) {
+  constructor(base: _OrdaDoc, current: JSONType) {
     this._doc = base;
     this.current = current;
   }
@@ -147,11 +147,11 @@ export class __Document implements Document {
     return this.current.toNoMetaJSON();
   }
 
-  getRoot(): Document {
+  getRoot(): OrdaDoc {
     return this.toDocument(this.current.root!);
   }
 
-  getParent(): Document | undefined {
+  getParent(): OrdaDoc | undefined {
     if (this.current.parent) {
       return this.toDocument(this.current.parent);
     }
@@ -166,19 +166,19 @@ export class __Document implements Document {
     return this.current.isGarbage();
   }
 
-  putToObject(key: string, value: unknown): Document | undefined {
+  putToObject(key: string, value: unknown): OrdaDoc | undefined {
     this.assertLocalOp('putToObject', TypeOfJSON.object, false);
     const ret = this._doc.sentenceLocalInTx(new DocPutInObjOperation(this.current.cTime, key, value));
     return ret ? this.toDocument(ret as JSONType) : undefined;
   }
 
-  removeInObject(key: string): Document | undefined {
+  removeInObject(key: string): OrdaDoc | undefined {
     this.assertLocalOp('DeleteInObject', TypeOfJSON.object, false);
     const ret = this._doc.sentenceLocalInTx(new DocRemoveInObjOperation(this.current.cTime, key));
     return ret ? this.toDocument(ret as JSONType) : undefined;
   }
 
-  insertToArray(pos: number, ...values: unknown[]): Document {
+  insertToArray(pos: number, ...values: unknown[]): OrdaDoc {
     this.assertLocalOp('InsertToArray', TypeOfJSON.array, false);
     const arr = this.current as JSONArray;
     arr.validateInsertPosition(pos, ...values);
@@ -186,7 +186,7 @@ export class __Document implements Document {
     return this;
   }
 
-  updateInArray(pos: number, ...values: unknown[]): Document[] {
+  updateInArray(pos: number, ...values: unknown[]): OrdaDoc[] {
     this.assertLocalOp('UpdateInArray', TypeOfJSON.array, false);
     const arr = this.current as JSONArray;
     arr.validateGetRange(pos, values.length);
@@ -194,7 +194,7 @@ export class __Document implements Document {
     return this.toDocuments(<JSONType[]>ret);
   }
 
-  deleteInArray(pos: number, numOfNodes = 1): Document[] {
+  deleteInArray(pos: number, numOfNodes = 1): OrdaDoc[] {
     this.assertLocalOp('DeleteInArray', TypeOfJSON.array, false);
     const arr = this.current as JSONArray;
     arr.validateGetRange(pos, numOfNodes);
@@ -202,13 +202,13 @@ export class __Document implements Document {
     return this.toDocuments(<JSONType[]>ret);
   }
 
-  transaction(tag: string, txFunc: (document: DocumentTx) => boolean): boolean {
+  transaction(tag: string, txFunc: (document: OrdaDocTx) => boolean): boolean {
     return this._doc.doTransaction(tag, (txCtx: TransactionContext): boolean => {
       return txFunc(this);
     });
   }
 
-  assertLocalOp(opName: string, ofJSON: TypeOfJSON, workOnGarbage: boolean) {
+  private assertLocalOp(opName: string, ofJSON: TypeOfJSON, workOnGarbage: boolean) {
     if (this.current.type !== ofJSON) {
       throw new ErrDatatype.InvalidParent(this.ctx.L, `${opName} is not allowed`);
     }
@@ -218,12 +218,12 @@ export class __Document implements Document {
     }
   }
 
-  private toDocument(child: JSONType): Document {
+  private toDocument(child: JSONType): OrdaDoc {
     return new __Document(this._doc, child);
   }
 
-  private toDocuments(children: JSONType[]): Document[] {
-    const docs = new Array<Document>();
+  private toDocuments(children: JSONType[]): OrdaDoc[] {
+    const docs = new Array<OrdaDoc>();
     children.forEach((c) => {
       docs.push(this.toDocument(c));
     });
@@ -234,12 +234,12 @@ export class __Document implements Document {
     return this.current.toNoMetaJSON();
   }
 
-  getFromArray(pos: number): Document {
+  getFromArray(pos: number): OrdaDoc {
     const ret = this.getManyFromArray(pos, 1);
     return ret[0];
   }
 
-  getManyFromArray(pos: number, numOfNodes: number): Document[] {
+  getManyFromArray(pos: number, numOfNodes: number): OrdaDoc[] {
     this.assertLocalOp('GetManyFromArray', TypeOfJSON.array, true);
     const arr = this.current as JSONArray;
     arr.validateGetRange(pos, numOfNodes);
@@ -247,7 +247,7 @@ export class __Document implements Document {
     return this.toDocuments(children);
   }
 
-  getFromObject(key: string): Document | undefined {
+  getFromObject(key: string): OrdaDoc | undefined {
     this.assertLocalOp('GetFromObject', TypeOfJSON.object, true);
     const child = (this.current as JSONObject).getJSONTypeByKey(key);
     if (child && !child.isGarbage()) {
@@ -256,7 +256,7 @@ export class __Document implements Document {
     return undefined;
   }
 
-  equals(other: Document): boolean {
+  equals(other: OrdaDoc): boolean {
     const otherDoc = other as __Document;
     return this._doc.equals(otherDoc._doc);
   }

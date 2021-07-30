@@ -2,18 +2,18 @@ import { createUID } from '@orda/types/uid';
 import { ClientConfig } from '@orda/config';
 import { DataManager } from '@orda/managers/data';
 import { ClientContext } from '@orda/context';
-import { Counter } from '@orda/datatypes/counter';
+import { OrdaCounter } from '@orda/datatypes/counter';
 import { IDatatype } from '@orda/datatypes/datatype';
 import { WireManager } from '@orda/managers/wire';
 import { GrpcGatewayWireManager } from '@orda/managers/grpc_gateway_wire';
 import { ClientModel, SyncType } from '@orda/types/client';
 import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
-import { DatatypeHandlers } from '@orda/handlers/datatype_handlers';
+import { DatatypeHandlers } from '@orda/handlers/datatype';
 import { ErrClient } from '@orda/errors/client';
-import { OooMap } from '@orda/datatypes/map';
-import { List } from '@orda/datatypes/list';
-import { _Document, Document } from '@orda/datatypes/document';
-import { ClientHandlers } from '@orda/handlers/client_handler';
+import { OrdaMap } from '@orda/datatypes/map';
+import { OrdaList } from '@orda/datatypes/list';
+import { _OrdaDoc, OrdaDoc } from '@orda/datatypes/document';
+import { ClientHandlers } from '@orda/handlers/client';
 
 export { Client };
 
@@ -30,7 +30,6 @@ class Client {
   private readonly wireManager?: WireManager;
   private readonly dataManager: DataManager;
   private handlers?: ClientHandlers;
-  private onConnect?: () => void;
 
   constructor(conf: ClientConfig, alias: string, clientHandlers?: ClientHandlers, wireManager?: WireManager) {
     this.model = new ClientModel(createUID(), alias, conf.collectionName, conf.syncType);
@@ -72,13 +71,13 @@ class Client {
         this.ctx.L.info('[🧞] before exchangeClient');
         await this.wireManager.exchangeClient();
         this.state = clientState.CONNECTED;
-        if (this.handlers?.onConnect) {
-          this.handlers.onConnect(this);
+        if (this.handlers?.onClientConnect) {
+          this.handlers.onClientConnect(this);
         }
       } catch (e) {
         this.state = clientState.NOT_CONNECTED;
-        if (this.handlers?.onError) {
-          this.handlers.onError(this, e);
+        if (this.handlers?.onClientError) {
+          this.handlers.onClientError(this, e);
         }
         return Promise.reject(e);
       }
@@ -93,8 +92,8 @@ class Client {
         this.dataManager.close();
         this.ctx.L.debug(`[🧞👆] close client '${this.ctx.client.alias}'`);
         this.state = clientState.CLOSED;
-        if (this.handlers?.onClose) {
-          this.handlers.onClose(this);
+        if (this.handlers?.onClientClose) {
+          this.handlers.onClientClose(this);
         }
       } finally {
         this.ctx.doUnlock('close');
@@ -110,12 +109,17 @@ class Client {
     return this.state === clientState.CONNECTED;
   }
 
-  public createCounter(key: string, handlers?: DatatypeHandlers): Counter {
-    return this.subscribeOrCreate(key, TypeOfDatatype.COUNTER, StateOfDatatype.DUE_TO_CREATE, handlers) as Counter;
+  public createCounter(key: string, handlers?: DatatypeHandlers): OrdaCounter {
+    return this.subscribeOrCreate(key, TypeOfDatatype.COUNTER, StateOfDatatype.DUE_TO_CREATE, handlers) as OrdaCounter;
   }
 
-  public subscribeCounter(key: string, handlers?: DatatypeHandlers): Counter {
-    return this.subscribeOrCreate(key, TypeOfDatatype.COUNTER, StateOfDatatype.DUE_TO_SUBSCRIBE, handlers) as Counter;
+  public subscribeCounter(key: string, handlers?: DatatypeHandlers): OrdaCounter {
+    return this.subscribeOrCreate(
+      key,
+      TypeOfDatatype.COUNTER,
+      StateOfDatatype.DUE_TO_SUBSCRIBE,
+      handlers
+    ) as OrdaCounter;
   }
 
   /**
@@ -123,15 +127,15 @@ class Client {
    * otherwise, the Orda server is going to create and subscribe a new Counter of the given key.
    * @param {string} key
    * @param {DatatypeHandlers} handlers
-   * @returns {Counter}
+   * @returns {OrdaCounter}
    */
-  public subscribeOrCreateCounter(key: string, handlers?: DatatypeHandlers): Counter {
+  public subscribeOrCreateCounter(key: string, handlers?: DatatypeHandlers): OrdaCounter {
     return this.subscribeOrCreate(
       key,
       TypeOfDatatype.COUNTER,
       StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE,
       handlers
-    ) as Counter;
+    ) as OrdaCounter;
   }
 
   private subscribeOrCreate(
@@ -143,12 +147,12 @@ class Client {
     return this.dataManager.subscribeOrCreateDatatype(key, type, state, handlers);
   }
 
-  public createMap(key: string, handlers?: DatatypeHandlers): OooMap {
-    return this.subscribeOrCreate(key, TypeOfDatatype.MAP, StateOfDatatype.DUE_TO_CREATE, handlers) as OooMap;
+  public createMap(key: string, handlers?: DatatypeHandlers): OrdaMap {
+    return this.subscribeOrCreate(key, TypeOfDatatype.MAP, StateOfDatatype.DUE_TO_CREATE, handlers) as OrdaMap;
   }
 
-  public subscribeMap(key: string, handlers?: DatatypeHandlers): OooMap {
-    return this.subscribeOrCreate(key, TypeOfDatatype.MAP, StateOfDatatype.DUE_TO_SUBSCRIBE, handlers) as OooMap;
+  public subscribeMap(key: string, handlers?: DatatypeHandlers): OrdaMap {
+    return this.subscribeOrCreate(key, TypeOfDatatype.MAP, StateOfDatatype.DUE_TO_SUBSCRIBE, handlers) as OrdaMap;
   }
 
   /**
@@ -158,16 +162,21 @@ class Client {
    * @param {DatatypeHandlers} handlers
    * @returns {Map}
    */
-  public subscribeOrCreateMap(key: string, handlers?: DatatypeHandlers): OooMap {
-    return this.subscribeOrCreate(key, TypeOfDatatype.MAP, StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE, handlers) as OooMap;
+  public subscribeOrCreateMap(key: string, handlers?: DatatypeHandlers): OrdaMap {
+    return this.subscribeOrCreate(
+      key,
+      TypeOfDatatype.MAP,
+      StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE,
+      handlers
+    ) as OrdaMap;
   }
 
-  public createList(key: string, handlers?: DatatypeHandlers): List {
-    return this.subscribeOrCreate(key, TypeOfDatatype.LIST, StateOfDatatype.DUE_TO_CREATE, handlers) as List;
+  public createList(key: string, handlers?: DatatypeHandlers): OrdaList {
+    return this.subscribeOrCreate(key, TypeOfDatatype.LIST, StateOfDatatype.DUE_TO_CREATE, handlers) as OrdaList;
   }
 
-  public subscribeList(key: string, handlers?: DatatypeHandlers): List {
-    return this.subscribeOrCreate(key, TypeOfDatatype.LIST, StateOfDatatype.DUE_TO_SUBSCRIBE, handlers) as List;
+  public subscribeList(key: string, handlers?: DatatypeHandlers): OrdaList {
+    return this.subscribeOrCreate(key, TypeOfDatatype.LIST, StateOfDatatype.DUE_TO_SUBSCRIBE, handlers) as OrdaList;
   }
 
   /**
@@ -175,21 +184,26 @@ class Client {
    * otherwise, the Orda server is going to create and subscribe a new List of the given key.
    * @param {string} key
    * @param {DatatypeHandlers} handlers
-   * @returns {List}
+   * @returns {OrdaList}
    */
-  public subscribeOrCreateList(key: string, handlers?: DatatypeHandlers): List {
-    return this.subscribeOrCreate(key, TypeOfDatatype.LIST, StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE, handlers) as List;
+  public subscribeOrCreateList(key: string, handlers?: DatatypeHandlers): OrdaList {
+    return this.subscribeOrCreate(
+      key,
+      TypeOfDatatype.LIST,
+      StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE,
+      handlers
+    ) as OrdaList;
   }
 
-  public createDocument(key: string, handlers?: DatatypeHandlers): Document {
+  public createDocument(key: string, handlers?: DatatypeHandlers): OrdaDoc {
     return (
-      this.subscribeOrCreate(key, TypeOfDatatype.DOCUMENT, StateOfDatatype.DUE_TO_CREATE, handlers) as _Document
+      this.subscribeOrCreate(key, TypeOfDatatype.DOCUMENT, StateOfDatatype.DUE_TO_CREATE, handlers) as _OrdaDoc
     ).toDocument();
   }
 
-  public subscribeDocument(key: string, handlers?: DatatypeHandlers): Document {
+  public subscribeDocument(key: string, handlers?: DatatypeHandlers): OrdaDoc {
     return (
-      this.subscribeOrCreate(key, TypeOfDatatype.DOCUMENT, StateOfDatatype.DUE_TO_SUBSCRIBE, handlers) as _Document
+      this.subscribeOrCreate(key, TypeOfDatatype.DOCUMENT, StateOfDatatype.DUE_TO_SUBSCRIBE, handlers) as _OrdaDoc
     ).toDocument();
   }
 
@@ -198,16 +212,16 @@ class Client {
    * otherwise, the Orda server is going to create and subscribe a new List of the given key.
    * @param {string} key
    * @param {DatatypeHandlers} handlers
-   * @returns {Document}
+   * @returns {OrdaDoc}
    */
-  public subscribeOrCreateDocument(key: string, handlers?: DatatypeHandlers): Document {
+  public subscribeOrCreateDocument(key: string, handlers?: DatatypeHandlers): OrdaDoc {
     return (
       this.subscribeOrCreate(
         key,
         TypeOfDatatype.DOCUMENT,
         StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE,
         handlers
-      ) as _Document
+      ) as _OrdaDoc
     ).toDocument();
   }
 

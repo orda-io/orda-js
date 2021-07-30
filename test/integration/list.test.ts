@@ -2,7 +2,7 @@ import { Suite } from 'mocha';
 import { helper } from '@test/helper/helper';
 import { SyncType } from '@orda/types/client';
 import { Client } from '@orda/client';
-import { _List } from '@orda/datatypes/list';
+import { _OrdaList } from '@orda/datatypes/list';
 import { expect } from 'chai';
 
 describe('Integration test list', function (this: Suite): void {
@@ -37,10 +37,10 @@ describe('Integration test list', function (this: Suite): void {
 
       helper.L.info(`${JSON.stringify(list1)}`);
       helper.L.info(`${JSON.stringify(list2)}`);
-      const snap1 = (list1 as _List).createSnapshotOperation();
-      const snap2 = (list2 as _List).createSnapshotOperation();
+      const snap1 = (list1 as _OrdaList).createSnapshotOperation();
+      const snap2 = (list2 as _OrdaList).createSnapshotOperation();
 
-      const list3 = client3.createList(helper.dtName(this)) as _List;
+      const list3 = client3.createList(helper.dtName(this)) as _OrdaList;
       list3.setSnapshot(snap1.getStringBody());
       const snap3 = list3.createSnapshotOperation();
       expect(`${snap1}`).to.equal(`${snap2}`).to.equal(`${snap3}`);

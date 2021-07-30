@@ -2,7 +2,7 @@ import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
 import { ClientContext } from '@orda/context';
 import { Wire, WiredDatatype } from '@orda/datatypes/wired';
 import { SnapshotOperation } from '@orda/operations/meta';
-import { DatatypeHandlers } from '@orda/handlers/datatype_handlers';
+import { DatatypeHandlers } from '@orda/handlers/datatype';
 import { Operation } from '@orda/operations/operation';
 import { DatatypeError } from '@orda/errors/for_handlers';
 
@@ -42,20 +42,20 @@ abstract class Datatype extends WiredDatatype {
     ) {
       this.notifyWireOnChangeState();
     }
-    if (this.handlers && this.handlers.onStateChange) {
-      this.handlers.onStateChange(this, oldState, newState);
+    if (this.handlers && this.handlers.onDatatypeStateChange) {
+      this.handlers.onDatatypeStateChange(this, oldState, newState);
     }
   }
 
   callOnRemoteOperations(opList: Operation[]): void {
-    if (this.handlers && this.handlers.onRemoteOperations) {
-      this.handlers.onRemoteOperations(this, opList);
+    if (this.handlers && this.handlers.onDatatypeRemoteChange) {
+      this.handlers.onDatatypeRemoteChange(this, opList);
     }
   }
 
   callOnErrors(...errs: DatatypeError[]): void {
-    if (this.handlers && this.handlers.onErrors) {
-      this.handlers.onErrors(this, ...errs);
+    if (this.handlers && this.handlers.onDatatypeErrors) {
+      this.handlers.onDatatypeErrors(this, ...errs);
     }
   }
 
