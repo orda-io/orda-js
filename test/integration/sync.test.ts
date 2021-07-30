@@ -2,7 +2,7 @@ import { SyncType } from '@orda/types/client';
 import { helper } from '@test/helper/helper';
 import { Client } from '@orda/client';
 import { Suite } from 'mocha';
-import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { DatatypeHandlers } from '../../src/handlers/datatype_handlers';
 import { CountDownLatch } from '@test/helper/countdown_latch';
 import { expect } from 'chai';
 import { CounterTx } from '@orda/datatypes/counter';

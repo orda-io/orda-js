@@ -1,4 +1,4 @@
-import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { DatatypeHandlers } from '../../src/handlers/datatype_handlers';
 import { Datatype } from '@orda/datatypes/datatype';
 import { DatatypeErrCodes, DatatypeError } from '@orda/errors/for_handlers';
 import { StateOfDatatype } from '@orda/generated/proto.enum';

@@ -2,7 +2,7 @@ import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
 import { ClientContext } from '@orda/context';
 import { Wire, WiredDatatype } from '@orda/datatypes/wired';
 import { SnapshotOperation } from '@orda/operations/meta';
-import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { DatatypeHandlers } from '@orda/handlers/datatype_handlers';
 import { Operation } from '@orda/operations/operation';
 import { DatatypeError } from '@orda/errors/for_handlers';
 

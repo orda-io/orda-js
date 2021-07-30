@@ -14,7 +14,7 @@ import { OrdaLogLevel } from '@orda-io/orda-logger';
 export { helper };
 
 const testLoggerFactory = new OrdaLoggerFactory(OrdaLogLevel.TRACE);
-const TestDB = 'orda-js-test';
+export const TestDB = 'orda-js-test';
 const helper = {
   loggerFactory: testLoggerFactory,
   resetTestCollection: false,
@@ -22,7 +22,7 @@ const helper = {
 
   getLocalClient(alias: string, wireManager?: WireManager): Client {
     const conf = new ClientConfig('orda-js-test', SyncType.LOCAL_ONLY);
-    return new Client(conf, alias, wireManager);
+    return new Client(conf, alias, undefined, wireManager);
   },
 
   dtName(s: Suite): string {

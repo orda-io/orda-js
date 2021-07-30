@@ -3,25 +3,28 @@ import { StateOfDatatype } from '@orda/types/datatype';
 import { DatatypeError } from '@orda/errors/for_handlers';
 import { Operation } from '@orda/operations/operation';
 
-export type { OnStateChange, OnRemoteOperations, OnErrors };
-
-type OnStateChange = (dt: Datatype, oldState: StateOfDatatype, newState: StateOfDatatype) => void;
-
-type OnRemoteOperations = (dt: Datatype, opList: Operation[]) => void;
-
-type OnErrors = (dt: Datatype, ...errs: DatatypeError[]) => void;
-
 export class DatatypeHandlers {
-  onStateChange?: OnStateChange;
+  onStateChange?: (dt: Datatype, oldState: StateOfDatatype, newState: StateOfDatatype) => void;
 
-  onRemoteOperations?: OnRemoteOperations;
+  onRemoteOperations?: (dt: Datatype, opList: Operation[]) => void;
 
-  onErrors?: OnErrors;
+  onErrors?: (dt: Datatype, ...errs: DatatypeError[]) => void;
 
-  constructor(onStateChange?: OnStateChange, onRemoteOperations?: OnRemoteOperations, onErrors?: OnErrors) {
+  constructor(
+    onStateChange?: (dt: Datatype, oldState: StateOfDatatype, newState: StateOfDatatype) => void,
+    onRemoteOperations?: (dt: Datatype, opList: Operation[]) => void,
+    onErrors?: (dt: Datatype, ...errs: DatatypeError[]) => void,
+    scope?: never
+  ) {
     this.onStateChange = onStateChange;
     this.onRemoteOperations = onRemoteOperations;
     this.onErrors = onErrors;
+
+    if (scope) {
+      this.onStateChange?.bind(scope);
+      this.onRemoteOperations?.bind(scope);
+      this.onErrors?.bind(scope);
+    }
   }
 
   addOnStateChangeHandler(

@@ -4,7 +4,7 @@ import { Datatype } from '@orda/datatypes/datatype';
 import { _Counter } from '@orda/datatypes/counter';
 import { PushPullPack } from '@orda/types/pushpullpack';
 import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
-import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { DatatypeHandlers } from '@orda/handlers/datatype_handlers';
 import { Uint64 } from '@orda-io/orda-integer';
 import { NotifyReceiver } from '@orda/managers/notify';
 import { WiredDatatype } from '@orda/datatypes/wired';

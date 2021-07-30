@@ -11,7 +11,7 @@ import { ErrDatatype } from '@orda/errors/datatype';
 import { OrdaError } from '@orda/errors/error';
 import { Wire } from '@orda/datatypes/wired';
 import { SnapshotOperation } from '@orda/operations/meta';
-import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { DatatypeHandlers } from '@orda/handlers/datatype_handlers';
 
 export { _Counter };
 export type { CounterTx, Counter };

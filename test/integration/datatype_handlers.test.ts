@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import { StateOfDatatype } from '@orda/generated/proto.enum';
 import { ordaLogger } from '../../src/constants/constants';
 
-describe('Test Handlers', function (this: Suite): void {
+describe('Test Datatype Handlers', function (this: Suite): void {
   it('Can handle no datatype to subscribe', async () => {
     const conf = await helper.createTestClientConfig(SyncType.MANUALLY);
     const client1: Client = new Client(conf, 'client1');

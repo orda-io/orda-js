@@ -8,7 +8,7 @@ import { Timestamp } from '@orda/types/timestamp';
 import { ErrDatatype } from '@orda/errors/datatype';
 import { StateOfDatatype } from '@orda/generated/proto.enum';
 import { Wire } from '@orda/datatypes/wired';
-import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { DatatypeHandlers } from '@orda/handlers/datatype_handlers';
 import { TypeOfDatatype } from '@orda/types/datatype';
 import { TypeOfOperation } from '@orda/types/operation';
 import { PutOperation, RemoveOperation } from '@orda/operations/map';

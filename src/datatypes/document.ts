@@ -2,7 +2,7 @@ import { Datatype, IDatatype } from '@orda/datatypes/datatype';
 import { ClientContext, DatatypeContext } from '@orda/context';
 import { StateOfDatatype } from '@orda/generated/proto.enum';
 import { Wire } from '@orda/datatypes/wired';
-import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { DatatypeHandlers } from '@orda/handlers/datatype_handlers';
 import { Timestamp } from '@orda/types/timestamp';
 import { TypeOfOperation } from '@orda/types/operation';
 import { Op } from '@orda/operations/operation';
