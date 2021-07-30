@@ -2,10 +2,9 @@ import { SyncType } from '@orda/types/client';
 import { helper } from '@test/helper/helper';
 import { Client } from '@orda/client';
 import { Suite } from 'mocha';
-import { DatatypeHandlers } from '../../src/handlers/datatype_handlers';
 import { CountDownLatch } from '@test/helper/countdown_latch';
 import { expect } from 'chai';
-import { CounterTx } from '@orda/datatypes/counter';
+import { OrdaCounterTx } from '@orda/datatypes/counter';
 import { Datatype } from '@orda/datatypes/datatype';
 
 describe('Test Synchronization', function (this: Suite): void {
@@ -44,23 +43,21 @@ describe('Test Synchronization', function (this: Suite): void {
       await client1.connect();
       await client2.connect();
       const latch1 = new CountDownLatch(1);
-      const counter1 = client1.subscribeOrCreateCounter(
-        helper.dtName(this),
-        new DatatypeHandlers((dt, oldState, newState) => {
+      const counter1 = client1.subscribeOrCreateCounter(helper.dtName(this), {
+        onDatatypeStateChange: (dt, oldState, newState) => {
           helper.L.info(`counter1: ${oldState} => ${newState}`);
           latch1.countDown();
-        })
-      );
+        },
+      });
 
       await latch1.wait();
 
-      const counter2 = client2.subscribeCounter(
-        helper.dtName(this),
-        new DatatypeHandlers().addOnRemoteOperationsHandler((dt: Datatype, opList) => {
-          const cnt2 = dt as unknown as CounterTx;
+      const counter2 = client2.subscribeCounter(helper.dtName(this), {
+        onDatatypeRemoteChange: (dt: Datatype, opList) => {
+          const cnt2 = dt as unknown as OrdaCounterTx;
           helper.L.info(`cnt2: ${cnt2.get()}`);
-        })
-      );
+        },
+      });
 
       for (let j = 0; j < 5; j++) {
         for (let i = 1; i <= 3; i++) {

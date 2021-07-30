@@ -9,10 +9,12 @@ describe('Test Client Handlers', function (this: Suite): void {
   it('Can handle client connection', async () => {
     const conf = await helper.createTestClientConfig(SyncType.REALTIME);
     const connectLatch = new CountDownLatch(1);
-    const handlers: ClientHandlers = new ClientHandlers(function (): void {
-      // expect(this).to.eq(handlers);
-      connectLatch.countDown();
-    });
+    const handlers: ClientHandlers = {
+      onClientConnect: function (): void {
+        expect(this).to.eq(handlers);
+        connectLatch.countDown();
+      },
+    };
     const client1: Client = new Client(conf, 'client1', handlers);
     try {
       client1.connect();
@@ -25,17 +27,17 @@ describe('Test Client Handlers', function (this: Suite): void {
   it('Can handle client connection error', async () => {
     const conf = helper.createClientConfig('NOT_EXIST', SyncType.REALTIME);
     const errorLatch = new CountDownLatch(1);
-    const handlers = new ClientHandlers(
-      () => {
+    const handlers = {
+      onClientConnect: () => {
         expect(this).to.eq(handlers);
         helper.L.info('connected');
         Assert.fail();
       },
-      (client: Client, e: Error) => {
+      onClientError: (client: Client, e: Error) => {
         helper.L.info(`${e}`);
         errorLatch.countDown();
-      }
-    );
+      },
+    };
     const client1: Client = new Client(conf, 'client2', handlers);
     try {
       client1.connect();
