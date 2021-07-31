@@ -1,4 +1,4 @@
-import { Datatype, IDatatype } from '@orda/datatypes/datatype';
+import { Datatype, OrdaDatatype } from '@orda/datatypes/datatype';
 import { ClientContext, DatatypeContext } from '@orda/context';
 import { StateOfDatatype } from '@orda/generated/proto.enum';
 import { Wire } from '@orda/datatypes/wired';
@@ -19,7 +19,7 @@ import {
 import { TransactionContext } from '@orda/datatypes/tansaction';
 import { JSONArray, JSONObject, JSONType, newJSONObject } from '@orda/datatypes/json';
 
-export interface OrdaDocTx extends IDatatype {
+export interface OrdaDocTx extends OrdaDatatype {
   putToObject(key: string, value: unknown): OrdaDoc | undefined;
 
   removeInObject(key: string): OrdaDoc | undefined;
@@ -53,7 +53,7 @@ export interface OrdaDoc extends OrdaDocTx {
   transaction(tag: string, fn: (document: OrdaDocTx) => boolean): boolean;
 }
 
-export class _OrdaDoc extends Datatype {
+export class __OrdaDoc extends Datatype {
   private readonly root: JSONObject;
 
   constructor(ctx: ClientContext, key: string, state: StateOfDatatype, wire?: Wire, handlers?: DatatypeHandlers) {
@@ -101,7 +101,7 @@ export class _OrdaDoc extends Datatype {
     return this.root;
   }
 
-  equals(other: _OrdaDoc): boolean {
+  equals(other: __OrdaDoc): boolean {
     return this.root.equals(other.root);
   }
 
@@ -110,15 +110,19 @@ export class _OrdaDoc extends Datatype {
   }
 
   toDocument(): OrdaDoc {
-    return new __Document(this, this.root);
+    return new _OrdaDoc(this, this.root);
+  }
+
+  getThis(): unknown {
+    return this.toDocument();
   }
 }
 
-export class __Document implements OrdaDoc {
+export class _OrdaDoc implements OrdaDoc {
   private readonly current: JSONType;
-  private readonly _doc: _OrdaDoc;
+  private readonly _doc: __OrdaDoc;
 
-  constructor(base: _OrdaDoc, current: JSONType) {
+  constructor(base: __OrdaDoc, current: JSONType) {
     this._doc = base;
     this.current = current;
   }
@@ -219,7 +223,7 @@ export class __Document implements OrdaDoc {
   }
 
   private toDocument(child: JSONType): OrdaDoc {
-    return new __Document(this._doc, child);
+    return new _OrdaDoc(this._doc, child);
   }
 
   private toDocuments(children: JSONType[]): OrdaDoc[] {
@@ -257,7 +261,7 @@ export class __Document implements OrdaDoc {
   }
 
   equals(other: OrdaDoc): boolean {
-    const otherDoc = other as __Document;
+    const otherDoc = other as _OrdaDoc;
     return this._doc.equals(otherDoc._doc);
   }
 }

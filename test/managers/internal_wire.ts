@@ -98,7 +98,7 @@ class InternalWireManager implements WireManager {
     dataManager?.applyPushPullPack(response);
   }
 
-  onChangeDatatypeState(wired: WiredDatatype): void {
+  onDatatypeStateChange(wired: WiredDatatype): void {
     //
   }
 

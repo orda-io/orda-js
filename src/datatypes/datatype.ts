@@ -7,9 +7,9 @@ import { Operation } from '@orda/operations/operation';
 import { DatatypeError } from '@orda/errors/for_handlers';
 
 export { Datatype };
-export type { IDatatype };
+export type { OrdaDatatype };
 
-interface IDatatype {
+interface OrdaDatatype {
   readonly key: string;
 
   readonly type: TypeOfDatatype;
@@ -35,27 +35,20 @@ abstract class Datatype extends WiredDatatype {
   }
 
   callOnStateChange(oldState: StateOfDatatype, newState: StateOfDatatype): void {
-    if (
-      newState === StateOfDatatype.SUBSCRIBED ||
-      newState === StateOfDatatype.CLOSED ||
-      newState === StateOfDatatype.DELETED
-    ) {
-      this.notifyWireOnChangeState();
-    }
     if (this.handlers && this.handlers.onDatatypeStateChange) {
-      this.handlers.onDatatypeStateChange(this, oldState, newState);
+      this.handlers.onDatatypeStateChange(this.getThis() as OrdaDatatype, oldState, newState);
     }
   }
 
-  callOnRemoteOperations(opList: Operation[]): void {
-    if (this.handlers && this.handlers.onDatatypeRemoteChange) {
-      this.handlers.onDatatypeRemoteChange(this, opList);
+  callOnRemoteChange(opList: Operation[]): void {
+    if (opList.length > 0 && this.handlers?.onDatatypeRemoteChange) {
+      this.handlers.onDatatypeRemoteChange(this.getThis() as OrdaDatatype, opList);
     }
   }
 
   callOnErrors(...errs: DatatypeError[]): void {
-    if (this.handlers && this.handlers.onDatatypeErrors) {
-      this.handlers.onDatatypeErrors(this, ...errs);
+    if (errs.length > 0 && this.handlers?.onDatatypeErrors) {
+      this.handlers.onDatatypeErrors(this.getThis() as OrdaDatatype, ...errs);
     }
   }
 

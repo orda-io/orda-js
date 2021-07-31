@@ -6,6 +6,7 @@ import { Snapshot } from '@orda/datatypes/snapshot';
 import { logOp } from '@orda/decorators/decorators';
 import { DatatypeMeta, StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
 import { DatatypeError } from '@orda/errors/for_handlers';
+import { OrdaDatatype } from '@orda/datatypes/datatype';
 
 export { BaseDatatype };
 
@@ -36,6 +37,11 @@ abstract class BaseDatatype {
     return this._id;
   }
 
+  // this is required to cope with _OrdaDoc
+  getThis(): unknown {
+    return this;
+  }
+
   get state(): StateOfDatatype {
     return this._state;
   }
@@ -45,10 +51,11 @@ abstract class BaseDatatype {
       return;
     }
     this.ctx.L.debug(`[BASE] change state: ${this._state} -> ${state}`);
-    const oldState = this._state;
     this._state = state;
-    this.callOnStateChange(oldState, this._state);
+    this.notifyWireOnStateChange(this._state);
   }
+
+  abstract notifyWireOnStateChange(state: StateOfDatatype): void;
 
   abstract callOnStateChange(oldState: StateOfDatatype, newState: StateOfDatatype): void;
 

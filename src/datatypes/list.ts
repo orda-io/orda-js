@@ -1,4 +1,4 @@
-import { Datatype, IDatatype } from '@orda/datatypes/datatype';
+import { Datatype, OrdaDatatype } from '@orda/datatypes/datatype';
 import { Snapshot } from '@orda/datatypes/snapshot';
 import { ClientContext, DatatypeContext } from '@orda/context';
 import { StateOfDatatype } from '@orda/generated/proto.enum';
@@ -16,7 +16,7 @@ import { SnapshotOperation } from '@orda/operations/meta';
 import { OrdaError } from '@orda/errors/error';
 import { TransactionContext } from '@orda/datatypes/tansaction';
 
-export interface OrdaListTx extends IDatatype {
+export interface OrdaListTx extends OrdaDatatype {
   insert(pos: number, ...values: unknown[]): void;
 
   get(pos: number): unknown;

@@ -1,4 +1,4 @@
-import { Datatype, IDatatype } from '@orda/datatypes/datatype';
+import { Datatype, OrdaDatatype } from '@orda/datatypes/datatype';
 import { Op } from '@orda/operations/operation';
 import { Snapshot } from '@orda/datatypes/snapshot';
 import { ClientContext, DatatypeContext } from '@orda/context';
@@ -18,7 +18,7 @@ import { SnapshotOperation } from '@orda/operations/meta';
 export { _OrdaMap };
 export type { OrdaMapTx, OrdaMap };
 
-interface OrdaMapTx extends IDatatype {
+interface OrdaMapTx extends OrdaDatatype {
   get(key: string): unknown;
 
   put(key: string, value: unknown): unknown;

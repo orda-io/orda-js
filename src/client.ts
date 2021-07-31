@@ -3,7 +3,7 @@ import { ClientConfig } from '@orda/config';
 import { DataManager } from '@orda/managers/data';
 import { ClientContext } from '@orda/context';
 import { OrdaCounter } from '@orda/datatypes/counter';
-import { IDatatype } from '@orda/datatypes/datatype';
+import { OrdaDatatype } from '@orda/datatypes/datatype';
 import { WireManager } from '@orda/managers/wire';
 import { GrpcGatewayWireManager } from '@orda/managers/grpc_gateway_wire';
 import { ClientModel, SyncType } from '@orda/types/client';
@@ -12,7 +12,7 @@ import { DatatypeHandlers } from '@orda/handlers/datatype';
 import { ErrClient } from '@orda/errors/client';
 import { OrdaMap } from '@orda/datatypes/map';
 import { OrdaList } from '@orda/datatypes/list';
-import { _OrdaDoc, OrdaDoc } from '@orda/datatypes/document';
+import { __OrdaDoc, OrdaDoc } from '@orda/datatypes/document';
 import { ClientHandlers } from '@orda/handlers/client';
 
 export { Client };
@@ -143,7 +143,7 @@ class Client {
     type: TypeOfDatatype,
     state: StateOfDatatype,
     handlers?: DatatypeHandlers
-  ): IDatatype {
+  ): OrdaDatatype {
     return this.dataManager.subscribeOrCreateDatatype(key, type, state, handlers);
   }
 
@@ -197,13 +197,13 @@ class Client {
 
   public createDocument(key: string, handlers?: DatatypeHandlers): OrdaDoc {
     return (
-      this.subscribeOrCreate(key, TypeOfDatatype.DOCUMENT, StateOfDatatype.DUE_TO_CREATE, handlers) as _OrdaDoc
+      this.subscribeOrCreate(key, TypeOfDatatype.DOCUMENT, StateOfDatatype.DUE_TO_CREATE, handlers) as __OrdaDoc
     ).toDocument();
   }
 
   public subscribeDocument(key: string, handlers?: DatatypeHandlers): OrdaDoc {
     return (
-      this.subscribeOrCreate(key, TypeOfDatatype.DOCUMENT, StateOfDatatype.DUE_TO_SUBSCRIBE, handlers) as _OrdaDoc
+      this.subscribeOrCreate(key, TypeOfDatatype.DOCUMENT, StateOfDatatype.DUE_TO_SUBSCRIBE, handlers) as __OrdaDoc
     ).toDocument();
   }
 
@@ -221,7 +221,7 @@ class Client {
         TypeOfDatatype.DOCUMENT,
         StateOfDatatype.DUE_TO_SUBSCRIBE_CREATE,
         handlers
-      ) as _OrdaDoc
+      ) as __OrdaDoc
     ).toDocument();
   }
 

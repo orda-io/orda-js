@@ -1,4 +1,4 @@
-import { Datatype, IDatatype } from '@orda/datatypes/datatype';
+import { Datatype, OrdaDatatype } from '@orda/datatypes/datatype';
 import { int32, Int32 } from '@orda-io/orda-integer';
 import { IncreaseOperation } from '@orda/operations/counter';
 import { ClientContext, DatatypeContext } from '@orda/context';
@@ -16,7 +16,7 @@ import { DatatypeHandlers } from '@orda/handlers/datatype';
 export { _OrdaCounter };
 export type { OrdaCounterTx, OrdaCounter };
 
-interface OrdaCounterTx extends IDatatype {
+interface OrdaCounterTx extends OrdaDatatype {
   get(): number;
 
   increase(delta?: number): number;

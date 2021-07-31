@@ -6,6 +6,7 @@ import { Client } from '@orda/client';
 import { expect } from 'chai';
 import { ErrDatatype } from '@orda/errors/datatype';
 import { OrdaDocTx } from '@orda/datatypes/document';
+import { OrdaDatatype, OrdaDoc, StateOfDatatype } from '@orda/index';
 
 describe('Integration test document', function (this: Suite): void {
   it('Can synchronize Document with server', async () => {
@@ -20,7 +21,11 @@ describe('Integration test document', function (this: Suite): void {
       const doc1 = client1.createDocument(helper.dtName(this));
       await doc1.sync();
 
-      const doc2 = client2.subscribeDocument(helper.dtName(this));
+      const doc2 = client2.subscribeDocument(helper.dtName(this), {
+        onDatatypeStateChange: (dt: OrdaDatatype, oldState: StateOfDatatype, newState: StateOfDatatype) => {
+          helper.L.info(`${JSON.stringify((dt as OrdaDoc).getValue())}`);
+        },
+      });
       await doc2.sync();
 
       doc1.putToObject('K1', 'hello');

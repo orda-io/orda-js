@@ -10,7 +10,7 @@ import { NotifyReceiver } from '@orda/managers/notify';
 import { WiredDatatype } from '@orda/datatypes/wired';
 import { _OrdaMap } from '@orda/datatypes/map';
 import { _OrdaList } from '@orda/datatypes/list';
-import { _OrdaDoc } from '@orda/datatypes/document';
+import { __OrdaDoc } from '@orda/datatypes/document';
 
 const trialLimit = 10;
 
@@ -132,7 +132,7 @@ export class DataManager implements NotifyReceiver {
         data = new _OrdaList(this.ctx, key, state, this.wireManager, handlers);
         break;
       case TypeOfDatatype.DOCUMENT:
-        data = new _OrdaDoc(this.ctx, key, state, this.wireManager, handlers);
+        data = new __OrdaDoc(this.ctx, key, state, this.wireManager, handlers);
         break;
       default:
     }

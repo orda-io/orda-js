@@ -23,7 +23,7 @@ import {
   DocRemoveInObjOperation,
   DocUpdateInArrayOperation,
 } from '@orda/operations/document';
-import { _OrdaDoc } from '@orda/datatypes/document';
+import { __OrdaDoc } from '@orda/datatypes/document';
 import { ErrorOperation, TransactionOperation } from '@orda/operations/meta';
 import { ErrDatatype } from '@orda/errors/datatype';
 
@@ -138,7 +138,7 @@ describe('Test encoding operations with server', function (this: Suite): void {
     jsOp5.body.T = [randomTimestamp(), randomTimestamp(), randomTimestamp(), randomTimestamp()];
     await exchangeAndValidateOperation(TypeOfDatatype.DOCUMENT, jsOp5);
 
-    const doc1 = new _OrdaDoc(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
+    const doc1 = new __OrdaDoc(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
     const _doc1 = doc1.toDocument();
     _doc1.putToObject('K1', 'hello');
     _doc1.putToObject('K2', arr);
@@ -149,7 +149,7 @@ describe('Test encoding operations with server', function (this: Suite): void {
     helper.L.info(`${JSON.stringify(_doc1)}`);
     const snapshot1 = doc1.createSnapshotOperation();
     const snapshot2 = await exchangeAndValidateOperation(TypeOfDatatype.DOCUMENT, snapshot1, false);
-    const doc2 = new _OrdaDoc(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
+    const doc2 = new __OrdaDoc(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
     doc2.executeRemoteOp(snapshot2);
     expect(doc1.equals(doc2)).to.true;
   });
