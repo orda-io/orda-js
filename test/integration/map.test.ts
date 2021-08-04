@@ -3,7 +3,7 @@ import { helper } from '@test/helper/helper';
 import { SyncType } from '@orda/types/client';
 import { Client } from '@orda/client';
 import { expect } from 'chai';
-import { _OooMap } from '@orda/datatypes/map';
+import { _OrdaMap } from '@orda/datatypes/map';
 
 describe('Integration test map', function (this: Suite): void {
   it('Can synchronize Map with server', async () => {
@@ -31,13 +31,13 @@ describe('Integration test map', function (this: Suite): void {
       const map2 = client2.subscribeMap(helper.dtName(this));
       await map2.sync();
 
-      const snap1 = (map1 as _OooMap).createSnapshotOperation();
-      const snap2 = (map2 as _OooMap).createSnapshotOperation();
+      const snap1 = (map1 as _OrdaMap).createSnapshotOperation();
+      const snap2 = (map2 as _OrdaMap).createSnapshotOperation();
       helper.L.info(`${snap1}`);
       helper.L.info(`${snap2}`);
       expect(map1.get('hello')).to.equal(map2.get('hello'));
 
-      const map3 = client3.createMap(helper.dtName(this)) as _OooMap;
+      const map3 = client3.createMap(helper.dtName(this)) as _OrdaMap;
 
       map3.setSnapshot(snap1.getStringBody());
       const snap3 = map3.createSnapshotOperation();

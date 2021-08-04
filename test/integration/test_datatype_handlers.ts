@@ -1,4 +1,4 @@
-import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { DatatypeHandlers } from '../../src/handlers/datatype';
 import { Datatype } from '@orda/datatypes/datatype';
 import { DatatypeErrCodes, DatatypeError } from '@orda/errors/for_handlers';
 import { StateOfDatatype } from '@orda/generated/proto.enum';
@@ -7,24 +7,19 @@ import { CountDownLatch } from '@test/helper/countdown_latch';
 import { ExtMap } from '@orda/utils/map';
 import { helper } from '@test/helper/helper';
 
-export class TestDatatypeHandlers extends DatatypeHandlers {
+export class TestDatatypeHandlers implements DatatypeHandlers {
   errLatchMap: ExtMap<DatatypeErrCodes, CountDownLatch>;
   stateLatchMap: ExtMap<StateOfDatatype, CountDownLatch>;
   remoteLatch?: CountDownLatch;
   success: boolean;
 
   constructor() {
-    super();
     this.errLatchMap = new ExtMap<DatatypeErrCodes, CountDownLatch>();
     this.stateLatchMap = new ExtMap<StateOfDatatype, CountDownLatch>();
-
-    this.onErrors = this.thisOnErrors;
-    this.onStateChange = this.thisOnStateChange;
-    this.onRemoteOperations = this.thisOnRemoteOperations;
     this.success = true;
   }
 
-  thisOnErrors(dt: Datatype, ...errs: DatatypeError[]): void {
+  onDatatypeErrors(dt: Datatype, ...errs: DatatypeError[]): void {
     if (errs.length > 0) {
       for (const err of errs) {
         const latch = this.errLatchMap.get(err.code);
@@ -65,7 +60,7 @@ export class TestDatatypeHandlers extends DatatypeHandlers {
     return this.remoteLatch;
   }
 
-  thisOnStateChange(datatype: Datatype, oldState: StateOfDatatype, newState: StateOfDatatype): void {
+  onDatatypeStateChange(datatype: Datatype, oldState: StateOfDatatype, newState: StateOfDatatype): void {
     const latch = this.stateLatchMap.get(newState);
     if (!latch) {
       this.setFalse(newState);
@@ -75,7 +70,7 @@ export class TestDatatypeHandlers extends DatatypeHandlers {
     this.stateLatchMap.delete(newState);
   }
 
-  thisOnRemoteOperations(datatype: Datatype, opList: Operation[]): void {
+  onDatatypeRemoteChange(datatype: Datatype, opList: Operation[]): void {
     for (let i = 0; i < opList.length; i++) {
       helper.L.info(`${opList[i]}`);
       if (this.remoteLatch) {

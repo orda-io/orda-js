@@ -1,4 +1,4 @@
-import { Datatype, IDatatype } from '@orda/datatypes/datatype';
+import { Datatype, OrdaDatatype } from '@orda/datatypes/datatype';
 import { int32, Int32 } from '@orda-io/orda-integer';
 import { IncreaseOperation } from '@orda/operations/counter';
 import { ClientContext, DatatypeContext } from '@orda/context';
@@ -11,22 +11,22 @@ import { ErrDatatype } from '@orda/errors/datatype';
 import { OrdaError } from '@orda/errors/error';
 import { Wire } from '@orda/datatypes/wired';
 import { SnapshotOperation } from '@orda/operations/meta';
-import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { DatatypeHandlers } from '@orda/handlers/datatype';
 
-export { _Counter };
-export type { CounterTx, Counter };
+export { _OrdaCounter };
+export type { OrdaCounterTx, OrdaCounter };
 
-interface CounterTx extends IDatatype {
+interface OrdaCounterTx extends OrdaDatatype {
   get(): number;
 
   increase(delta?: number): number;
 }
 
-interface Counter extends CounterTx {
-  transaction(tag: string, fn: (counter: CounterTx) => boolean): boolean;
+interface OrdaCounter extends OrdaCounterTx {
+  transaction(tag: string, fn: (counter: OrdaCounterTx) => boolean): boolean;
 }
 
-class _Counter extends Datatype implements Counter {
+class _OrdaCounter extends Datatype implements OrdaCounter {
   private readonly snap: CounterSnapshot;
 
   constructor(ctx: ClientContext, key: string, state: StateOfDatatype, wire?: Wire, handlers?: DatatypeHandlers) {
@@ -69,7 +69,7 @@ class _Counter extends Datatype implements Counter {
 
   private executeCommon(op: Op): unknown {
     switch (op.type) {
-      case TypeOfOperation.SNAPSHOT:
+      case TypeOfOperation.COUNTER_SNAPSHOT:
         const sop = op as SnapshotOperation;
         this.snap.fromJSON(sop.getStringBody());
         return;
@@ -79,7 +79,7 @@ class _Counter extends Datatype implements Counter {
     throw new ErrDatatype.IllegalOperation(this.ctx.L, this.type, op.toString());
   }
 
-  transaction(tag: string, txFunc: (counter: CounterTx) => boolean): boolean {
+  transaction(tag: string, txFunc: (counter: OrdaCounterTx) => boolean): boolean {
     return this.doTransaction(tag, (txCtx: TransactionContext): boolean => {
       return txFunc(this);
     });
@@ -88,10 +88,6 @@ class _Counter extends Datatype implements Counter {
   toJSON(): unknown {
     return this.snap.toNoMetaJSON();
   }
-}
-
-interface ICounterSnapshot {
-  Counter: number;
 }
 
 class CounterSnapshot implements Snapshot {
@@ -112,14 +108,14 @@ class CounterSnapshot implements Snapshot {
     }
   }
 
-  toJSON(): ICounterSnapshot {
+  toJSON(): unknown {
     return {
       Counter: this.value.asNumber(),
     };
   }
 
   fromJSON(json: string): void {
-    const parsed: ICounterSnapshot = JSON.parse(json);
+    const parsed = JSON.parse(json);
     this.value = int32(parsed.Counter);
   }
 

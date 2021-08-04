@@ -6,6 +6,7 @@ import { Snapshot } from '@orda/datatypes/snapshot';
 import { logOp } from '@orda/decorators/decorators';
 import { DatatypeMeta, StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
 import { DatatypeError } from '@orda/errors/for_handlers';
+import { OrdaDatatype } from '@orda/datatypes/datatype';
 
 export { BaseDatatype };
 
@@ -36,6 +37,11 @@ abstract class BaseDatatype {
     return this._id;
   }
 
+  // this is required to cope with _OrdaDoc
+  getThis(): unknown {
+    return this;
+  }
+
   get state(): StateOfDatatype {
     return this._state;
   }
@@ -45,10 +51,11 @@ abstract class BaseDatatype {
       return;
     }
     this.ctx.L.debug(`[BASE] change state: ${this._state} -> ${state}`);
-    const oldState = this._state;
     this._state = state;
-    this.callOnStateChange(oldState, this._state);
+    this.notifyWireOnStateChange(this._state);
   }
+
+  abstract notifyWireOnStateChange(state: StateOfDatatype): void;
 
   abstract callOnStateChange(oldState: StateOfDatatype, newState: StateOfDatatype): void;
 
@@ -66,8 +73,15 @@ abstract class BaseDatatype {
   protected sentenceLocal(op: Op): unknown {
     op.id = this.opId.next();
     try {
-      if (op.type !== TypeOfOperation.TRANSACTION && op.type !== TypeOfOperation.SNAPSHOT) {
-        return this.executeLocalOp(op);
+      switch (op.type) {
+        case TypeOfOperation.TRANSACTION:
+        case TypeOfOperation.COUNTER_SNAPSHOT:
+        case TypeOfOperation.MAP_SNAPSHOT:
+        case TypeOfOperation.LIST_SNAPSHOT:
+        case TypeOfOperation.DOC_SNAPSHOT:
+          break;
+        default:
+          return this.executeLocalOp(op);
       }
     } catch (e) {
       this.opId.rollback();

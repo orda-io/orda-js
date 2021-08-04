@@ -5,7 +5,8 @@ import { SyncType } from '@orda/types/client';
 import { Client } from '@orda/client';
 import { expect } from 'chai';
 import { ErrDatatype } from '@orda/errors/datatype';
-import { DocumentTx } from '@orda/datatypes/document';
+import { OrdaDocTx } from '@orda/datatypes/document';
+import { OrdaDatatype, OrdaDoc, StateOfDatatype } from '@orda/index';
 
 describe('Integration test document', function (this: Suite): void {
   it('Can synchronize Document with server', async () => {
@@ -20,7 +21,11 @@ describe('Integration test document', function (this: Suite): void {
       const doc1 = client1.createDocument(helper.dtName(this));
       await doc1.sync();
 
-      const doc2 = client2.subscribeDocument(helper.dtName(this));
+      const doc2 = client2.subscribeDocument(helper.dtName(this), {
+        onDatatypeStateChange: (dt: OrdaDatatype, oldState: StateOfDatatype, newState: StateOfDatatype) => {
+          helper.L.info(`${JSON.stringify((dt as OrdaDoc).getValue())}`);
+        },
+      });
       await doc2.sync();
 
       doc1.putToObject('K1', 'hello');
@@ -42,13 +47,13 @@ describe('Integration test document', function (this: Suite): void {
       helper.L.info(`${JSON.stringify(doc1.getValue())}`);
       expect(JSON.stringify(doc1)).to.eq(JSON.stringify(doc2));
 
-      doc1.transaction('tx1', (doc: DocumentTx) => {
+      doc1.transaction('tx1', (doc: OrdaDocTx) => {
         doc.putToObject('T1', 'a');
         doc.putToObject('T2', [1, 2, 3, 4]);
         return false;
       });
 
-      doc2.transaction('tx2', (doc: DocumentTx) => {
+      doc2.transaction('tx2', (doc: OrdaDocTx) => {
         doc.putToObject('T1', 'b');
         doc.putToObject('T2', [4, 3, 2, 1]);
         return true;

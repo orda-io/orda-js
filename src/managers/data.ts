@@ -1,16 +1,16 @@
 import { ClientContext } from '@orda/context';
 import { WireManager } from '@orda/managers/wire';
 import { Datatype } from '@orda/datatypes/datatype';
-import { _Counter } from '@orda/datatypes/counter';
+import { _OrdaCounter } from '@orda/datatypes/counter';
 import { PushPullPack } from '@orda/types/pushpullpack';
 import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
-import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { DatatypeHandlers } from '@orda/handlers/datatype';
 import { Uint64 } from '@orda-io/orda-integer';
 import { NotifyReceiver } from '@orda/managers/notify';
 import { WiredDatatype } from '@orda/datatypes/wired';
-import { _OooMap } from '@orda/datatypes/map';
-import { _List } from '@orda/datatypes/list';
-import { _Document } from '@orda/datatypes/document';
+import { _OrdaMap } from '@orda/datatypes/map';
+import { _OrdaList } from '@orda/datatypes/list';
+import { __OrdaDoc } from '@orda/datatypes/document';
 
 const trialLimit = 10;
 
@@ -123,16 +123,16 @@ export class DataManager implements NotifyReceiver {
 
     switch (type) {
       case TypeOfDatatype.COUNTER:
-        data = new _Counter(this.ctx, key, state, this.wireManager, handlers);
+        data = new _OrdaCounter(this.ctx, key, state, this.wireManager, handlers);
         break;
       case TypeOfDatatype.MAP:
-        data = new _OooMap(this.ctx, key, state, this.wireManager, handlers);
+        data = new _OrdaMap(this.ctx, key, state, this.wireManager, handlers);
         break;
       case TypeOfDatatype.LIST:
-        data = new _List(this.ctx, key, state, this.wireManager, handlers);
+        data = new _OrdaList(this.ctx, key, state, this.wireManager, handlers);
         break;
       case TypeOfDatatype.DOCUMENT:
-        data = new _Document(this.ctx, key, state, this.wireManager, handlers);
+        data = new __OrdaDoc(this.ctx, key, state, this.wireManager, handlers);
         break;
       default:
     }

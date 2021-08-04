@@ -18,7 +18,7 @@ export type { Wire };
 interface Wire {
   deliverTransaction(wired: WiredDatatype): void;
 
-  onChangeDatatypeState(wired: WiredDatatype): void;
+  onDatatypeStateChange(wired: WiredDatatype): void;
 }
 
 abstract class WiredDatatype extends TransactionDatatype {
@@ -37,34 +37,35 @@ abstract class WiredDatatype extends TransactionDatatype {
     this.ctx.L.debug(`[🚆🔻] BEGIN applyPushPull:${ppp.toString()}`);
     const errs: DatatypeError[] = new Array<DatatypeError>();
     const opList: Operation[] = new Array<Operation>();
-    let newState: StateOfDatatype = this.state;
+    const oldState: StateOfDatatype = this.state;
+
     const err = this.checkOptionAndError(ppp);
     if (!err) {
       this.excludeDuplicateOperations(ppp);
       this.syncCheckPoint(ppp.checkPoint);
-      newState = this.evaluateStateForPushPullOption(ppp);
-      this.state = newState;
+      this.state = this.evaluateStateForPushPullOption(ppp);
       if (ppp.opList.length > 0) {
         opList.push(...this.sentenceRemoteInTx(...ppp.opList));
       }
     } else {
       errs.push(err);
     }
-
-    // } finally {
     this.ctx.L.debug('[🚆🔺] END applyPushPull');
-    this.callHandlers(errs, opList).then();
-    // }
+    // noinspection JSIgnoredPromiseFromCall
+    this.callHandlers(oldState, this.state, errs, opList);
   }
 
-  private async callHandlers(errs: DatatypeError[], opList: Operation[]): Promise<void> {
-    if (errs.length > 0) {
-      this.callOnErrors(...errs);
-    }
+  private async callHandlers(
+    oldState: StateOfDatatype,
+    newState: StateOfDatatype,
+    errs: DatatypeError[],
+    opList: Operation[]
+  ): Promise<void> {
+    this.callOnStateChange(oldState, newState);
 
-    if (opList.length > 0) {
-      this.callOnRemoteOperations(opList);
-    }
+    this.callOnErrors(...errs);
+
+    this.callOnRemoteChange(opList);
   }
 
   public needPush(): boolean {
@@ -94,11 +95,18 @@ abstract class WiredDatatype extends TransactionDatatype {
     return needPull;
   }
 
-  public notifyWireOnChangeState(): void {
-    this.wire?.onChangeDatatypeState(this);
+  public notifyWireOnStateChange(state: StateOfDatatype): void {
+    if (
+      state === StateOfDatatype.SUBSCRIBED ||
+      state === StateOfDatatype.CLOSED ||
+      state === StateOfDatatype.DUE_TO_UNSUBSCRIBE ||
+      state === StateOfDatatype.DELETED
+    ) {
+      this.wire?.onDatatypeStateChange(this);
+    }
   }
 
-  abstract callOnRemoteOperations(opList: unknown[]): void;
+  abstract callOnRemoteChange(opList: unknown[]): void;
 
   private syncCheckPoint(newCheckPoint: CheckPoint): void {
     const oldCheckPoint = this.checkPoint.clone();

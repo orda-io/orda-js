@@ -2,14 +2,15 @@ import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
 import { ClientContext } from '@orda/context';
 import { Wire, WiredDatatype } from '@orda/datatypes/wired';
 import { SnapshotOperation } from '@orda/operations/meta';
-import { DatatypeHandlers } from '@orda/handlers/handlers';
+import { DatatypeHandlers } from '@orda/handlers/datatype';
 import { Operation } from '@orda/operations/operation';
 import { DatatypeError } from '@orda/errors/for_handlers';
+import { TypeOfSnapshotOperation } from '@orda/types/operation';
 
 export { Datatype };
-export type { IDatatype };
+export type { OrdaDatatype };
 
-interface IDatatype {
+interface OrdaDatatype {
   readonly key: string;
 
   readonly type: TypeOfDatatype;
@@ -35,32 +36,25 @@ abstract class Datatype extends WiredDatatype {
   }
 
   callOnStateChange(oldState: StateOfDatatype, newState: StateOfDatatype): void {
-    if (
-      newState === StateOfDatatype.SUBSCRIBED ||
-      newState === StateOfDatatype.CLOSED ||
-      newState === StateOfDatatype.DELETED
-    ) {
-      this.notifyWireOnChangeState();
-    }
-    if (this.handlers && this.handlers.onStateChange) {
-      this.handlers.onStateChange(this, oldState, newState);
+    if (this.handlers && oldState !== newState && this.handlers.onDatatypeStateChange) {
+      this.handlers.onDatatypeStateChange(this.getThis() as OrdaDatatype, oldState, newState);
     }
   }
 
-  callOnRemoteOperations(opList: Operation[]): void {
-    if (this.handlers && this.handlers.onRemoteOperations) {
-      this.handlers.onRemoteOperations(this, opList);
+  callOnRemoteChange(opList: Operation[]): void {
+    if (opList.length > 0 && this.handlers?.onDatatypeRemoteChange) {
+      this.handlers.onDatatypeRemoteChange(this.getThis() as OrdaDatatype, opList);
     }
   }
 
   callOnErrors(...errs: DatatypeError[]): void {
-    if (this.handlers && this.handlers.onErrors) {
-      this.handlers.onErrors(this, ...errs);
+    if (errs.length > 0 && this.handlers?.onDatatypeErrors) {
+      this.handlers.onDatatypeErrors(this.getThis() as OrdaDatatype, ...errs);
     }
   }
 
   createSnapshotOperation(): SnapshotOperation {
-    return new SnapshotOperation(JSON.stringify(this.getSnapshot()));
+    return new SnapshotOperation(TypeOfSnapshotOperation[this.type], JSON.stringify(this.getSnapshot()));
   }
 
   subscribeOrCreate(): void {

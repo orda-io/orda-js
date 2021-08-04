@@ -22,8 +22,11 @@ export function convertFromOpenApiOperation(opa: OperationOa, logger?: OrdaLogge
   const decodedBody = commonBtoA(opa.body!);
 
   switch (opa?.opType) {
-    case OpType.SNAPSHOT:
-      op = SnapshotOperation.fromOpenApi(decodedBody, logger);
+    case OpType.COUNTER_SNAPSHOT:
+    case OpType.MAP_SNAPSHOT:
+    case OpType.LIST_SNAPSHOT:
+    case OpType.DOC_SNAPSHOT:
+      op = SnapshotOperation.fromOpenApi(opa.opType, decodedBody, logger);
       break;
     case OpType.ERROR:
       op = ErrorOperation.fromOpenApi(decodedBody, logger);

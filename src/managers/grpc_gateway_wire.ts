@@ -96,7 +96,7 @@ class GrpcGatewayWireManager implements WireManager {
     return;
   }
 
-  onChangeDatatypeState(wired: WiredDatatype): void {
+  onDatatypeStateChange(wired: WiredDatatype): void {
     switch (wired.state) {
       case StateOfDatatype.DUE_TO_CREATE:
         break;

@@ -3,6 +3,7 @@ import { helper } from '@test/helper/helper';
 import { expect } from 'chai';
 import { ErrDatatype } from '@orda/errors/datatype';
 import { TypeOfJSON } from '@orda/types/datatype';
+import { JSONPatch } from '../../src/datatypes/document';
 
 const obj1 = {
   K1: 'hello',
@@ -114,5 +115,50 @@ describe('Test local Document operations', function (this: Suite): void {
 
     a1.insertToArray(1, 'A', 'B').insertToArray(3, 'C');
     helper.L.info(`${JSON.stringify(root)}`);
+  });
+
+  it('Can test JSONPatch operations', () => {
+    const client1 = helper.getLocalClient(helper.ctName(this, 1));
+    const root = client1.subscribeOrCreateDocument(helper.dtName(this));
+    root.putToObject('objKey', obj1);
+    root.putToObject('arrKey', arr1);
+    helper.L.info(`${JSON.stringify(root.getValue())}`);
+
+    const p1: JSONPatch = {
+      path: '/objKey/newKey',
+      op: 'add',
+      value: arr1,
+    };
+    const p2: JSONPatch = {
+      path: '/objKey/K1',
+      op: 'remove',
+    };
+    const p3: JSONPatch = {
+      path: '/objKey/K2',
+      op: 'replace',
+      value: 5678,
+    };
+    root.patch(p1, p2, p3);
+    helper.L.info(`${JSON.stringify(root.getValue())}`);
+
+    const p4: JSONPatch = {
+      path: '/arrKey/0',
+      op: 'add',
+      value: obj1,
+    };
+
+    const p5: JSONPatch = {
+      path: '/arrKey/1',
+      op: 'remove',
+    };
+
+    const p6: JSONPatch = {
+      path: '/arrKey/1',
+      op: 'replace',
+      value: 5678,
+    };
+
+    root.patch(p4, p5, p6);
+    helper.L.info(`${JSON.stringify(root.getValue())}`);
   });
 });

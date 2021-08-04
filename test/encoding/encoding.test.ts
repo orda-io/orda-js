@@ -9,13 +9,16 @@ import { createUID } from '@orda/types/uid';
 import { expect } from 'chai';
 import { PutOperation, RemoveOperation } from '@orda/operations/map';
 import { Op } from '@orda/operations/operation';
-import { _Counter } from '@orda/datatypes/counter';
+import { _OrdaCounter } from '@orda/datatypes/counter';
 import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
-import { _OooMap } from '@orda/datatypes/map';
+import { _OrdaMap } from '@orda/datatypes/map';
 import { Datatype } from '@orda/datatypes/datatype';
 import { DeleteOperation, InsertOperation, UpdateOperation } from '@orda/operations/list';
 import { Timestamp } from '@orda/types/timestamp';
-import { _List } from '@orda/datatypes/list';
+import { _OrdaList } from '@orda/datatypes/list';
+import { __OrdaDoc } from '@orda/datatypes/document';
+import { ErrorOperation, TransactionOperation } from '@orda/operations/meta';
+import { ErrDatatype } from '@orda/errors/datatype';
 import {
   DocDeleteInArrayOperation,
   DocInsertToArrayOperation,
@@ -23,9 +26,6 @@ import {
   DocRemoveInObjOperation,
   DocUpdateInArrayOperation,
 } from '@orda/operations/document';
-import { _Document } from '@orda/datatypes/document';
-import { ErrorOperation, TransactionOperation } from '@orda/operations/meta';
-import { ErrDatatype } from '@orda/errors/datatype';
 
 describe('Test encoding operations with server', function (this: Suite): void {
   it('Can encode and decode meta operations', async () => {
@@ -44,11 +44,19 @@ describe('Test encoding operations with server', function (this: Suite): void {
     const jsOp1 = new IncreaseOperation(int32(123));
     await exchangeAndValidateOperation(TypeOfDatatype.COUNTER, jsOp1);
 
-    const counter1 = new _Counter(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
+    const counter1 = new _OrdaCounter(
+      helper.createClientContext(this),
+      helper.dtName(this),
+      StateOfDatatype.DUE_TO_CREATE
+    );
     counter1.increase(1234);
     const snapshot1 = counter1.createSnapshotOperation();
     const snapshot2 = await exchangeAndValidateOperation(TypeOfDatatype.COUNTER, snapshot1);
-    const counter2 = new _Counter(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
+    const counter2 = new _OrdaCounter(
+      helper.createClientContext(this),
+      helper.dtName(this),
+      StateOfDatatype.DUE_TO_CREATE
+    );
     counter2.executeRemoteOp(snapshot2);
     const snapshot3 = counter2.createSnapshotOperation();
 
@@ -63,7 +71,7 @@ describe('Test encoding operations with server', function (this: Suite): void {
     const jsOp3 = new RemoveOperation('hello');
     await exchangeAndValidateOperation(TypeOfDatatype.MAP, jsOp3);
 
-    const map1 = new _OooMap(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
+    const map1 = new _OrdaMap(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
     map1.put('k1', 'world');
     map1.put('k2', 123);
     map1.put('k3', 3.1415);
@@ -72,7 +80,7 @@ describe('Test encoding operations with server', function (this: Suite): void {
     const snapshot1 = map1.createSnapshotOperation();
     const snapshot2 = await exchangeAndValidateOperation(TypeOfDatatype.MAP, snapshot1);
 
-    const map2 = new _OooMap(
+    const map2 = new _OrdaMap(
       helper.createClientContext(this),
       helper.dtName(this),
       StateOfDatatype.DUE_TO_CREATE
@@ -95,13 +103,13 @@ describe('Test encoding operations with server', function (this: Suite): void {
     jsOp3.body.T = [randomTimestamp(), randomTimestamp(), randomTimestamp(), randomTimestamp()];
     await exchangeAndValidateOperation(TypeOfDatatype.LIST, jsOp3);
 
-    const list1 = new _List(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
+    const list1 = new _OrdaList(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
     list1.insert(0, 'hello', true, 1024, 3.141592);
 
     const snapshot1 = list1.createSnapshotOperation();
     const snapshot2 = await exchangeAndValidateOperation(TypeOfDatatype.LIST, snapshot1);
 
-    const list2 = new _List(
+    const list2 = new _OrdaList(
       helper.createClientContext(this),
       helper.dtName(this),
       StateOfDatatype.DUE_TO_CREATE
@@ -130,7 +138,7 @@ describe('Test encoding operations with server', function (this: Suite): void {
     jsOp5.body.T = [randomTimestamp(), randomTimestamp(), randomTimestamp(), randomTimestamp()];
     await exchangeAndValidateOperation(TypeOfDatatype.DOCUMENT, jsOp5);
 
-    const doc1 = new _Document(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
+    const doc1 = new __OrdaDoc(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
     const _doc1 = doc1.toDocument();
     _doc1.putToObject('K1', 'hello');
     _doc1.putToObject('K2', arr);
@@ -141,10 +149,19 @@ describe('Test encoding operations with server', function (this: Suite): void {
     helper.L.info(`${JSON.stringify(_doc1)}`);
     const snapshot1 = doc1.createSnapshotOperation();
     const snapshot2 = await exchangeAndValidateOperation(TypeOfDatatype.DOCUMENT, snapshot1, false);
-    const doc2 = new _Document(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
+    const doc2 = new __OrdaDoc(helper.createClientContext(this), helper.dtName(this), StateOfDatatype.DUE_TO_CREATE);
     doc2.executeRemoteOp(snapshot2);
     expect(doc1.equals(doc2)).to.true;
   });
+
+  // it('Can encode and decode simple snapshot operations', async () => {
+  //   const snap = {
+  //     A: 'abc',
+  //     B: 1234,
+  //   };
+  //   const snapOp = new SnapshotOperation(TypeOfOperation.DOC_SNAPSHOT, JSON.stringify(snap));
+  //   await exchangeAndValidateOperation(TypeOfDatatype.DOCUMENT, snapOp, false);
+  // });
 });
 
 const arr = ['hello', 1234, 3.141592, true];

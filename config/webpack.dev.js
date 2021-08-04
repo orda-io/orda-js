@@ -8,7 +8,7 @@ module.exports = function () {
     },
     mode: 'development',
     output: {
-      path: base.root('example'),
+      path: base.root('dist'),
       filename: '[name]-dev.js',
       library: {
         name: 'orda',
