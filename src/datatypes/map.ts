@@ -53,7 +53,7 @@ class _OrdaMap extends Datatype implements OrdaMap {
 
   executeRemoteOp(op: Op): unknown {
     switch (op.type) {
-      case TypeOfOperation.SNAPSHOT:
+      case TypeOfOperation.MAP_SNAPSHOT:
         const sop = op as SnapshotOperation;
         this.snap.fromJSON(sop.getStringBody());
         return;

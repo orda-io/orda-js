@@ -5,6 +5,13 @@ import { Timestamp } from '@orda/types/timestamp';
 
 export { TypeOfOperation };
 
+export const TypeOfSnapshotOperation = {
+  COUNTER: TypeOfOperation.COUNTER_SNAPSHOT,
+  MAP: TypeOfOperation.MAP_SNAPSHOT,
+  LIST: TypeOfOperation.LIST_SNAPSHOT,
+  DOCUMENT: TypeOfOperation.DOC_SNAPSHOT,
+};
+
 export class OperationID {
   era: Uint32;
   lamport: Uint64;

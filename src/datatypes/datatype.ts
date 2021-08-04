@@ -5,6 +5,7 @@ import { SnapshotOperation } from '@orda/operations/meta';
 import { DatatypeHandlers } from '@orda/handlers/datatype';
 import { Operation } from '@orda/operations/operation';
 import { DatatypeError } from '@orda/errors/for_handlers';
+import { TypeOfSnapshotOperation } from '@orda/types/operation';
 
 export { Datatype };
 export type { OrdaDatatype };
@@ -35,7 +36,7 @@ abstract class Datatype extends WiredDatatype {
   }
 
   callOnStateChange(oldState: StateOfDatatype, newState: StateOfDatatype): void {
-    if (this.handlers && this.handlers.onDatatypeStateChange) {
+    if (this.handlers && oldState !== newState && this.handlers.onDatatypeStateChange) {
       this.handlers.onDatatypeStateChange(this.getThis() as OrdaDatatype, oldState, newState);
     }
   }
@@ -53,7 +54,7 @@ abstract class Datatype extends WiredDatatype {
   }
 
   createSnapshotOperation(): SnapshotOperation {
-    return new SnapshotOperation(JSON.stringify(this.getSnapshot()));
+    return new SnapshotOperation(TypeOfSnapshotOperation[this.type], JSON.stringify(this.getSnapshot()));
   }
 
   subscribeOrCreate(): void {

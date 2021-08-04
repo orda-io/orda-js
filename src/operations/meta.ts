@@ -4,6 +4,7 @@ import { ErrDatatype } from '@orda/errors/datatype';
 import { OrdaLogger } from '@orda-io/orda-logger';
 import { PushPullErrorCode } from '@orda/errors/push_pull';
 import { DatatypeErrCodes, DatatypeError } from '@orda/errors/for_handlers';
+import { TypeOfDatatype, TypeOfDatatypeMap } from '@orda/types/datatype';
 
 export { TransactionOperation, SnapshotOperation, ErrorOperation };
 
@@ -11,8 +12,8 @@ class snapshotBody {
   Type: number;
   Snapshot: unknown;
 
-  constructor(Type: number, snapshot: unknown) {
-    this.Type = Type;
+  constructor(Type: TypeOfDatatype, snapshot: unknown) {
+    this.Type = TypeOfDatatypeMap[Type];
     this.Snapshot = snapshot;
   }
 }
@@ -20,16 +21,15 @@ class snapshotBody {
 class SnapshotOperation extends Op {
   body: string;
 
-  constructor(snapshot: string) {
-    super(TypeOfOperation.SNAPSHOT);
+  constructor(type: TypeOfOperation, snapshot: string) {
+    super(type);
     this.body = snapshot;
   }
 
-  static fromOpenApi(body: string, logger?: OrdaLogger): SnapshotOperation {
+  static fromOpenApi(snapshotType: TypeOfOperation, body: string, logger?: OrdaLogger): SnapshotOperation {
     try {
       // const bodySnapshot = JSON.parse(body);
-
-      return new SnapshotOperation(body);
+      return new SnapshotOperation(snapshotType, body);
     } catch (e) {
       throw new ErrDatatype.Marshal(logger, e);
     }

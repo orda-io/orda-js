@@ -13,5 +13,5 @@ export function commonBtoA(base64: string): string {
 }
 
 export function commonAtoB(asc: string): string {
-  return isBrowser ? window.btoa(unescape(encodeURIComponent(asc))) : Buffer.from(asc, 'ascii').toString('base64');
+  return isBrowser ? window.btoa(unescape(encodeURIComponent(asc))) : Buffer.from(asc, 'utf-8').toString('base64');
 }

@@ -30,6 +30,8 @@ export interface OrdaDocTx extends OrdaDatatype {
 
   deleteInArray(pos: number, numOfNodes?: number): OrdaDoc[];
 
+  patch(...ops: JSONPatch[]): void;
+
   isGarbage(): boolean;
 
   getTypeOfJSON(): TypeOfJSON;
@@ -80,7 +82,7 @@ export class __OrdaDoc extends Datatype {
 
   executeRemoteOp(op: Op): unknown {
     switch (op.type) {
-      case TypeOfOperation.SNAPSHOT:
+      case TypeOfOperation.DOC_SNAPSHOT:
         this.root.fromJSON(op.getStringBody());
         return;
       case TypeOfOperation.DOC_OBJ_PUT:
@@ -109,12 +111,154 @@ export class __OrdaDoc extends Datatype {
     this.root.fromJSON(snap);
   }
 
-  toDocument(): OrdaDoc {
-    return new _OrdaDoc(this, this.root);
+  toDocument(child?: JSONType): OrdaDoc {
+    return new _OrdaDoc(this, child ? child : this.root);
+  }
+
+  toDocuments(children: JSONType[]): OrdaDoc[] {
+    const docs = new Array<OrdaDoc>();
+    children.forEach((c) => {
+      docs.push(this.toDocument(c));
+    });
+    return docs;
   }
 
   getThis(): unknown {
     return this.toDocument();
+  }
+
+  putToObject(current: JSONType, key: string, value: unknown): OrdaDoc | undefined {
+    this.assertLocalOp(current, 'putToObject', TypeOfJSON.object, false);
+    const ret = this.sentenceLocalInTx(new DocPutInObjOperation(current.cTime, key, value));
+    return ret ? this.toDocument(ret as JSONType) : undefined;
+  }
+
+  removeInObject(current: JSONType, key: string): OrdaDoc | undefined {
+    this.assertLocalOp(current, 'DeleteInObject', TypeOfJSON.object, false);
+    const ret = this.sentenceLocalInTx(new DocRemoveInObjOperation(current.cTime, key));
+    return ret ? this.toDocument(ret as JSONType) : undefined;
+  }
+
+  insertToArray(current: JSONType, pos: number, ...values: unknown[]): void {
+    this.assertLocalOp(current, 'InsertToArray', TypeOfJSON.array, false);
+    const arr = current as JSONArray;
+    arr.validateInsertPosition(pos, ...values);
+    this.sentenceLocalInTx(new DocInsertToArrayOperation(arr.cTime, pos, values));
+  }
+
+  updateInArray(current: JSONType, pos: number, ...values: unknown[]): OrdaDoc[] {
+    this.assertLocalOp(current, 'UpdateInArray', TypeOfJSON.array, false);
+    const arr = current as JSONArray;
+    arr.validateGetRange(pos, values.length);
+    const ret = this.sentenceLocalInTx(new DocUpdateInArrayOperation(arr.cTime, pos, values));
+    return this.toDocuments(<JSONType[]>ret);
+  }
+
+  deleteInArray(current: JSONType, pos: number, numOfNodes = 1): OrdaDoc[] {
+    this.assertLocalOp(current, 'DeleteInArray', TypeOfJSON.array, false);
+    const arr = current as JSONArray;
+    arr.validateGetRange(pos, numOfNodes);
+    const ret = this.sentenceLocalInTx(new DocDeleteInArrayOperation(arr.cTime, pos, numOfNodes));
+    return this.toDocuments(<JSONType[]>ret);
+  }
+
+  getManyFromArray(current: JSONType, pos: number, numOfNodes: number): OrdaDoc[] {
+    this.assertLocalOp(current, 'GetManyFromArray', TypeOfJSON.array, true);
+    const arr = current as JSONArray;
+    arr.validateGetRange(pos, numOfNodes);
+    const children = arr.getManyJSONTypes(pos, numOfNodes);
+    return this.toDocuments(children);
+  }
+
+  getFromObject(current: JSONType, key: string): OrdaDoc | undefined {
+    this.assertLocalOp(current, 'GetFromObject', TypeOfJSON.object, true);
+    const child = (current as JSONObject).getJSONTypeByKey(key);
+    if (child && !child.isGarbage()) {
+      return this.toDocument(child);
+    }
+    return undefined;
+  }
+
+  private assertLocalOp(current: JSONType, opName: string, ofJSON: TypeOfJSON, workOnGarbage: boolean) {
+    current = current || this.root;
+    if (current.type !== ofJSON) {
+      throw new ErrDatatype.InvalidParent(this.ctx.L, `${opName} is not allowed`);
+    }
+
+    if (!workOnGarbage && current.isGarbage()) {
+      throw new ErrDatatype.NoOp(this.ctx.L, 'already deleted from the root document');
+    }
+  }
+
+  patchEach(current: JSONType, patch: JSONPatch): boolean {
+    const [target, key] = this.getTargetFromPatch(current, patch.path);
+    this.ctx.L.info(`target:${target}, key:${key}`);
+    if (!target || target.type === TypeOfJSON.element) {
+      this.ctx.L.error(`invalid path: ${JSON.stringify(patch)}`);
+      return false;
+    }
+
+    switch (patch.op) {
+      case 'add':
+        if (patch.value === undefined) {
+          return false;
+        }
+        if (target.type === TypeOfJSON.object) {
+          this.putToObject(target, key, patch.value);
+        } else if (target.type === TypeOfJSON.array) {
+          this.insertToArray(target, Number(key), patch.value);
+        }
+        return true;
+      case 'remove':
+        if (target.type === TypeOfJSON.object) {
+          this.removeInObject(target, key);
+        } else if (target.type === TypeOfJSON.array) {
+          this.deleteInArray(target, Number(key));
+        }
+        return true;
+      case 'replace':
+        if (patch.value === undefined) {
+          return false;
+        }
+        if (target.type === TypeOfJSON.object) {
+          this.putToObject(target, key, patch.value);
+        } else if (target.type === TypeOfJSON.array) {
+          this.updateInArray(target, Number(key), patch.value);
+        }
+        return true;
+      default:
+        this.ctx.L.error(`unsupported JSONPatch operation: ${patch}`);
+        return false;
+    }
+  }
+
+  private getTargetFromPatch(current: JSONType, path: string): [JSONType | undefined, string] {
+    let node: JSONType | undefined = current;
+    let paths = path.split('/');
+    if (paths.length < 2) {
+      return [undefined, ''];
+    }
+    const key = paths[paths.length - 1];
+    paths = paths.slice(1, -1);
+
+    this.ctx.L.info(`${path} => ${JSON.stringify(paths)}`);
+    paths.forEach((k) => {
+      this.ctx.L.info(`key:${k}`);
+      if (node) {
+        switch (node.type) {
+          case TypeOfJSON.element:
+            break;
+          case TypeOfJSON.object:
+            node = (node as JSONObject).getJSONTypeByKey(k);
+            break;
+          case TypeOfJSON.array:
+            node = (node as JSONArray).getJSONType(Number(k));
+            break;
+        }
+      }
+    });
+    return [node, key];
+    //
   }
 }
 
@@ -152,12 +296,12 @@ export class _OrdaDoc implements OrdaDoc {
   }
 
   getRoot(): OrdaDoc {
-    return this.toDocument(this.current.root!);
+    return this._doc.toDocument();
   }
 
   getParent(): OrdaDoc | undefined {
     if (this.current.parent) {
-      return this.toDocument(this.current.parent);
+      return this._doc.toDocument(this.current.parent);
     }
     return undefined;
   }
@@ -171,67 +315,30 @@ export class _OrdaDoc implements OrdaDoc {
   }
 
   putToObject(key: string, value: unknown): OrdaDoc | undefined {
-    this.assertLocalOp('putToObject', TypeOfJSON.object, false);
-    const ret = this._doc.sentenceLocalInTx(new DocPutInObjOperation(this.current.cTime, key, value));
-    return ret ? this.toDocument(ret as JSONType) : undefined;
+    return this._doc.putToObject(this.current, key, value);
   }
 
   removeInObject(key: string): OrdaDoc | undefined {
-    this.assertLocalOp('DeleteInObject', TypeOfJSON.object, false);
-    const ret = this._doc.sentenceLocalInTx(new DocRemoveInObjOperation(this.current.cTime, key));
-    return ret ? this.toDocument(ret as JSONType) : undefined;
+    return this._doc.removeInObject(this.current, key);
   }
 
   insertToArray(pos: number, ...values: unknown[]): OrdaDoc {
-    this.assertLocalOp('InsertToArray', TypeOfJSON.array, false);
-    const arr = this.current as JSONArray;
-    arr.validateInsertPosition(pos, ...values);
-    this._doc.sentenceLocalInTx(new DocInsertToArrayOperation(arr.cTime, pos, values));
+    this._doc.insertToArray(this.current, pos, ...values);
     return this;
   }
 
   updateInArray(pos: number, ...values: unknown[]): OrdaDoc[] {
-    this.assertLocalOp('UpdateInArray', TypeOfJSON.array, false);
-    const arr = this.current as JSONArray;
-    arr.validateGetRange(pos, values.length);
-    const ret = this._doc.sentenceLocalInTx(new DocUpdateInArrayOperation(arr.cTime, pos, values));
-    return this.toDocuments(<JSONType[]>ret);
+    return this._doc.updateInArray(this.current, pos, ...values);
   }
 
   deleteInArray(pos: number, numOfNodes = 1): OrdaDoc[] {
-    this.assertLocalOp('DeleteInArray', TypeOfJSON.array, false);
-    const arr = this.current as JSONArray;
-    arr.validateGetRange(pos, numOfNodes);
-    const ret = this._doc.sentenceLocalInTx(new DocDeleteInArrayOperation(arr.cTime, pos, numOfNodes));
-    return this.toDocuments(<JSONType[]>ret);
+    return this._doc.deleteInArray(this.current, pos, numOfNodes);
   }
 
   transaction(tag: string, txFunc: (document: OrdaDocTx) => boolean): boolean {
     return this._doc.doTransaction(tag, (txCtx: TransactionContext): boolean => {
       return txFunc(this);
     });
-  }
-
-  private assertLocalOp(opName: string, ofJSON: TypeOfJSON, workOnGarbage: boolean) {
-    if (this.current.type !== ofJSON) {
-      throw new ErrDatatype.InvalidParent(this.ctx.L, `${opName} is not allowed`);
-    }
-
-    if (!workOnGarbage && this.current.isGarbage()) {
-      throw new ErrDatatype.NoOp(this.ctx.L, 'already deleted from the root document');
-    }
-  }
-
-  private toDocument(child: JSONType): OrdaDoc {
-    return new _OrdaDoc(this._doc, child);
-  }
-
-  private toDocuments(children: JSONType[]): OrdaDoc[] {
-    const docs = new Array<OrdaDoc>();
-    children.forEach((c) => {
-      docs.push(this.toDocument(c));
-    });
-    return docs;
   }
 
   toJSON(): unknown {
@@ -244,24 +351,37 @@ export class _OrdaDoc implements OrdaDoc {
   }
 
   getManyFromArray(pos: number, numOfNodes: number): OrdaDoc[] {
-    this.assertLocalOp('GetManyFromArray', TypeOfJSON.array, true);
-    const arr = this.current as JSONArray;
-    arr.validateGetRange(pos, numOfNodes);
-    const children = arr.getManyJSONTypes(pos, numOfNodes);
-    return this.toDocuments(children);
+    return this._doc.getManyFromArray(this.current, pos, numOfNodes);
   }
 
   getFromObject(key: string): OrdaDoc | undefined {
-    this.assertLocalOp('GetFromObject', TypeOfJSON.object, true);
-    const child = (this.current as JSONObject).getJSONTypeByKey(key);
-    if (child && !child.isGarbage()) {
-      return this.toDocument(child);
+    return this._doc.getFromObject(this.current, key);
+  }
+
+  patch(...patches: JSONPatch[]): void {
+    if (patches.length === 1) {
+      this._doc.patchEach(this.current, patches[0]);
+    } else {
+      this.transaction(`patch: ${JSON.stringify(patches)}`, (ordaDocTx): boolean => {
+        for (const p of patches) {
+          if (!this._doc.patchEach(this.current, p)) {
+            return false;
+          }
+        }
+        return true;
+      });
     }
-    return undefined;
   }
 
   equals(other: OrdaDoc): boolean {
     const otherDoc = other as _OrdaDoc;
     return this._doc.equals(otherDoc._doc);
   }
+}
+
+export interface JSONPatch {
+  path: string;
+  op: string;
+  value?: unknown;
+  from?: unknown;
 }

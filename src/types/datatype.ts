@@ -19,6 +19,13 @@ export class DatatypeMeta {
   }
 }
 
+export const TypeOfDatatypeMap = {
+  COUNTER: 0,
+  MAP: 1,
+  LIST: 2,
+  DOCUMENT: 3,
+};
+
 export const enum TypeOfJSON {
   element = 'E',
   object = 'O',

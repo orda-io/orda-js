@@ -68,7 +68,7 @@ export class _OrdaList extends Datatype implements OrdaList {
 
   executeRemoteOp(op: Op): unknown {
     switch (op.type) {
-      case TypeOfOperation.SNAPSHOT: {
+      case TypeOfOperation.LIST_SNAPSHOT: {
         const sop = op as SnapshotOperation;
         this.snap.fromJSON(sop.getStringBody());
         return;

@@ -69,7 +69,7 @@ class _OrdaCounter extends Datatype implements OrdaCounter {
 
   private executeCommon(op: Op): unknown {
     switch (op.type) {
-      case TypeOfOperation.SNAPSHOT:
+      case TypeOfOperation.COUNTER_SNAPSHOT:
         const sop = op as SnapshotOperation;
         this.snap.fromJSON(sop.getStringBody());
         return;

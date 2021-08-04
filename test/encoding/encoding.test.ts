@@ -16,6 +16,9 @@ import { Datatype } from '@orda/datatypes/datatype';
 import { DeleteOperation, InsertOperation, UpdateOperation } from '@orda/operations/list';
 import { Timestamp } from '@orda/types/timestamp';
 import { _OrdaList } from '@orda/datatypes/list';
+import { __OrdaDoc } from '@orda/datatypes/document';
+import { ErrorOperation, TransactionOperation } from '@orda/operations/meta';
+import { ErrDatatype } from '@orda/errors/datatype';
 import {
   DocDeleteInArrayOperation,
   DocInsertToArrayOperation,
@@ -23,9 +26,6 @@ import {
   DocRemoveInObjOperation,
   DocUpdateInArrayOperation,
 } from '@orda/operations/document';
-import { __OrdaDoc } from '@orda/datatypes/document';
-import { ErrorOperation, TransactionOperation } from '@orda/operations/meta';
-import { ErrDatatype } from '@orda/errors/datatype';
 
 describe('Test encoding operations with server', function (this: Suite): void {
   it('Can encode and decode meta operations', async () => {
@@ -153,6 +153,15 @@ describe('Test encoding operations with server', function (this: Suite): void {
     doc2.executeRemoteOp(snapshot2);
     expect(doc1.equals(doc2)).to.true;
   });
+
+  // it('Can encode and decode simple snapshot operations', async () => {
+  //   const snap = {
+  //     A: 'abc',
+  //     B: 1234,
+  //   };
+  //   const snapOp = new SnapshotOperation(TypeOfOperation.DOC_SNAPSHOT, JSON.stringify(snap));
+  //   await exchangeAndValidateOperation(TypeOfDatatype.DOCUMENT, snapOp, false);
+  // });
 });
 
 const arr = ['hello', 1234, 3.141592, true];

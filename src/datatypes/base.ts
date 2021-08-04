@@ -73,8 +73,15 @@ abstract class BaseDatatype {
   protected sentenceLocal(op: Op): unknown {
     op.id = this.opId.next();
     try {
-      if (op.type !== TypeOfOperation.TRANSACTION && op.type !== TypeOfOperation.SNAPSHOT) {
-        return this.executeLocalOp(op);
+      switch (op.type) {
+        case TypeOfOperation.TRANSACTION:
+        case TypeOfOperation.COUNTER_SNAPSHOT:
+        case TypeOfOperation.MAP_SNAPSHOT:
+        case TypeOfOperation.LIST_SNAPSHOT:
+        case TypeOfOperation.DOC_SNAPSHOT:
+          break;
+        default:
+          return this.executeLocalOp(op);
       }
     } catch (e) {
       this.opId.rollback();
