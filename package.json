@@ -19,7 +19,7 @@
     "build:dev": "webpack --config=./config/webpack.dev.js --stats-all --profile --bail",
     "build:prod": "npm run clean && webpack --config=./config/webpack.prod.js --stats-all --profile --bail",
     "build:exam": "npx webpack --config=./config/webpack.dev.js --output-path=./example --devtool=inline-source-map --stats-all --profile --bail",
-    "taggingBeforePublish": "npm run build:prod && npm version patch -m \"npm publish tag %s\"",
+    "taggingBeforePublish": "npm run build:prod && npm version patch -m \"🧩tag: npm publish tag %s\"",
     "pushTags": "git push --tags"
   },
   "main": "dist/orda.js",
