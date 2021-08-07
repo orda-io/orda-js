@@ -2,6 +2,8 @@ const webpackConfig = require('./webpack.dev.js')();
 
 const isCoverage = process.argv.some((argument) => /--coverage/.test(argument));
 
+webpackConfig.module.rules[0].exclude = [/node_modules/];
+
 if (isCoverage) {
   webpackConfig.module.rules.push({
     enforce: 'post',
@@ -92,6 +94,6 @@ const karmaConfig = {
   concurrency: Infinity,
 };
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set(karmaConfig);
 };

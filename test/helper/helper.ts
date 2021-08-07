@@ -10,6 +10,7 @@ import { MD5 } from 'crypto-js';
 import { Api, ApiConfig } from '@orda/generated/openapi';
 import * as Assert from 'assert';
 import { OrdaLogLevel } from '@orda-io/orda-logger';
+import { serverUrl } from '../test_config';
 
 export { helper };
 
@@ -82,7 +83,7 @@ const helper = {
     return new ClientConfig(
       collectionName,
       syncType ? syncType : SyncType.MANUALLY,
-      'http://127.0.0.1:29862',
+      serverUrl,
       'ws://127.0.0.1:18881/mqtt',
       OrdaLogLevel.TRACE
     );
