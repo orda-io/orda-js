@@ -1,10 +1,12 @@
 ### Relevant issues
 
-- Resolved / fixed issues: #
-- Additional reference: #
+- Resolved: #
+- ...
 
 ### Checklists
- - [ ] Related tests added?
- - [ ] Related docs updated?
+
+- [ ] New tests created?
+- [ ] Related docs updated?
 
 ### Description
+
