@@ -50,7 +50,8 @@ $ npm run test:mocha # test with mocha
 ----
 We always welcome your participation.
 
-#License
+
+# License
 
 ----
 Orda-js is licensed under Apache 2.0 License that can be found in the LICENSE file. 
