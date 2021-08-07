@@ -18,7 +18,6 @@ module.exports = function () {
     },
     plugins: [],
     devtool: 'source-map',
-    module: {},
     optimization: {
       minimize: true,
       minimizer: [
