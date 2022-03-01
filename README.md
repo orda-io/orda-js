@@ -1,16 +1,16 @@
 # 🐎🎪 Orda-js
 
 ---
-Orda-js is the Javascript(or Typescript) SDK for [Orda](orda-io/orda) project. Orda project is a multi-device data synchronization platform based on
+Orda-js is the Javascript(or Typescript) SDK for [Orda](https://github.com/orda-io/orda) project. Orda project is a multi-device data synchronization platform based on
 [MongoDB](https://www.mongodb.com/) (which could be other document databases such
 as [CouchBase](https://www.couchbase.com/)). Orda is based on CRDT(conflict-free data types), which enables
 operation-based synchronization.
 
-In [this repository](orda-io/orda), we present the Orda Server, and introduce the concept of the Orda project. 
+In [this repository](https://github.com/orda-io/orda), we present the Orda Server, and introduce the concept of the Orda project. 
 
 The library size of orda-js is just about 100KB. It works not only in browsers, but also with nodejs. 
 
-One of the example implemented with orda-js. [Orda-JSONEditor](orda-io/orda-jsoneditor) is a sample program. 
+One of the example implemented with orda-js. [Orda-JSONEditor](https://github.com/orda-io/orda-jsoneditor) is a sample program. 
 
 ## Install
 
