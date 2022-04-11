@@ -31,7 +31,7 @@ class SnapshotOperation extends Op {
       // const bodySnapshot = JSON.parse(body);
       return new SnapshotOperation(snapshotType, body);
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 }
@@ -59,7 +59,7 @@ class TransactionOperation extends Op {
       const bodyTransaction = JSON.parse(body);
       return new TransactionOperation(bodyTransaction.Tag, bodyTransaction.NumOfOps);
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 }
@@ -87,7 +87,7 @@ class ErrorOperation extends Op {
       const bodyError = JSON.parse(body);
       return new ErrorOperation(bodyError.Code, bodyError.Msg);
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 

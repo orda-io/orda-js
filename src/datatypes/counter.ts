@@ -55,7 +55,7 @@ class _OrdaCounter extends Datatype implements OrdaCounter {
       if (e instanceof OrdaError) {
         throw e;
       }
-      throw new ErrDatatype.IllegalParameters(this.ctx.L, e);
+      throw new ErrDatatype.IllegalParameters(this.ctx.L, (e as Error).message);
     }
   }
 
@@ -104,7 +104,7 @@ class CounterSnapshot implements Snapshot {
     try {
       return this.value.add(op.body.Delta) as Int32;
     } catch (e) {
-      throw new ErrDatatype.OutOfBound(this.ctx.L, e);
+      throw new ErrDatatype.OutOfBound(this.ctx.L, e as Error);
     }
   }
 

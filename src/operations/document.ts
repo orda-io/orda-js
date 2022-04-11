@@ -29,7 +29,7 @@ export class DocPutInObjOperation extends Op {
       const snap = JSON.parse(body);
       return new DocPutInObjOperation(Timestamp.fromJSON(snap.P), snap.K, snap.V);
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 }
@@ -57,7 +57,7 @@ export class DocRemoveInObjOperation extends Op {
       const snap = JSON.parse(body);
       return new DocRemoveInObjOperation(Timestamp.fromJSON(snap.P), snap.K);
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 }
@@ -90,7 +90,7 @@ export class DocInsertToArrayOperation extends Op {
       ins.body.T = Timestamp.fromJSON(snap.T);
       return ins;
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 }
@@ -126,7 +126,7 @@ export class DocUpdateInArrayOperation extends Op {
       });
       return update;
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 }
@@ -162,7 +162,7 @@ export class DocDeleteInArrayOperation extends Op {
       });
       return del;
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 }

@@ -27,7 +27,7 @@ class IncreaseOperation extends Op {
       const snap = JSON.parse(body);
       return new IncreaseOperation(snap.Delta);
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 }

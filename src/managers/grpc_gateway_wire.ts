@@ -54,7 +54,7 @@ class GrpcGatewayWireManager implements WireManager {
         this.ctx.L.warn(`[🚀] fail to receive ClientMessage: status(${response?.status}`);
       }
     } catch (e) {
-      const err = new ErrClient.Connect(this.ctx.L, e.error.message);
+      const err = new ErrClient.Connect(this.ctx.L, (e as Error).message);
       return Promise.reject(err);
     } finally {
       this.ctx.L.debug('[🚀🔺] end exchangeClient()');
@@ -82,7 +82,7 @@ class GrpcGatewayWireManager implements WireManager {
         this.ctx.L.warn(`[🚀] fail to receive PushPullMessage: status(${response?.status}`);
       }
     } catch (e) {
-      const err = new ErrClient.PushPull(this.ctx.L, e);
+      const err = new ErrClient.PushPull(this.ctx.L, (e as Error).message);
       return Promise.reject(err);
     } finally {
       this.ctx.L.info('[🚀🔺] END exchangePushPull()');

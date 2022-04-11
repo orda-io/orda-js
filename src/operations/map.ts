@@ -28,7 +28,7 @@ class PutOperation extends Op {
       const snap = JSON.parse(body);
       return new PutOperation(snap.Key, snap.Value);
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 }
@@ -54,7 +54,7 @@ class RemoveOperation extends Op {
       const snap = JSON.parse(body);
       return new RemoveOperation(snap.Key);
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 }

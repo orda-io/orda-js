@@ -77,7 +77,7 @@ class Client {
       } catch (e) {
         this.state = clientState.NOT_CONNECTED;
         if (this.handlers?.onClientError) {
-          this.handlers.onClientError(this, e);
+          this.handlers.onClientError(this, e as Error);
         }
         return Promise.reject(e);
       }

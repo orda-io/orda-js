@@ -15,6 +15,7 @@ module.exports = function () {
         type: 'umd',
       },
       publicPath: '/',
+      globalObject: 'this',
     },
     plugins: [],
     devtool: 'source-map',

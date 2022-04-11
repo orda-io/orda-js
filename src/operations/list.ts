@@ -31,7 +31,7 @@ export class InsertOperation extends Op {
       insert.body.T = Timestamp.fromJSON(snap.T);
       return insert;
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 }
@@ -65,7 +65,7 @@ export class DeleteOperation extends Op {
       });
       return del;
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 }
@@ -99,7 +99,7 @@ export class UpdateOperation extends Op {
       });
       return update;
     } catch (e) {
-      throw new ErrDatatype.Marshal(logger, e);
+      throw new ErrDatatype.Marshal(logger, e as Error);
     }
   }
 }

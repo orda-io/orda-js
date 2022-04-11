@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -11,10 +10,16 @@
  */
 
 export interface OrdaCheckPoint {
-  /** @format uint64 */
+  /**
+   * @inject_tag: bson:"s",json:"s"
+   * @format uint64
+   */
   sseq?: string;
 
-  /** @format uint64 */
+  /**
+   * @inject_tag: bson:"c",json:"c"
+   * @format uint64
+   */
   cseq?: string;
 }
 
@@ -63,14 +68,25 @@ export interface OrdaOperation {
 }
 
 export interface OrdaOperationID {
-  /** @format int64 */
+  /**
+   * @inject_tag: json:"e,omitempty"
+   * @format int64
+   */
   era?: number;
 
-  /** @format uint64 */
+  /**
+   * @inject_tag: json:"l,omitempty"
+   * @format uint64
+   */
   lamport?: string;
+
+  /** @inject_tag: json:"c,omitempty" */
   CUID?: string;
 
-  /** @format uint64 */
+  /**
+   * @inject_tag: json:"s,omitempty"
+   * @format uint64
+   */
   seq?: string;
 }
 
@@ -140,10 +156,7 @@ export enum OrdaTypeOfOperation {
 }
 
 export interface ProtobufAny {
-  typeUrl?: string;
-
-  /** @format byte */
-  value?: string;
+  '@type'?: string;
 }
 
 export interface RpcStatus {
@@ -389,7 +402,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name OrdaServiceProcessClient
      * @request POST:/api/v1/collections/{collection}/clients/{cuid}
      */
-    ordaServiceProcessClient: (collection: string, cuid: string, body: OrdaClientMessage, params: RequestParams = {}) =>
+    ordaServiceProcessClient: (
+      collection: string,
+      cuid: string,
+      body: { header?: OrdaHeader; clientAlias?: string; clientType?: OrdaClientType; syncType?: OrdaSyncType },
+      params: RequestParams = {}
+    ) =>
       this.request<OrdaClientMessage, RpcStatus>({
         path: `/api/v1/collections/${collection}/clients/${cuid}`,
         method: 'POST',
@@ -430,7 +448,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ordaServiceProcessPushPull: (
       collection: string,
       cuid: string,
-      body: OrdaPushPullMessage,
+      body: { header?: OrdaHeader; PushPullPacks?: OrdaPushPullPack[] },
       params: RequestParams = {}
     ) =>
       this.request<OrdaPushPullMessage, RpcStatus>({
