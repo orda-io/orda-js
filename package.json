@@ -72,7 +72,6 @@
     "karma-sinon": "^1.0.5",
     "karma-webpack": "^5.0.0",
     "mocha": "^9.2.2",
-    "node-fetch": "^2.6.7",
     "pbjs": "^0.0.14",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
@@ -91,6 +90,7 @@
     "@orda-io/orda-integer": "^0.1.13",
     "@orda-io/orda-logger": "^0.1.14",
     "async-mutex": "^0.3.2",
+    "cross-fetch": "^3.1.5",
     "nanoid": "^3.3.2",
     "paho-mqtt": "^1.1.0"
   }

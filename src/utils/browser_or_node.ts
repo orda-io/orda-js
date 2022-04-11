@@ -4,7 +4,7 @@ const checkBrowser = new Function('try {return this===window;}catch(e){ return f
 const isBrowser = checkBrowser();
 
 if (!isBrowser) {
-  global.fetch = require('node-fetch');
+  global.fetch = require('cross-fetch');
   global.WebSocket = require('ws');
 }
 
