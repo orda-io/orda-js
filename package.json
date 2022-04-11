@@ -91,7 +91,9 @@
     "@orda-io/orda-logger": "^0.1.14",
     "async-mutex": "^0.3.2",
     "cross-fetch": "^3.1.5",
+    "crypto": "^1.0.1",
     "nanoid": "^3.3.2",
-    "paho-mqtt": "^1.1.0"
+    "paho-mqtt": "^1.1.0",
+    "xhr2": "^0.2.1"
   }
 }
