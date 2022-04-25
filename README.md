@@ -8,7 +8,7 @@ operation-based synchronization.
 
 In [this repository](https://github.com/orda-io/orda), we present the Orda Server, and introduce the concept of the Orda project. 
 
-The library size of orda-js is just about 100KB. It works not only in browsers, but also with nodejs. 
+The library size of orda-js is just about 298KB. It works not only in browsers, but also with nodejs. 
 
 One of the example implemented with orda-js. [Orda-JSONEditor](https://github.com/orda-io/orda-jsoneditor) is a sample program. 
 
