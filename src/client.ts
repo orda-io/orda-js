@@ -68,7 +68,7 @@ class Client {
     }
     if (this.wireManager) {
       try {
-        this.ctx.L.info('[🧞] before exchangeClient');
+        this.ctx.L.debug('[🧞] before exchangeClient');
         await this.wireManager.exchangeClient();
         this.state = clientState.CONNECTED;
         if (this.handlers?.onClientConnect) {
@@ -106,7 +106,7 @@ class Client {
   }
 
   public isConnected(): boolean {
-    return this.state === clientState.CONNECTED;
+    return this.state === clientState.CONNECTED || !this.wireManager;
   }
 
   public createCounter(key: string, handlers?: DatatypeHandlers): OrdaCounter {
@@ -144,6 +144,10 @@ class Client {
     state: StateOfDatatype,
     handlers?: DatatypeHandlers
   ): OrdaDatatype {
+    // TODO: should change isConnected
+    // if (!this.isConnected()) {
+    //   throw new ErrClient.Connect(this.ctx.L, 'not connected');
+    // }
     return this.dataManager.subscribeOrCreateDatatype(key, type, state, handlers);
   }
 

@@ -1,25 +1,19 @@
-import { ClientConfig } from '@orda/config';
 import { ClientContext } from '@orda/context';
-import type { OnConnectionLostHandler, OnMessageHandler } from 'paho-mqtt';
-import Paho, {
-  ErrorWithInvocationContext,
-  Message,
-  MQTTError,
-  OnFailureCallback,
-  OnSuccessCallback,
-  WithInvocationContext,
-} from 'paho-mqtt';
-import { uint64, Uint64 } from '@orda-io/orda-integer';
-import { ErrClient } from '@orda/errors/client';
+import * as mqtt from 'mqtt';
+import { ClientConfig } from '@orda/config';
 import { getAgent } from '@orda/constants/constants';
-
-// without mqtt, mqtt-packet 83K
-// with mqtt, mqtt-packet 267K
-// with paho-mqtt 114K
-
-export interface NotifyReceiver {
-  onReceiveNotification(cuid: string, duid: string, key: string, sseq: Uint64): void;
-}
+import {
+  ClientSubscribeCallback,
+  ISubscriptionGrant,
+  OnConnectCallback,
+  OnDisconnectCallback,
+  OnErrorCallback,
+  OnMessageCallback,
+  PacketCallback,
+} from 'mqtt/types/lib/client';
+import { IConnackPacket, IDisconnectPacket, IPublishPacket, Packet } from 'mqtt-packet';
+import { Uint64, uint64 } from '@orda-io/orda-integer';
+import { ErrClient } from '@orda/errors/client';
 
 const STATES = {
   NOT_CONNECTED: 'not_connected',
@@ -28,24 +22,42 @@ const STATES = {
 } as const;
 type STATES = typeof STATES[keyof typeof STATES];
 
+const defaultKeepAlive = 60;
+const defaultConnectTimeout = 10 * 1000;
+
+export interface NotifyReceiver {
+  onReceiveNotification(cuid: string, duid: string, key: string, sseq: Uint64): void;
+}
+
 export class NotifyManager {
   private readonly ctx: ClientContext;
+  private readonly conf: ClientConfig;
+  private readonly wsOpt: mqtt.IClientOptions;
   private readonly notificationUri: string;
-  private client: Paho.Client;
   private receiver?: NotifyReceiver;
 
+  private client?: mqtt.MqttClient;
   private states: STATES;
-  private subscribeQueue: string[];
+  private subscribeTopics: Map<string, string>;
+  private unsubscribeTopics: Map<string, string>;
 
   constructor(conf: ClientConfig, ctx: ClientContext, receiver?: NotifyReceiver) {
     this.ctx = ctx;
-    this.notificationUri = conf.notificationUri;
-    this.client = new Paho.Client(this.notificationUri, this.ctx.client.cuid);
+    this.conf = conf;
     this.receiver = receiver;
-    this.client.onConnectionLost = this.onConnectLost;
-    this.client.onMessageArrived = this.onMessageArrived;
     this.states = STATES.NOT_CONNECTED;
-    this.subscribeQueue = [];
+    this.wsOpt = {
+      username: `${getAgent()}/${this.ctx.client.alias}`,
+      protocolId: 'MQTT',
+      keepalive: defaultKeepAlive,
+      connectTimeout: defaultConnectTimeout,
+      wsOptions: {
+        headers: conf.customWsHeaders,
+      },
+    };
+    this.notificationUri = conf.notificationUri;
+    this.subscribeTopics = new Map<string, string>();
+    this.unsubscribeTopics = new Map<string, string>();
     this.ctx.L.debug(`[🔔👇] create notifyManager of ${this.ctx.client.alias} to ${this.notificationUri}`);
   }
 
@@ -54,88 +66,101 @@ export class NotifyManager {
   }
 
   public connect(): void {
+    this.client = mqtt.connect(this.notificationUri, this.wsOpt);
+    this.client.on('connect', this.onConnect);
+    this.client.on('disconnect', this.onConnectLost);
+    this.client.on('message', this.onMessageArrived);
+    this.client.on('error', this.onErrorCallback);
     this.ctx.L.debug(`[🔔] connect notifyManager`);
-    this.client.connect({
-      onSuccess: this.onConnect,
-      userName: `${getAgent()}/${this.ctx.client.alias}`,
-    });
   }
 
-  public onConnect: OnSuccessCallback = (o) => {
+  public onConnect: OnConnectCallback = (packet: IConnackPacket) => {
     if (this.states === STATES.CLOSED) {
       this.ctx.L.debug('connected after closed');
       this.disconnect();
       return;
     }
-    this.ctx.L.debug(`[🔔] connected ${this.ctx.client.alias} by notifyManager to ${this.notificationUri}`);
-    this.states = STATES.CONNECTED;
-    if (this.subscribeQueue.length > 0) {
-      this.subscribeQueue.forEach((key) => {
-        this.subscribeDatatype(key);
-      });
-      this.subscribeQueue = [];
-    }
-  };
-
-  public isConnected(): boolean {
-    return this.client.isConnected();
-  }
-
-  public subscribeDatatype(key: string): void {
-    const topic = `${this.ctx.client.collection}/${key}`;
-    if (this.isConnected()) {
-      this.ctx.L.debug(`[🔔] subscribe ${topic} ${this.client.isConnected()}`);
-      this.client.subscribe(topic, {
-        qos: 0,
-        onFailure: this.onFailureSubscribe,
-      });
+    if (packet.cmd === 'connack') {
+      this.ctx.L.debug(`[🔔] connected ${this.ctx.client.alias} by notifyManager to ${this.notificationUri}`);
+      this.states = STATES.CONNECTED;
+      if (this.subscribeTopics.size > 0) {
+        this.subscribeDatatype();
+      }
     } else {
-      this.subscribeQueue.push(key);
+      this.ctx.L.warn(`[🔔] fail to connect notifyManager: ${JSON.stringify(packet)}`);
     }
-  }
-
-  public unsubscribeDatatype(key: string): void {
-    const topic = `${this.ctx.client.collection}/${key}`;
-    this.ctx.L.debug(`[🔔] unsubscribe ${topic}`);
-    this.client.unsubscribe(topic, {
-      onSuccess: this.onUnsubscribeSuccess,
-      onFailure: this.onFailureSubscribe,
-    });
-  }
-
-  onFailureSubscribe: OnFailureCallback = (e: ErrorWithInvocationContext) => {
-    throw new ErrClient.Subscribe(this.ctx.L, e.errorMessage);
   };
 
-  onUnsubscribeSuccess: OnSuccessCallback = (o: WithInvocationContext) => {
-    //
+  public onConnectLost: OnDisconnectCallback = (packet: IDisconnectPacket) => {
+    this.ctx.L.info(`OnDisconnectCallback: ${JSON.stringify(packet)}`);
   };
 
-  private onConnectLost: OnConnectionLostHandler = (error: MQTTError) => {
-    if (error.errorCode !== 0) this.ctx.L.debug(`connection lost: [${error.errorCode}] ${error.errorMessage}`);
-  };
-
-  onMessageArrived: OnMessageHandler = async (message: Message) => {
-    const notify = JSON.parse(message.payloadString);
+  public onMessageArrived: OnMessageCallback = async (topic: string, payload: Buffer, packet: IPublishPacket) => {
+    const notify = JSON.parse(payload.toString());
     if (this.ctx.client.cuid === notify.CUID) {
       // drain
       return;
     }
-    const topics = message.destinationName.split('/');
-    if (topics[0] !== this.ctx.client.collection) {
-      this.ctx.L.error(`[🔔] mismatch collections ${this.ctx.client.collection} vs. ${topics[0]}`);
+    if (!topic.startsWith(this.ctx.client.collection)) {
+      this.ctx.L.error(`[🔔] mismatch collections ${this.ctx.client.collection} for ${topic}`);
       return;
     }
-    const key = topics[1];
+    const key = topic.substring(this.ctx.client.collection.length + 1);
     const notification = `Notification{cuid:${notify.CUID}, key:${key}, duid:${notify.DUID}, sseq:${notify.sseq}}`;
     this.ctx.L.debug(`[🔔🔻] receive ${notification}`);
     await this.receiver?.onReceiveNotification(notify.CUID, notify.DUID, key, uint64(notify.sseq));
     this.ctx.L.debug(`[🔔🔺] finish ${notification}`);
   };
 
+  onErrorCallback: OnErrorCallback = (error: Error) => {
+    this.ctx.L.warn(`[🔔] receive error in notifyManager: ${JSON.stringify(error)}`);
+  };
+
+  public isConnected(): boolean {
+    return this.client ? this.client.connected : false;
+  }
+
+  public subscribeDatatype(...keys: string[]): void {
+    if (keys.length > 0) {
+      keys.forEach((k) => this.subscribeTopics.set(`${this.ctx.client.collection}/${k}`, k));
+    }
+    if (this.isConnected() && this.subscribeTopics.size > 0) {
+      const topics = Array.from(this.subscribeTopics.keys());
+      this.ctx.L.debug(`[🔔] subscribe ${topics}`);
+      this.client?.subscribe(topics, { qos: 0 }, this.onSubscribe);
+    }
+  }
+
+  public onSubscribe: ClientSubscribeCallback = (err: Error, granted: ISubscriptionGrant[]): void => {
+    if (err) {
+      this.ctx.L.warn(`[🔔] fail to subscribe: ${JSON.stringify(err)}`);
+      throw new ErrClient.Subscribe(this.ctx.L, JSON.stringify(err));
+    }
+
+    granted.map((topic) => {
+      this.ctx.L.debug(`[🔔] subscribe ${JSON.stringify(topic)}`);
+      this.subscribeTopics.delete(topic.topic);
+    });
+  };
+
+  onUnsubscribe: PacketCallback = (error?: Error, packet?: Packet) => {
+    this.ctx.L.info(`${JSON.stringify(error)}, ${JSON.stringify(packet)}`);
+  };
+
+  public unsubscribeDatatype(...keys: string[]): void {
+    if (keys.length > 0) {
+      keys.forEach((k) => this.unsubscribeTopics.set(`${this.ctx.client.collection}/${k}`, k));
+    }
+    if (this.isConnected() && this.unsubscribeTopics.size > 0) {
+      const topics = Array.from(this.unsubscribeTopics.keys());
+      this.ctx.L.debug(`[🔔] unsubscribe ${topics}`);
+      this.client?.unsubscribe(topics, this.onUnsubscribe);
+    }
+  }
+
   disconnect(): void {
-    if (this.client.isConnected()) {
-      this.client.disconnect();
+    if (this.isConnected()) {
+      this.client?.end();
       this.ctx.L.debug('[🔔👆] close notifyManager');
     }
     this.states = STATES.CLOSED;

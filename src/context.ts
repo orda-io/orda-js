@@ -28,14 +28,14 @@ export class ClientContext {
 
   async doLock(name?: string): Promise<boolean> {
     this.unlock = await this.lock.acquire();
-    this.L.info(`[🔒] lock: ${name}`);
+    this.L.debug(`[🔒] lock: ${name}`);
     return Promise.resolve(true);
   }
 
   doUnlock(name?: string): void {
     if (this.unlock) {
       this.unlock();
-      this.L.info(`[🔓] unlock: ${name}`);
+      this.L.debug(`[🔓] unlock: ${name}`);
     }
   }
 

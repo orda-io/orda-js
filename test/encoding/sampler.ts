@@ -1,10 +1,13 @@
 import { Api, ApiConfig, OrdaOperation } from '@orda/generated/openapi';
 import { TypeOfDatatype } from '@orda/types/datatype';
-import { serverUrl } from '../test_config';
+import { testConf } from '../test_config';
 
 export async function testEncodingOperation(type: TypeOfDatatype, op: OrdaOperation): Promise<OrdaOperation> {
   const apiConfig: ApiConfig = {
-    baseUrl: serverUrl,
+    baseUrl: testConf.serverAddr,
+    baseApiParams: {
+      headers: testConf.customHeaders,
+    },
   };
   const orda = new Api(apiConfig);
 

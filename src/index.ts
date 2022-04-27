@@ -4,7 +4,8 @@ export { SyncType } from '@orda/types/client';
 export { TypeOfJSON } from '@orda/types/datatype';
 export { DatatypeHandlers } from '@orda/handlers/datatype';
 export { ClientHandlers } from '@orda/handlers/client';
-
+export { Operation } from '@orda/operations/operation';
+export { DatatypeError } from '@orda/errors/for_handlers';
 export type { OrdaDatatype } from '@orda/datatypes/datatype';
 export { OrdaCounter, OrdaCounterTx } from '@orda/datatypes/counter';
 export { OrdaList, OrdaListTx } from '@orda/datatypes/list';

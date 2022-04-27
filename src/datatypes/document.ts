@@ -192,7 +192,7 @@ export class __OrdaDoc extends Datatype {
 
   patchEach(current: JSONType, patch: JSONPatch): boolean {
     const [target, key] = this.getTargetFromPatch(current, patch.path);
-    this.ctx.L.info(`target:${target}, key:${key}`);
+    // this.ctx.L.info(`target:${target}, key:${key}`);
     if (!target || target.type === TypeOfJSON.element) {
       this.ctx.L.error(`invalid path: ${JSON.stringify(patch)}`);
       return false;
@@ -241,9 +241,8 @@ export class __OrdaDoc extends Datatype {
     const key = paths[paths.length - 1];
     paths = paths.slice(1, -1);
 
-    this.ctx.L.info(`${path} => ${JSON.stringify(paths)}`);
+    this.ctx.L.debug(`${path} => ${JSON.stringify(paths)}`);
     paths.forEach((k) => {
-      this.ctx.L.info(`key:${k}`);
       if (node) {
         switch (node.type) {
           case TypeOfJSON.element:

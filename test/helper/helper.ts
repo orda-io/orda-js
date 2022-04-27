@@ -1,4 +1,4 @@
-import { OrdaLoggerFactory } from '@orda-io/orda-logger';
+import { OrdaLoggerFactory, OrdaLogLevel } from '@orda-io/orda-logger';
 import { ClientContext, DatatypeContext } from '@orda/context';
 import { ClientModel, SyncType } from '@orda/types/client';
 import { createUID } from '@orda/types/uid';
@@ -9,8 +9,7 @@ import { WireManager } from '@orda/managers/wire';
 import { MD5 } from 'crypto-js';
 import { Api, ApiConfig } from '@orda/generated/openapi';
 import * as Assert from 'assert';
-import { OrdaLogLevel } from '@orda-io/orda-logger';
-import { serverUrl } from '../test_config';
+import { testConf } from '../test_config';
 
 export { helper };
 
@@ -42,6 +41,9 @@ const helper = {
   async resetCollection(conf: ClientConfig): Promise<void> {
     const apiConfig: ApiConfig = {
       baseUrl: conf.serverAddr,
+      baseApiParams: {
+        headers: conf.customHeaders,
+      },
     };
     const orda = new Api(apiConfig);
     await orda.api
@@ -83,9 +85,10 @@ const helper = {
     return new ClientConfig(
       collectionName,
       syncType ? syncType : SyncType.MANUALLY,
-      serverUrl,
-      'ws://127.0.0.1:18881/mqtt',
-      OrdaLogLevel.TRACE
+      testConf.serverAddr,
+      testConf.notificationUri,
+      testConf._customHeaders,
+      testConf.loggerFactory.logLevel
     );
   },
 };

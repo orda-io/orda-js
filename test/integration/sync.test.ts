@@ -5,7 +5,8 @@ import { Suite } from 'mocha';
 import { CountDownLatch } from '@test/helper/countdown_latch';
 import { expect } from 'chai';
 import { OrdaCounterTx } from '@orda/datatypes/counter';
-import { Datatype } from '@orda/datatypes/datatype';
+import { Datatype, OrdaDatatype } from '@orda/datatypes/datatype';
+import { Operation, OrdaDocTx } from '../../src';
 
 describe('Test Synchronization', function (this: Suite): void {
   it('Can sync manually', async () => {
@@ -66,11 +67,33 @@ describe('Test Synchronization', function (this: Suite): void {
         await helper.sleep(0.1);
       }
       await helper.sleep(1);
-
-      expect(counter1.get()).to.equal(counter2.get());
+      expect(counter1.get()).to.equal(counter2.get()).to.equal(30);
     } finally {
       await client1.close();
       await client2.close();
+    }
+  });
+
+  it('Can sync realtime document', async () => {
+    const conf = await helper.createTestClientConfig(SyncType.REALTIME);
+    const client1: Client = new Client(conf, 'client1');
+
+    try {
+      await client1.connect();
+      const latch1 = new CountDownLatch(1);
+      const doc1 = client1.subscribeOrCreateDocument(helper.dtName(this), {
+        onDatatypeStateChange: (dt, oldState, newState) => {
+          helper.L.info(`doc1: ${oldState} => ${newState}`);
+          latch1.countDown();
+        },
+        onDatatypeRemoteChange: (dt: Datatype, opList: Operation[]) => {
+          const docIn = dt as unknown as OrdaDocTx;
+          helper.L.info(`${JSON.stringify(docIn.getValue())}`);
+        },
+      });
+      await latch1.wait();
+    } finally {
+      await client1.close();
     }
   });
 });

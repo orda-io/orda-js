@@ -46,7 +46,7 @@ export class DataManager implements NotifyReceiver {
       }
       return Promise.resolve();
     } finally {
-      this.ctx.L.info('[💾🔺] end syncAll');
+      this.ctx.L.debug('[💾🔺] end syncAll');
     }
   }
 
@@ -82,7 +82,7 @@ export class DataManager implements NotifyReceiver {
       return Promise.resolve(false);
     }
     try {
-      this.ctx.L.info(`[💾🔻] BEGIN syncDatatype: ${datatype.key}`);
+      this.ctx.L.debug(`[💾🔻] BEGIN syncDatatype: ${datatype.key}`);
       const ppp = datatype.createPushPullPack();
       if (ppp) {
         await this.wireManager?.exchangePushPull(this.ctx.cuid, ppp);
@@ -90,7 +90,7 @@ export class DataManager implements NotifyReceiver {
       return Promise.resolve(true);
     } finally {
       this.ctx.doUnlock(`syncDatatype: ${datatype.key}`);
-      this.ctx.L.info(`[💾🔺] END syncDatatype: ${datatype.key}`);
+      this.ctx.L.debug(`[💾🔺] END syncDatatype: ${datatype.key}`);
       if (this.syncAllIfNeeded() && trial < trialLimit) {
         if (datatype.needPush()) {
           await this.trySyncDatatype(datatype, ++trial);
@@ -105,7 +105,7 @@ export class DataManager implements NotifyReceiver {
       this.trySyncAll().then();
       return true;
     }
-    this.ctx.L.info('[💾] no need to sync');
+    this.ctx.L.debug('[💾] no need to sync');
     return false;
   }
 
