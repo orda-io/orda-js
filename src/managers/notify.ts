@@ -46,6 +46,7 @@ export class NotifyManager {
     this.conf = conf;
     this.receiver = receiver;
     this.states = STATES.NOT_CONNECTED;
+
     this.wsOpt = {
       username: `${getAgent()}/${this.ctx.client.alias}`,
       protocolId: 'MQTT',
@@ -55,6 +56,7 @@ export class NotifyManager {
         headers: conf.customWsHeaders,
       },
     };
+    this.ctx.L.debug(`[🔔] custom header: ${JSON.stringify(this.wsOpt.wsOptions?.headers)}`);
     this.notificationUri = conf.notificationUri;
     this.subscribeTopics = new Map<string, string>();
     this.unsubscribeTopics = new Map<string, string>();
@@ -68,13 +70,29 @@ export class NotifyManager {
   public connect(): void {
     this.client = mqtt.connect(this.notificationUri, this.wsOpt);
     this.client.on('connect', this.onConnect);
+    this.client.on('reconnect', this.onReconnect);
+    this.client.on('packetreceive', this.onPacketReceive);
+    this.client.on('packetsend', this.onPacketSend);
     this.client.on('disconnect', this.onConnectLost);
     this.client.on('message', this.onMessageArrived);
     this.client.on('error', this.onErrorCallback);
+
     this.ctx.L.debug(`[🔔] connect notifyManager`);
   }
 
-  public onConnect: OnConnectCallback = (packet: IConnackPacket) => {
+  onReconnect = () => {
+    this.ctx.L.debug('[🔔] reconnect');
+  };
+
+  onPacketSend = (packet: Packet) => {
+    this.ctx.L.debug(`[🔔] packetSend: ${JSON.stringify(packet)}`);
+  };
+
+  onPacketReceive = (packet: Packet) => {
+    this.ctx.L.debug(`[🔔] packetReceive: ${JSON.stringify(packet)}`);
+  };
+
+  onConnect: OnConnectCallback = (packet: IConnackPacket) => {
     if (this.states === STATES.CLOSED) {
       this.ctx.L.debug('connected after closed');
       this.disconnect();
