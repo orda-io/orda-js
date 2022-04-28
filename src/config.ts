@@ -1,6 +1,5 @@
-import { OrdaLoggerFactory, OrdaLogLevel } from '@orda-io/orda-logger';
-import { SyncType } from '@orda/types/client';
-import { isBrowser } from '@orda/utils/browser_or_node';
+import {OrdaLoggerFactory, OrdaLogLevel} from '@orda-io/orda-logger';
+import {SyncType} from '@orda/types/client';
 
 export class ClientConfig {
   collectionName: string;
@@ -44,17 +43,17 @@ export class ClientConfig {
       return undefined;
     }
 
-    if (isBrowser) {
-      const headers = new Map<string, string>();
-      this._customHeaders.forEach((h: string[]) => {
-        const key = h[0];
-        headers.set(key, h[1]);
-      });
-      return headers;
-    } else {
-      const headers: { [key: string]: string } = {};
-      this._customHeaders.forEach((h) => (headers[h[0]] = h[1]));
-      return headers;
-    }
+    // if (isBrowser) {
+    const headers = new Map<string, string>();
+    this._customHeaders.forEach((h: string[]) => {
+      const key = h[0];
+      headers.set(key, h[1]);
+    });
+    return headers;
+    // } else {
+    //   const headers: { [key: string]: string } = {};
+    //   this._customHeaders.forEach((h) => (headers[h[0]] = h[1]));
+    //   return headers;
+    // }
   }
 }
