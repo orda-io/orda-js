@@ -1,6 +1,6 @@
 {
   "name": "@orda-io/orda",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "description": "Orda-js: A typescript/javascript library for orda project. CRDT-based data synchronization supporting document database.",
   "scripts": {
     "dev": "npx webpack serve --config=./config/webpack.dev.js --stats-all --profile --bail --progress",
@@ -85,7 +85,6 @@
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.8.1"
-
   },
   "dependencies": {
     "@orda-io/orda-integer": "^0.1.13",
