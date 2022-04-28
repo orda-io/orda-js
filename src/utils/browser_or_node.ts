@@ -5,7 +5,6 @@ const isBrowser = checkBrowser();
 
 if (!isBrowser) {
   global.fetch = require('cross-fetch');
-  global.WebSocket = require('ws');
 }
 
 export function commonBtoA(base64: string): string {
