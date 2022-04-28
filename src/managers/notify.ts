@@ -14,6 +14,7 @@ import {
 import { IConnackPacket, IDisconnectPacket, IPublishPacket, Packet } from 'mqtt-packet';
 import { Uint64, uint64 } from '@orda-io/orda-integer';
 import { ErrClient } from '@orda/errors/client';
+import { isBrowser } from '@orda/utils/browser_or_node';
 
 const STATES = {
   NOT_CONNECTED: 'not_connected',
@@ -46,7 +47,7 @@ export class NotifyManager {
     this.conf = conf;
     this.receiver = receiver;
     this.states = STATES.NOT_CONNECTED;
-
+    this.ctx.L.info(`isBrowser: ${isBrowser}`);
     this.wsOpt = {
       username: `${getAgent()}/${this.ctx.client.alias}`,
       protocolId: 'MQTT',
@@ -69,6 +70,7 @@ export class NotifyManager {
 
   public connect(): void {
     this.client = mqtt.connect(this.notificationUri, this.wsOpt);
+
     this.client.on('connect', this.onConnect);
     this.client.on('reconnect', this.onReconnect);
     this.client.on('packetreceive', this.onPacketReceive);
@@ -81,7 +83,7 @@ export class NotifyManager {
   }
 
   onReconnect = () => {
-    this.ctx.L.debug('[🔔] reconnect');
+    this.ctx.L.debug(`[🔔] reconnect: ${JSON.stringify(this.client?.options.wsOptions)}`);
   };
 
   onPacketSend = (packet: Packet) => {
