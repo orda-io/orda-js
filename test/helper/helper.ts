@@ -42,7 +42,7 @@ const helper = {
     const apiConfig: ApiConfig = {
       baseUrl: conf.serverAddr,
       baseApiParams: {
-        headers: conf.customHeaders,
+        headers: conf.customHeadersInit,
       },
     };
     const orda = new Api(apiConfig);
@@ -87,7 +87,7 @@ const helper = {
       syncType ? syncType : SyncType.MANUALLY,
       testConf.serverAddr,
       testConf.notificationUri,
-      testConf._customHeaders,
+      testConf.customHeaders,
       testConf.loggerFactory.logLevel
     );
   },

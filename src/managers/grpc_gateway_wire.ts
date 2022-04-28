@@ -27,7 +27,7 @@ class GrpcGatewayWireManager implements WireManager {
     const apiConfig: ApiConfig = {
       baseUrl: conf.serverAddr,
       baseApiParams: {
-        headers: conf.customHeaders,
+        headers: conf.customHeadersInit,
       },
     };
     this.openApi = new Api(apiConfig);
