@@ -42,7 +42,7 @@ const helper = {
     const apiConfig: ApiConfig = {
       baseUrl: conf.serverAddr,
       baseApiParams: {
-        headers: conf.customHeadersInit,
+        headers: conf.customHeaders,
       },
     };
     const orda = new Api(apiConfig);

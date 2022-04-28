@@ -5,7 +5,7 @@ import { Suite } from 'mocha';
 import { CountDownLatch } from '@test/helper/countdown_latch';
 import { expect } from 'chai';
 import { OrdaCounterTx } from '@orda/datatypes/counter';
-import { Datatype, OrdaDatatype } from '@orda/datatypes/datatype';
+import { Datatype } from '@orda/datatypes/datatype';
 import { Operation, OrdaDocTx } from '../../src';
 
 describe('Test Synchronization', function (this: Suite): void {
@@ -66,7 +66,7 @@ describe('Test Synchronization', function (this: Suite): void {
         }
         await helper.sleep(0.1);
       }
-      await helper.sleep(1);
+      await helper.sleep(0.8);
       expect(counter1.get()).to.equal(counter2.get()).to.equal(30);
     } finally {
       await client1.close();

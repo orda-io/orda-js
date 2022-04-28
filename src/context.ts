@@ -20,7 +20,7 @@ export class ClientContext {
 
   async tryLock(name?: string): Promise<boolean> {
     if (this.lock.isLocked()) {
-      this.L.info(`already locked: ${name}`);
+      this.L.debug(`already locked: ${name}`);
       return Promise.resolve(false);
     }
     return await this.doLock(name);

@@ -46,15 +46,17 @@ export class NotifyManager {
     this.conf = conf;
     this.receiver = receiver;
     this.states = STATES.NOT_CONNECTED;
+
     this.wsOpt = {
       username: `${getAgent()}/${this.ctx.client.alias}`,
       protocolId: 'MQTT',
       keepalive: defaultKeepAlive,
       connectTimeout: defaultConnectTimeout,
       wsOptions: {
-        headers: conf.customHeaders as any | undefined,
+        headers: conf.customHeaders as any,
       },
     };
+
     this.ctx.L.debug(`[🔔] custom header: ${JSON.stringify(this.wsOpt.wsOptions?.headers)}`);
     this.notificationUri = conf.notificationUri;
     this.subscribeTopics = new Map<string, string>();
@@ -85,11 +87,11 @@ export class NotifyManager {
   };
 
   onPacketSend = (packet: Packet) => {
-    this.ctx.L.debug(`[🔔] packetSend: ${JSON.stringify(packet)}`);
+    // this.ctx.L.debug(`[🔔] packetSend: ${JSON.stringify(packet)}`);
   };
 
   onPacketReceive = (packet: Packet) => {
-    this.ctx.L.debug(`[🔔] packetReceive: ${JSON.stringify(packet)}`);
+    // this.ctx.L.debug(`[🔔] packetReceive: ${JSON.stringify(packet)}`);
   };
 
   onConnect: OnConnectCallback = (packet: IConnackPacket) => {

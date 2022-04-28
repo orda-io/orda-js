@@ -6,7 +6,7 @@ export async function testEncodingOperation(type: TypeOfDatatype, op: OrdaOperat
   const apiConfig: ApiConfig = {
     baseUrl: testConf.serverAddr,
     baseApiParams: {
-      headers: testConf.customHeadersInit,
+      headers: testConf.customHeaders,
     },
   };
   const orda = new Api(apiConfig);

@@ -6,7 +6,7 @@ export class ClientConfig {
   syncType: SyncType;
   serverAddr: string;
   notificationUri: string;
-  customHeaders?: Map<string, string>;
+  customHeaders?: HeadersInit;
   loggerFactory: OrdaLoggerFactory;
 
   constructor(
@@ -14,14 +14,14 @@ export class ClientConfig {
     syncType?: SyncType,
     serverAddr?: string,
     notificationUri?: string,
-    customHeaders?: Map<string, string>,
+    customHeaders?: Map<string, string> | HeadersInit,
     logLevel?: OrdaLogLevel
   ) {
     this.collectionName = collectionName;
     this.syncType = syncType ? syncType : SyncType.LOCAL_ONLY;
     this.serverAddr = serverAddr ? serverAddr : '';
     this.notificationUri = notificationUri ? notificationUri : '';
-    this.customHeaders = customHeaders;
+    this.customHeaders = customHeaders instanceof Map ? this.transformHeadersInit(customHeaders) : customHeaders;
     if (logLevel === undefined) {
       this.loggerFactory = new OrdaLoggerFactory(OrdaLogLevel.TRACE);
     } else {
@@ -29,12 +29,12 @@ export class ClientConfig {
     }
   }
 
-  public get customHeadersInit(): HeadersInit | undefined {
-    if (!this.customHeaders) {
+  transformHeadersInit(customHeaders?: Map<string, string>): HeadersInit | undefined {
+    if (!customHeaders) {
       return undefined;
     }
     const headers: HeadersInit = {};
-    this.customHeaders.forEach((h) => (headers[h[0]] = h[1]));
+    customHeaders.forEach((v, k) => (headers[k] = v));
     return headers;
   }
 }
