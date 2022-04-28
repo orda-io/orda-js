@@ -1,5 +1,5 @@
-import {OrdaLoggerFactory, OrdaLogLevel} from '@orda-io/orda-logger';
-import {SyncType} from '@orda/types/client';
+import { OrdaLoggerFactory, OrdaLogLevel } from '@orda-io/orda-logger';
+import { SyncType } from '@orda/types/client';
 
 export class ClientConfig {
   collectionName: string;
