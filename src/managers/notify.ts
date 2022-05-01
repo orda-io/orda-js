@@ -57,7 +57,7 @@ export class NotifyManager {
       },
     };
 
-    this.ctx.L.debug(`[🔔] custom header: ${JSON.stringify(this.wsOpt.wsOptions?.headers)}`);
+    this.ctx.L.debug(`[🔔] custom headers: ${JSON.stringify(this.wsOpt.wsOptions?.headers)}`);
     this.notificationUri = conf.notificationUri;
     this.subscribeTopics = new Map<string, string>();
     this.unsubscribeTopics = new Map<string, string>();

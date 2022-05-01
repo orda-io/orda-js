@@ -16,7 +16,7 @@
     "gen:proto-enum": " curl -s https://raw.githubusercontent.com/orda-io/orda/master/proto/orda.enum.proto | npx pbjs /dev/fd/0 --ts ./src/generated/proto.enum.ts && sed 's/export const enum/export enum/g' ./src/generated/proto.enum.ts",
     "build:dev": "webpack --config=./config/webpack.dev.js --stats-all --profile --bail",
     "build:prod": "npm run clean && webpack --config=./config/webpack.prod.js --stats-all --profile --bail",
-    "taggingBeforePublish": "npm run build:prod && npm version patch -m \"🧩tag: npm publish tag %s\"",
+    "prepublish": "npm run build:prod && npm version patch -m \"🧩tag: npm publish tag %s\"",
     "pushTags": "git push --tags"
   },
   "main": "dist/orda.js",
@@ -88,7 +88,7 @@
   },
   "dependencies": {
     "@orda-io/orda-integer": "^0.1.13",
-    "@orda-io/orda-logger": "^0.1.14",
+    "@orda-io/orda-logger": "^0.1.15",
     "async-mutex": "^0.3.2",
     "cross-fetch": "^3.1.5",
     "mqtt": "^4.3.7",
