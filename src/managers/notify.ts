@@ -15,6 +15,7 @@ import { IConnackPacket, IDisconnectPacket, IPublishPacket, Packet } from 'mqtt-
 import { Uint64, uint64 } from '@orda-io/orda-integer';
 import { ErrClient } from '@orda/errors/client';
 
+global.WebSocket = require('ws');
 const STATES = {
   NOT_CONNECTED: 'not_connected',
   CONNECTED: 'connected',
