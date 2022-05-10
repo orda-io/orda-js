@@ -6,7 +6,6 @@ import { PushPullPack } from '@orda/types/pushpullpack';
 import { StateOfDatatype, TypeOfDatatype } from '@orda/types/datatype';
 import { DatatypeHandlers } from '@orda/handlers/datatype';
 import { Uint64 } from '@orda-io/orda-integer';
-import { NotifyReceiver } from '@orda/managers/notify';
 import { WiredDatatype } from '@orda/datatypes/wired';
 import { _OrdaMap } from '@orda/datatypes/map';
 import { _OrdaList } from '@orda/datatypes/list';
@@ -14,7 +13,14 @@ import { __OrdaDoc } from '@orda/datatypes/document';
 
 const trialLimit = 10;
 
-export class DataManager implements NotifyReceiver {
+export interface DatatypeEventReceiver {
+  onReceiveNotification(cuid: string, duid: string, key: string, sseq: Uint64): void;
+  applyPushPullPack(...pushPullPacks: PushPullPack[]): void;
+  trySyncDatatype(datatype: WiredDatatype, trial?: number): Promise<boolean>;
+  closeDatatype(key: string): void;
+}
+
+export class DataManager implements DatatypeEventReceiver {
   ctx: ClientContext;
   private wireManager?: WireManager;
   private dataMap: Map<string, Datatype>;
@@ -50,7 +56,7 @@ export class DataManager implements NotifyReceiver {
     }
   }
 
-  closeDatatype(key: string) {
+  closeDatatype(key: string): void {
     this.dataMap.delete(key);
   }
 

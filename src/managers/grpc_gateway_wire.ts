@@ -2,7 +2,7 @@ import { WireManager } from '@orda/managers/wire';
 import { uint32, Uint32 } from '@orda-io/orda-integer';
 import { ClientContext } from '@orda/context';
 import { ClientConfig } from '@orda/config';
-import { DataManager } from '@orda/managers/data';
+import { DatatypeEventReceiver } from '@orda/managers/data';
 import { WiredDatatype } from '@orda/datatypes/wired';
 import { PushPullPack } from '@orda/types/pushpullpack';
 import { Api, ApiConfig, OrdaSyncType } from '@orda/generated/openapi';
@@ -10,13 +10,13 @@ import { ErrClient } from '@orda/errors/client';
 import { StateOfDatatype } from '@orda/generated/proto.enum';
 import { ClientMessage, PushPullMessage } from '@orda/types/messages';
 import { CUID } from '@orda/types/uid';
-import { NotifyManager } from '@orda/managers/notify';
+import { NotifyEventReceiver, NotifyManager } from '@orda/managers/notify';
 
 export { GrpcGatewayWireManager };
 
 class GrpcGatewayWireManager implements WireManager {
   private seq: Uint32;
-  private dataManager?: DataManager;
+  private dataEventReceiver?: DatatypeEventReceiver;
   openApi: Api<any>;
   private ctx: ClientContext;
   private notifyManager?: NotifyManager;
@@ -36,9 +36,9 @@ class GrpcGatewayWireManager implements WireManager {
     }
   }
 
-  addDataManager(dataManager: DataManager): void {
-    this.dataManager = dataManager;
-    this.notifyManager?.addNotifyReceiver(dataManager);
+  setReceivers(dataReceiver: DatatypeEventReceiver, notifyEventReceiver?: NotifyEventReceiver): void {
+    this.dataEventReceiver = dataReceiver;
+    this.notifyManager?.setDatatypeEventReceiver(dataReceiver, notifyEventReceiver);
   }
 
   public async exchangeClient(): Promise<void> {
@@ -79,7 +79,7 @@ class GrpcGatewayWireManager implements WireManager {
             pushPullPacks.push(PushPullPack.fromOpenApi(ppp));
           }
           this.ctx.L.debug(`[🚀] RECV PULL: ${JSON.stringify(pushPullPacks)}`);
-          this.dataManager?.applyPushPullPack(...pushPullPacks);
+          this.dataEventReceiver?.applyPushPullPack(...pushPullPacks);
         }
       } else {
         this.ctx.L.warn(`[🚀] fail to receive PushPullMessage: status(${response?.status}`);
@@ -95,7 +95,7 @@ class GrpcGatewayWireManager implements WireManager {
 
   async deliverTransaction(wired: WiredDatatype): Promise<void> {
     this.ctx.L.debug('[🚀] deliverTransaction');
-    await this.dataManager?.trySyncDatatype(wired);
+    await this.dataEventReceiver?.trySyncDatatype(wired);
     return;
   }
 
@@ -113,7 +113,7 @@ class GrpcGatewayWireManager implements WireManager {
       case StateOfDatatype.DUE_TO_UNSUBSCRIBE:
       case StateOfDatatype.CLOSED:
       case StateOfDatatype.DELETED:
-        this.dataManager?.closeDatatype(wired.key);
+        this.dataEventReceiver?.closeDatatype(wired.key);
         this.notifyManager?.unsubscribeDatatype(wired.key);
         break;
     }

@@ -17,8 +17,6 @@ describe('Test OpenApi', function (this: Suite): void {
 async function asyncTest(): Promise<void> {
   try {
     const conf = await helper.createTestClientConfig();
-    // const client1: Client = new Client(conf, 'client2');
-    // console.log('1');
     const cm = new ClientModel(createUID(), 'client1', conf.collectionName, conf.syncType);
     const ctx = new ClientContext(cm, conf.loggerFactory);
     const wireManager = new GrpcGatewayWireManager(conf, ctx);
@@ -27,9 +25,6 @@ async function asyncTest(): Promise<void> {
     console.log(`response:${response.status}`);
     const data = await response.data;
     console.log(`data:${JSON.stringify(data)}`);
-    // await wireManager.exchangeClient();
-    // await client1.connect();
-    // const api =
     console.log('end');
   } catch (e) {
     console.error(e);

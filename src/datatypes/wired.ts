@@ -266,7 +266,7 @@ abstract class WiredDatatype extends TransactionDatatype {
 
   async sync(): Promise<void> {
     await this.deliverTransaction([], true);
-    this.ctx.L.info(`[🚆] end sync in WiredDatatype`);
+    this.ctx.L.debug(`[🚆] end sync in WiredDatatype`);
     return;
   }
 }

@@ -1,6 +1,6 @@
 import { WireManager } from '@orda/managers/wire';
 import { WiredDatatype } from '@orda/datatypes/wired';
-import { DataManager } from '@orda/managers/data';
+import { DataManager, DatatypeEventReceiver } from '@orda/managers/data';
 import { CUID, DUID } from '@orda/types/uid';
 import { PPOptions, PushPullOptions, PushPullPack } from '@orda/types/pushpullpack';
 import { uint64 } from '@orda-io/orda-integer';
@@ -8,6 +8,7 @@ import { Op } from '@orda/operations/operation';
 import { OrdaLogger } from '@orda-io/orda-logger';
 import { ExtMap } from '@orda/utils/map';
 import { CheckPoint } from '@orda/types/checkpoint';
+import { NotifyEventReceiver } from '../../src/managers/notify';
 
 export { InternalWireManager };
 
@@ -114,7 +115,8 @@ class InternalWireManager implements WireManager {
     this.exchangePushPull(datatype.ctx.cuid, pushPullPack);
   }
 
-  addDataManager(dataManager: DataManager): void {
+  setReceivers(dataReceiver: DatatypeEventReceiver, notifyEventReceiver?: NotifyEventReceiver): void {
+    const dataManager: DataManager = dataReceiver as DataManager;
     this.loggerMap.set(dataManager.ctx.cuid, dataManager.ctx.L);
     this.dataManagers.set(dataManager.ctx.cuid, dataManager);
   }

@@ -76,7 +76,11 @@ describe('Test Synchronization', function (this: Suite): void {
 
   it('Can sync realtime document', async () => {
     const conf = await helper.createTestClientConfig(SyncType.REALTIME);
-    const client1: Client = new Client(conf, 'client1');
+    const client1: Client = new Client(conf, 'client1', {
+      onClientDisconnect(client: Client) {
+        helper.L.info(`###### disconnect`);
+      },
+    });
 
     try {
       await client1.connect();

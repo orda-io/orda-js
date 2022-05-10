@@ -1,7 +1,11 @@
 import { Wire } from '@orda/datatypes/wired';
-import { DataManager } from '@orda/managers/data';
+import { DataManager, DatatypeEventReceiver } from '@orda/managers/data';
 import { PushPullPack } from '@orda/types/pushpullpack';
 import { CUID } from '@orda/types/uid';
+import { Client } from '@orda/client';
+import { ClientHandlers } from '@orda/handlers/client';
+import { Data } from 'ws';
+import { NotifyEventReceiver } from '@orda/managers/notify';
 
 export type { WireManager };
 
@@ -9,7 +13,7 @@ export type { WireManager };
  * deal with request
  */
 interface WireManager extends Wire {
-  addDataManager(dataManager: DataManager): void;
+  setReceivers(dataManager: DatatypeEventReceiver, notifyEventReceiver?: NotifyEventReceiver): void;
 
   exchangeClient(): void;
 

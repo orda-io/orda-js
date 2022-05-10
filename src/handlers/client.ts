@@ -6,4 +6,6 @@ export interface ClientHandlers {
   onClientError?(client: Client, e: Error): void;
 
   onClientClose?(client: Client): void;
+
+  onClientDisconnect?(client: Client): void;
 }

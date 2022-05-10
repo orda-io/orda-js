@@ -14,6 +14,7 @@ import { OrdaMap } from '@orda/datatypes/map';
 import { OrdaList } from '@orda/datatypes/list';
 import { __OrdaDoc, OrdaDoc } from '@orda/datatypes/document';
 import { ClientHandlers } from '@orda/handlers/client';
+import { NotifyEventReceiver } from '@orda/managers/notify';
 
 export { Client };
 
@@ -23,7 +24,7 @@ export const enum clientState {
   CLOSED,
 }
 
-class Client {
+class Client implements NotifyEventReceiver {
   private state: clientState;
   private readonly model: ClientModel;
   private readonly ctx: ClientContext;
@@ -46,8 +47,14 @@ class Client {
       }
     }
     this.dataManager.addWireManager(this.wireManager);
-    this.wireManager?.addDataManager(this.dataManager);
+    this.wireManager?.setReceivers(this.dataManager, this);
     this.ctx.L.debug(`[🧞👇] create Client '${alias}'`);
+  }
+
+  onNotificationDisconnect(): void {
+    if (this.handlers && this.handlers.onClientDisconnect) {
+      this.handlers.onClientDisconnect(this);
+    }
   }
 
   public setHandlers(clientHandlers?: ClientHandlers): void {

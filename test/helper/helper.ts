@@ -88,7 +88,8 @@ const helper = {
       testConf.serverAddr,
       testConf.notificationUri,
       testConf.customHeaders,
-      testConf.loggerFactory.logLevel
+      testConf.loggerFactory.logLevel,
+      5
     );
   },
 };

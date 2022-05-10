@@ -12,10 +12,12 @@ import {
   PacketCallback,
 } from 'mqtt/types/lib/client';
 import { IConnackPacket, IDisconnectPacket, IPublishPacket, Packet } from 'mqtt-packet';
-import { Uint64, uint64 } from '@orda-io/orda-integer';
+import { uint64 } from '@orda-io/orda-integer';
 import { ErrClient } from '@orda/errors/client';
+import { DatatypeEventReceiver } from '@orda/managers/data';
 
 global.WebSocket = require('ws');
+
 const STATES = {
   NOT_CONNECTED: 'not_connected',
   CONNECTED: 'connected',
@@ -23,11 +25,10 @@ const STATES = {
 } as const;
 type STATES = typeof STATES[keyof typeof STATES];
 
-const defaultKeepAlive = 60;
 const defaultConnectTimeout = 10 * 1000;
 
-export interface NotifyReceiver {
-  onReceiveNotification(cuid: string, duid: string, key: string, sseq: Uint64): void;
+export interface NotifyEventReceiver {
+  onNotificationDisconnect: () => void;
 }
 
 export class NotifyManager {
@@ -35,38 +36,39 @@ export class NotifyManager {
   private readonly conf: ClientConfig;
   private readonly wsOpt: mqtt.IClientOptions;
   private readonly notificationUri: string;
-  private receiver?: NotifyReceiver;
+  private datatypeReceiver?: DatatypeEventReceiver;
+  private onNotifyEventReciver?: NotifyEventReceiver;
 
   private client?: mqtt.MqttClient;
   private states: STATES;
   private subscribeTopics: Map<string, string>;
   private unsubscribeTopics: Map<string, string>;
 
-  constructor(conf: ClientConfig, ctx: ClientContext, receiver?: NotifyReceiver) {
+  constructor(conf: ClientConfig, ctx: ClientContext, receiver?: DatatypeEventReceiver) {
     this.ctx = ctx;
     this.conf = conf;
-    this.receiver = receiver;
+    this.datatypeReceiver = receiver;
     this.states = STATES.NOT_CONNECTED;
 
     this.wsOpt = {
       username: `${getAgent()}/${this.ctx.client.alias}`,
       protocolId: 'MQTT',
-      keepalive: defaultKeepAlive,
+      keepalive: conf.notificationKeepAlive,
       connectTimeout: defaultConnectTimeout,
       wsOptions: {
         headers: conf.customHeaders as any,
       },
     };
 
-    // this.ctx.L.debug(`[🔔] custom headers: ${JSON.stringify(this.wsOpt.wsOptions?.headers)}`);
     this.notificationUri = conf.notificationUri;
     this.subscribeTopics = new Map<string, string>();
     this.unsubscribeTopics = new Map<string, string>();
     this.ctx.L.debug(`[🔔👇] create notifyManager of ${this.ctx.client.alias} to ${this.notificationUri}`);
   }
 
-  addNotifyReceiver(receiver?: NotifyReceiver): void {
-    this.receiver = receiver;
+  setDatatypeEventReceiver(receiver?: DatatypeEventReceiver, notifyEventReceiver?: NotifyEventReceiver): void {
+    this.datatypeReceiver = receiver;
+    this.onNotifyEventReciver = notifyEventReceiver;
   }
 
   public connect(): void {
@@ -74,9 +76,7 @@ export class NotifyManager {
 
     this.client.on('connect', this.onConnect);
     this.client.on('reconnect', this.onReconnect);
-    this.client.on('packetreceive', this.onPacketReceive);
-    this.client.on('packetsend', this.onPacketSend);
-    this.client.on('disconnect', this.onConnectLost);
+    this.client.on('offline', this.onOffline);
     this.client.on('message', this.onMessageArrived);
     this.client.on('error', this.onErrorCallback);
 
@@ -84,7 +84,11 @@ export class NotifyManager {
   }
 
   onReconnect = () => {
-    this.ctx.L.debug(`[🔔] reconnect: ${JSON.stringify(this.client?.options.wsOptions)}`);
+    this.ctx.L.debug(`[🔔] reconnect: ${this.notificationUri}`);
+  };
+  onOffline = () => {
+    this.ctx.L.debug(`[🔔] offline: ${this.notificationUri}`);
+    this.onNotifyEventReciver?.onNotificationDisconnect();
   };
 
   onPacketSend = (packet: Packet) => {
@@ -129,7 +133,7 @@ export class NotifyManager {
     const key = topic.substring(this.ctx.client.collection.length + 1);
     const notification = `Notification{cuid:${notify.CUID}, key:${key}, duid:${notify.DUID}, sseq:${notify.sseq}}`;
     this.ctx.L.debug(`[🔔🔻] receive ${notification}`);
-    await this.receiver?.onReceiveNotification(notify.CUID, notify.DUID, key, uint64(notify.sseq));
+    await this.datatypeReceiver?.onReceiveNotification(notify.CUID, notify.DUID, key, uint64(notify.sseq));
     this.ctx.L.debug(`[🔔🔺] finish ${notification}`);
   };
 
