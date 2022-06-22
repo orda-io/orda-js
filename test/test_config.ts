@@ -7,8 +7,8 @@ headers.set('orda-custom-header', 'orda-custom-header-value');
 export const testConf: ClientConfig = new ClientConfig(
   'NOT_USED',
   OrdaSyncType.MANUALLY,
-  'http://127.0.0.1:19861',
-  'ws://127.0.0.1:18881/mqtt',
+  'http://localhost:19861',
+  'ws://localhost:18881/mqtt',
   headers,
   OrdaLogLevel.TRACE
 );

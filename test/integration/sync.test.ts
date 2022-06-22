@@ -10,7 +10,7 @@ import { Operation, OrdaDocTx } from '../../src';
 
 describe('Test Synchronization', function (this: Suite): void {
   it('Can sync manually', async () => {
-    const conf = await helper.createTestClientConfig(SyncType.MANUALLY);
+    const conf = await helper.createTestClientConfigWithCollectionReset(SyncType.MANUALLY);
     const client1: Client = new Client(conf, 'client1');
     const client2: Client = new Client(conf, 'client2');
     try {
@@ -36,7 +36,7 @@ describe('Test Synchronization', function (this: Suite): void {
   });
 
   it('Can sync realtime', async () => {
-    const conf = await helper.createTestClientConfig(SyncType.REALTIME);
+    const conf = await helper.createTestClientConfigWithCollectionReset(SyncType.REALTIME);
     const client1: Client = new Client(conf, 'client1');
     const client2: Client = new Client(conf, 'client2');
 
@@ -75,7 +75,7 @@ describe('Test Synchronization', function (this: Suite): void {
   });
 
   it('Can sync realtime document', async () => {
-    const conf = await helper.createTestClientConfig(SyncType.REALTIME);
+    const conf = await helper.createTestClientConfigWithCollectionReset(SyncType.REALTIME);
     const client1: Client = new Client(conf, 'client1', {
       onClientDisconnect(client: Client) {
         helper.L.info(`###### disconnect`);

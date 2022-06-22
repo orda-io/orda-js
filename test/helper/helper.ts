@@ -71,7 +71,7 @@ const helper = {
     return new ClientContext(cm, testLoggerFactory);
   },
 
-  async createTestClientConfig(syncType?: SyncType): Promise<ClientConfig> {
+  async createTestClientConfigWithCollectionReset(syncType?: SyncType): Promise<ClientConfig> {
     const conf = this.createClientConfig(TestDB, syncType);
     if (!this.resetTestCollection) {
       this.resetTestCollection = true;
