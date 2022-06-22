@@ -72,6 +72,6 @@ export function convertFromOpenApiOperation(opa: OperationOa, logger?: OrdaLogge
     op.id = OperationID.fromOpenApi(opa.ID!);
     return op;
   }
-  logger?.info(`${JSON.stringify(opa)}`);
+  logger?.error(`${JSON.stringify(opa)}`);
   throw new ErrDatatype.Marshal(logger);
 }
