@@ -16,7 +16,7 @@ describe('Test OpenApi', function (this: Suite): void {
 
 async function asyncTest(): Promise<void> {
   try {
-    const conf = await helper.createTestClientConfig();
+    const conf = await helper.createTestClientConfigWithCollectionReset();
     const cm = new ClientModel(createUID(), 'client1', conf.collectionName, conf.syncType);
     const ctx = new ClientContext(cm, conf.loggerFactory);
     const wireManager = new GrpcGatewayWireManager(conf, ctx);

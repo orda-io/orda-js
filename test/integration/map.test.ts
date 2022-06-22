@@ -7,7 +7,7 @@ import { _OrdaMap } from '@orda/datatypes/map';
 
 describe('Integration test map', function (this: Suite): void {
   it('Can synchronize Map with server', async () => {
-    const conf = await helper.createTestClientConfig(SyncType.MANUALLY);
+    const conf = await helper.createTestClientConfigWithCollectionReset(SyncType.MANUALLY);
     const client1: Client = new Client(conf, 'client1');
     const client2: Client = new Client(conf, 'client2');
     const client3: Client = new Client(conf, 'client3');

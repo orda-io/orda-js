@@ -3,8 +3,9 @@
         "ts-node/register",
         "tsconfig-paths/register"
     ],
-    "package": "./package.json",
-    "colors": true,
-    "full-trace": true,
-    "sort": true
+    "extensions" : ["ts"],
+    "spec": "test/**/*.test.ts",
+    "node-option": [
+        "loader=ts-node/esm"
+    ]
 }

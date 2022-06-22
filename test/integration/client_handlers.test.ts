@@ -7,7 +7,7 @@ import { expect } from 'chai';
 
 describe('Test Client Handlers', function (this: Suite): void {
   it('Can handle client connection', async () => {
-    const conf = await helper.createTestClientConfig(SyncType.REALTIME);
+    const conf = await helper.createTestClientConfigWithCollectionReset(SyncType.REALTIME);
     const connectLatch = new CountDownLatch(1);
     const handlers: ClientHandlers = {
       onClientConnect: function (): void {

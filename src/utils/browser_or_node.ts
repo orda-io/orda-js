@@ -8,7 +8,7 @@ if (!isBrowser) {
 }
 
 export function commonBtoA(base64: string): string {
-  return isBrowser ? decodeURIComponent(escape(window.atob(base64))) : Buffer.from(base64, 'base64').toString('ascii');
+  return isBrowser ? decodeURIComponent(escape(window.atob(base64))) : Buffer.from(base64, 'base64').toString('utf-8');
 }
 
 export function commonAtoB(asc: string): string {

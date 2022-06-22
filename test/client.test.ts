@@ -7,7 +7,7 @@ import { createUID } from '@orda/types/uid';
 
 describe('Test Clients', function (this: Suite): void {
   it('Can connect synchronously', async () => {
-    const conf = await helper.createTestClientConfig();
+    const conf = await helper.createTestClientConfigWithCollectionReset();
     const client1: Client = new Client(conf, 'client2');
     // console.log('1');
     const cm = new ClientModel(createUID(), 'client1', conf.collectionName, conf.syncType);
@@ -33,7 +33,7 @@ describe('Test Clients', function (this: Suite): void {
     } catch (e) {}
     expect(client1.isConnected()).to.false;
 
-    const conf = await helper.createTestClientConfig(SyncType.REALTIME);
+    const conf = await helper.createTestClientConfigWithCollectionReset(SyncType.REALTIME);
     const client2: Client = new Client(conf, 'client2');
     try {
       await client2.connect();
@@ -47,7 +47,7 @@ describe('Test Clients', function (this: Suite): void {
   });
 
   it('Can subscribe and create a counter', async () => {
-    const conf1 = await helper.createTestClientConfig();
+    const conf1 = await helper.createTestClientConfigWithCollectionReset();
 
     const client1: Client = new Client(conf1, 'client1');
     try {

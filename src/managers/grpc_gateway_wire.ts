@@ -76,7 +76,7 @@ class GrpcGatewayWireManager implements WireManager {
         if (pulled.PushPullPacks) {
           const pushPullPacks: PushPullPack[] = new Array<PushPullPack>();
           for (const ppp of pulled.PushPullPacks) {
-            pushPullPacks.push(PushPullPack.fromOpenApi(ppp));
+            pushPullPacks.push(PushPullPack.fromOpenApi(ppp, this.ctx.L));
           }
           this.ctx.L.debug(`[🚀] RECV PULL: ${JSON.stringify(pushPullPacks)}`);
           this.dataEventReceiver?.applyPushPullPack(...pushPullPacks);
