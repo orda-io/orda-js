@@ -18,7 +18,6 @@ import { commonBtoA, isBrowser } from '@orda/utils/browser_or_node';
 
 export function convertFromOpenApiOperation(opa: OperationOa, logger?: OrdaLogger): Op {
   let op: Op | undefined;
-  logger?.log(`isBrowser:${isBrowser}`);
   const decodedBody = commonBtoA(opa.body!);
 
   switch (opa?.opType) {
