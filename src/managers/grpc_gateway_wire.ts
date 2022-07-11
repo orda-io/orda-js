@@ -57,7 +57,7 @@ class GrpcGatewayWireManager implements WireManager {
         this.ctx.L.warn(`[🚀] fail to receive ClientMessage: status(${response?.status}`);
       }
     } catch (e) {
-      const err = new ErrClient.Connect(this.ctx.L, (e as any)?.toString());
+      const err = new ErrClient.Connect(this.ctx.L, JSON.stringify(e));
       return Promise.reject(err);
     } finally {
       this.ctx.L.debug('[🚀🔺] end exchangeClient()');
