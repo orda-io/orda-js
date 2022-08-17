@@ -24,7 +24,7 @@ const karmaConfig = {
   // list of files / patterns to load in the browser
   files: [
     {
-      pattern: './test/**/*.ts',
+      pattern: 'test/**/*.ts',
       included: true /* should be true to run tests */,
     },
   ],
@@ -35,7 +35,7 @@ const karmaConfig = {
   // preprocess matching files before serving them to the browser
   // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
   preprocessors: {
-    './test/**/*.ts': ['webpack'],
+    'test/**/*.ts': ['webpack'],
   },
   plugins: [
     'karma-webpack',
@@ -53,9 +53,12 @@ const karmaConfig = {
 
   // use the dev webpack configuration
   webpack: {
+    target: 'web',
     mode: webpackConfig.mode,
-    resolve: webpackConfig.resolve,
+    output: webpackConfig.output,
     module: webpackConfig.module,
+    plugins: webpackConfig.plugins,
+    resolve: webpackConfig.resolve,
     devtool: 'inline-source-map',
   },
 
