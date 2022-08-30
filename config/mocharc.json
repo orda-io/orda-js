@@ -4,7 +4,8 @@
         "tsconfig-paths/register"
     ],
     "extensions" : ["ts"],
-    "spec": "test/**/*.test.ts",
+    "spec": ["test/**/*.test.ts"],
+    "ui": "bdd",
     "node-option": [
         "loader=ts-node/esm"
     ]
