@@ -14,7 +14,7 @@ import {
   DocRemoveInObjOperation,
   DocUpdateInArrayOperation,
 } from '@orda/operations/document';
-import { commonBtoA, isBrowser } from '@orda/utils/browser_or_node';
+import { commonBtoA } from '@orda/utils/converter';
 
 export function convertFromOpenApiOperation(opa: OperationOa, logger?: OrdaLogger): Op {
   let op: Op | undefined;

@@ -1,3 +1,5 @@
+import { ordaLogger } from "@orda/constants/constants";
+
 export { isBrowser };
 
 const checkBrowser = new Function('try {return this===window;}catch(e){ return false;}');
@@ -5,12 +7,7 @@ const isBrowser = checkBrowser();
 
 if (!isBrowser) {
   global.fetch = require('cross-fetch');
-}
-
-export function commonBtoA(base64: string): string {
-  return isBrowser ? decodeURIComponent(escape(window.atob(base64))) : Buffer.from(base64, 'base64').toString('utf-8');
-}
-
-export function commonAtoB(asc: string): string {
-  return isBrowser ? window.btoa(unescape(encodeURIComponent(asc))) : Buffer.from(asc, 'utf-8').toString('base64');
+  ordaLogger.debug("initialize orda-js sdk in nodejs")
+} else {
+  ordaLogger.debug("initialize orda-js sdk in browser")
 }

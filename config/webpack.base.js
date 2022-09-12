@@ -29,7 +29,7 @@ exports.config = {
           {
             loader: 'ts-loader',
             options: {
-              compiler: 'ttypescript',
+              compiler: 'typescript',
             },
           },
         ],

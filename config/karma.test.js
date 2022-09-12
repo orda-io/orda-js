@@ -26,6 +26,8 @@ const karmaConfig = {
     {
       pattern: 'test/**/*.ts',
       included: true /* should be true to run tests */,
+      watch: true,
+      type: 'js'
     },
   ],
 
@@ -35,7 +37,7 @@ const karmaConfig = {
   // preprocess matching files before serving them to the browser
   // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
   preprocessors: {
-    'test/**/*.ts': ['webpack'],
+    'test/**/*.ts': ['webpack', 'sourcemap'],
   },
   plugins: [
     'karma-webpack',
@@ -44,6 +46,7 @@ const karmaConfig = {
     'karma-sinon',
     'karma-chrome-launcher',
     'karma-mocha-reporter',
+    'karma-sourcemap-loader',
   ],
   client: {
     mocha: {
@@ -59,7 +62,7 @@ const karmaConfig = {
     module: webpackConfig.module,
     plugins: webpackConfig.plugins,
     resolve: webpackConfig.resolve,
-    devtool: 'inline-source-map',
+    devtool: false,
   },
 
   webpackServer: {

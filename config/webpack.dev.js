@@ -1,5 +1,6 @@
 const webpackMerge = require('webpack-merge');
 const base = require('./webpack.base');
+const wp = require('webpack')
 
 module.exports = function () {
   return webpackMerge(base.config, {
@@ -9,7 +10,7 @@ module.exports = function () {
     mode: 'development',
     output: {
       path: base.root('dist'),
-      filename: '[name]-dev.js',
+      filename: '[name].js',
       library: {
         name: 'orda',
         type: 'umd',
@@ -17,14 +18,12 @@ module.exports = function () {
       publicPath: '/',
       globalObject: 'this',
     },
-    devtool: 'source-map',
-    devServer: {
-      static: {
-        directory: base.root('example'),
-        // watch: true,
-        serveIndex: true,
-      },
-      watchFiles: [base.root('example/**/*')],
-    },
+    plugins: [
+      new wp.EvalSourceMapDevToolPlugin({
+        test: /\.(ts|js|css)($|\?)/i,
+        moduleFilenameTemplate: 'webpack-internal://[namespace]/[resource-path]?[hash]',
+      })
+    ],
+    devtool: false,
   });
 };
